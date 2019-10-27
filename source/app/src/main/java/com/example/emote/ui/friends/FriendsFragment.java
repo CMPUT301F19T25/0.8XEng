@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.emote.FireStoreHandler;
 import com.example.emote.R;
 
 public class FriendsFragment extends Fragment {
@@ -36,6 +37,10 @@ public class FriendsFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
+        FireStoreHandler fsh = new FireStoreHandler("john123");
+        fsh.sendFriendRequest("jimmy");
+
         return root;
     }
 

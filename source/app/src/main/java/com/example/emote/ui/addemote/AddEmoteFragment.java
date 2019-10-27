@@ -12,10 +12,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.emote.FireStoreHandler;
 import com.example.emote.R;
+import com.example.emote.EmotionEvent;
+import com.example.emote.Situation;
 
 public class AddEmoteFragment extends Fragment {
 
+    private static final String TAG = "AddEmoteFragment";
     private AddEmoteViewModel addEmoteViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -30,6 +34,17 @@ public class AddEmoteFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
+
+        FireStoreHandler fsh = new FireStoreHandler("john123");
+        EmotionEvent emoteEvent1 = new EmotionEvent("Happy", Situation.FEW_PEOPLE, "Good food");
+        EmotionEvent emoteEvent2 = new EmotionEvent("Sad", Situation.FEW_PEOPLE, "Dog died");
+        EmotionEvent emoteEvent3 = new EmotionEvent("Tired", Situation.FEW_PEOPLE, "Sleepy");
+        fsh.addEmote(emoteEvent1);
+        fsh.addEmote(emoteEvent2);
+        fsh.addEmote(emoteEvent3);
+
+
         return root;
     }
 }
