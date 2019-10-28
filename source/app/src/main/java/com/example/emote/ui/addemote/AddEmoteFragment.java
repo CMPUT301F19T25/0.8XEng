@@ -47,4 +47,8 @@ public class AddEmoteFragment extends Fragment {
 
         return root;
     }
+
+    public void addEmote() {
+        // TODO 
+    }
 }
