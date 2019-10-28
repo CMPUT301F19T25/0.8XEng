@@ -27,13 +27,13 @@ public class AddEmoteFragment extends Fragment {
         addEmoteViewModel =
                 ViewModelProviders.of(this).get(AddEmoteViewModel.class);
         View root = inflater.inflate(R.layout.fragment_add_emote, container, false);
-        final TextView textView = root.findViewById(R.id.text_add_emote);
-        addEmoteViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+//        final TextView textView = root.findViewById(R.id.text_add_emote);
+//        addEmoteViewModel.getText().observe(this, new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
+//            }
+//        });
 
 
         FireStoreHandler fsh = new FireStoreHandler("john123");
