@@ -35,11 +35,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        if (mAuth.getCurrentUser() != null) {
-            // user currently signed in
-            onLoginSuccess();
-        }
-
         loginButton = findViewById(R.id.btn_login);
         signupButton = findViewById(R.id.btn_signup);
         usernameText = findViewById(R.id.input_username);
@@ -60,6 +55,11 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_SIGNUP);
             }
         });
+
+        if (mAuth.getCurrentUser() != null) {
+            // user currently signed in
+            onLoginSuccess();
+        }
     }
 
     public void onLoginFailed() {

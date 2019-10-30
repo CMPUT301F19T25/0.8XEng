@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginHelper {
     public static String DUMMY_DOMAIN = "@dummydomainthatdoesntexist.com";
-    // TODO: Move all user and password validation / sanitization here 
+    // TODO: Move all user and password validation / sanitization here
 
     public static Task<AuthResult> signupUser(String username, String password){
         String email = username + DUMMY_DOMAIN;
