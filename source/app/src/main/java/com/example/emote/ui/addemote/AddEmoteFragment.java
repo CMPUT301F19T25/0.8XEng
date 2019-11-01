@@ -17,6 +17,8 @@ import com.example.emote.R;
 import com.example.emote.EmotionEvent;
 import com.example.emote.Situation;
 
+import java.util.Date;
+
 public class AddEmoteFragment extends Fragment {
 
     private static final String TAG = "AddEmoteFragment";
@@ -37,9 +39,9 @@ public class AddEmoteFragment extends Fragment {
 
 
         FireStoreHandler fsh = new FireStoreHandler("john123");
-        EmotionEvent emoteEvent1 = new EmotionEvent("Happy", Situation.FEW_PEOPLE, "Good food");
-        EmotionEvent emoteEvent2 = new EmotionEvent("Sad", Situation.FEW_PEOPLE, "Dog died");
-        EmotionEvent emoteEvent3 = new EmotionEvent("Tired", Situation.FEW_PEOPLE, "Sleepy");
+        EmotionEvent emoteEvent1 = new EmotionEvent("Happy", Situation.FEW_PEOPLE, "Good food", new Date(System.currentTimeMillis()));
+        EmotionEvent emoteEvent2 = new EmotionEvent("Sad", Situation.FEW_PEOPLE, "Dog died", new Date(System.currentTimeMillis()));
+        EmotionEvent emoteEvent3 = new EmotionEvent("Tired", Situation.FEW_PEOPLE, "Sleepy", new Date(System.currentTimeMillis()));
         fsh.addEmote(emoteEvent1);
         fsh.addEmote(emoteEvent2);
         fsh.addEmote(emoteEvent3);

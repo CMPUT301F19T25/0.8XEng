@@ -5,6 +5,7 @@ package com.example.emote;
 
 import com.example.emote.Situation;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class EmotionEvent {
@@ -15,15 +16,18 @@ public class EmotionEvent {
     private Situation situation;
     private String reason;
     private String username;
+
+    private Date date;
     private String fireStoreDocumentID;
 
     public EmotionEvent(){}
 
-    public EmotionEvent(String emote, Situation situation, String reason){
+    public EmotionEvent(String emote, Situation situation, String reason, Date date){
         setUsername(username);
         setEmote(emote);
         setSituation(situation);
         setReason(reason);
+        setDate(date);
         fireStoreDocumentID = UUID.randomUUID().toString();
     }
 
@@ -62,5 +66,9 @@ public class EmotionEvent {
     public String getFireStoreDocumentID() {
         return fireStoreDocumentID;
     }
+
+    public Date getDate() { return date; }
+
+    public void setDate(Date date) { this.date = date; }
 
 }
