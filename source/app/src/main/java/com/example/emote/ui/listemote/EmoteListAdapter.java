@@ -13,7 +13,10 @@ import androidx.annotation.Nullable;
 import com.example.emote.R;
 import com.example.emote.EmotionEvent;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class EmoteListAdapter extends ArrayAdapter<EmotionEvent> {
 
@@ -37,7 +40,16 @@ public class EmoteListAdapter extends ArrayAdapter<EmotionEvent> {
 
         EmotionEvent emote = emoteDataList.get(position);
         TextView emoteTextView = view.findViewById(R.id.emote_text);
+        TextView userTextView = view.findViewById(R.id.user_name);
+        TextView dateTextView = view.findViewById(R.id.date);
         emoteTextView.setText(emote.getEmote());
+        userTextView.setText(emote.getUsername());
+        try{
+            DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+            dateTextView.setText(df.format(emote.getDate()));
+        }catch (NullPointerException np){
+            dateTextView.setText("No date");
+        }
 
         return view;
     }
