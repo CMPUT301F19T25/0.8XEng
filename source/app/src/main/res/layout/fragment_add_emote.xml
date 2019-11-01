@@ -49,7 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="date"
-            android:hint="Date" />
+            android:hint="Date"
+            android:focusable="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -66,8 +67,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="time"
-            android:hint="Time" />
+            android:hint="Time"
+            android:focusable="false"/>
     </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Spinner
+        android:id="@+id/spinner_situation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Situation"
+        app:layout_constraintTop_toBottomOf="@+id/text_layout_time" />
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_layout_reason"
@@ -75,31 +86,16 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
         app:hintEnabled="true"
-        app:layout_constraintTop_toBottomOf="@+id/text_layout_time"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_situation"
         tools:layout_editor_absoluteX="16dp">
 
         <EditText
             android:id="@+id/text_reason_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Situation" />
+            android:hint="Reason" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_layout_situation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        app:hintEnabled="true"
-        app:layout_constraintTop_toBottomOf="@+id/text_layout_reason"
-        tools:layout_editor_absoluteX="16dp">
-
-        <EditText
-            android:id="@+id/text_situation_field"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Situation" />
-    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -107,7 +103,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/text_layout_situation"
+        app:layout_constraintTop_toBottomOf="@+id/text_layout_reason"
         tools:layout_editor_absoluteX="197dp">
 
         <Button
