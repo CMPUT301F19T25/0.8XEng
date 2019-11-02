@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.emote.Emotion;
 import com.example.emote.EmotionEvent;
 import com.example.emote.FireStoreHandler;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,4 +54,5 @@ public class ListEmoteViewModel extends ViewModel {
                     }
                 });
     }
+
 }
