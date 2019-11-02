@@ -8,5 +8,5 @@ public enum Emotion {
     EXCITED,
     NEUTRAL,
     ANNOYED,
-    STRESSED
+    STRESSED;
 }

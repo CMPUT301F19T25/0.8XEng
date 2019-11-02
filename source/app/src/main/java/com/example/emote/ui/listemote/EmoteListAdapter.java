@@ -42,7 +42,9 @@ public class EmoteListAdapter extends ArrayAdapter<EmotionEvent> {
         TextView emoteTextView = view.findViewById(R.id.emote_text);
         TextView userTextView = view.findViewById(R.id.user_name);
         TextView dateTextView = view.findViewById(R.id.date);
-        emoteTextView.setText(emote.getEmote().toString());
+
+        int identifier = this.context.getResources().getIdentifier(emote.getEmote().toString(),"string", this.context.getPackageName());
+        emoteTextView.setText(this.context.getResources().getString(identifier));
         userTextView.setText(emote.getUsername());
         try{
             DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
