@@ -32,7 +32,7 @@ public class ListEmoteFragment extends Fragment {
     private ListEmoteViewModel listEmoteViewModel;
 
     private ArrayList<EmotionEvent> emoteDataList;
-    private ArrayAdapter<EmotionEvent> emoteAdapter;
+    private EmoteListAdapter emoteAdapter;
     private ListView emoteListView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -40,40 +40,12 @@ public class ListEmoteFragment extends Fragment {
         listEmoteViewModel =
                 ViewModelProviders.of(this).get(ListEmoteViewModel.class);
         View root = inflater.inflate(R.layout.fragment_list_emote, container, false);
-        final TextView textView = root.findViewById(R.id.text_list_emote);
-        listEmoteViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
 
         emoteListView = root.findViewById(R.id.emote_list_view);
         emoteDataList = new ArrayList<>();
         emoteAdapter = new EmoteListAdapter(getContext(), emoteDataList);
         emoteListView.setAdapter(emoteAdapter);
-
-        FireStoreHandler fsh = new FireStoreHandler("john123");
-        FirebaseFirestore db = fsh.getFireStoreDBReference();
-        db.collection(FireStoreHandler.EMOTE_COLLECTION)
-                .whereEqualTo(EmotionEvent.USERNAME_KEY, fsh.getUsername())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ArrayList<EmotionEvent> new_emotes;
-                        if (task.isSuccessful()) {
-                            emoteDataList.clear();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                emoteDataList.add(document.toObject(EmotionEvent.class));
-                            }
-                            emoteAdapter.notifyDataSetChanged();
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+        listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList);
 
         return root;
     }
