@@ -12,7 +12,7 @@ public class EmotionEvent {
 
     public static final String USERNAME_KEY = "username";
 
-    private String emote;
+    private Emotion emotion;
     private Situation situation;
     private String reason;
     private String username;
@@ -22,7 +22,7 @@ public class EmotionEvent {
 
     public EmotionEvent(){}
 
-    public EmotionEvent(String emote, Situation situation, String reason, Date date){
+    public EmotionEvent(Emotion emote, Situation situation, String reason, Date date){
         setUsername(username);
         setEmote(emote);
         setSituation(situation);
@@ -31,12 +31,12 @@ public class EmotionEvent {
         fireStoreDocumentID = UUID.randomUUID().toString();
     }
 
-    public String getEmote() {
-        return emote;
+    public Emotion getEmote() {
+        return this.emotion;
     }
 
-    public void setEmote(String emote) {
-        this.emote = emote;
+    public void setEmote(Emotion emote) {
+        this.emotion = emote;
     }
 
     public Situation getSituation() {

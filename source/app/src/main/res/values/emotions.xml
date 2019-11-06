@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="SAD">Sad</string>
+    <string name="HAPPY">Happy</string>
+    <string name="LONELY">Lonely</string>
+    <string name="DEPRESSED">Depressed</string>
+    <string name="EXCITED">Excited</string>
+    <string name="NEUTRAL">Neutral</string>
+    <string name="ANNOYED">Annoyed</string>
+    <string name="STRESSED">Stressed</string>
+</resources>
