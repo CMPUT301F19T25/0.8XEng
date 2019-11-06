@@ -5,5 +5,4 @@ public enum Situation {
     ONE_PERSON,
     FEW_PEOPLE,
     CROWD
-
 }
