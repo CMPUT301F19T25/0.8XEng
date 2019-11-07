@@ -15,16 +15,30 @@
         android:orientation="vertical"
         android:id="@+id/filter_layout">
 
-        <RadioButton
-            android:id="@+id/radioButton"
+        <CheckBox
+            android:id="@+id/check_box_show_friends"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:checked="false"
+            android:clickable="true"
             android:text="Show Friends" />
+
+        <CheckBox
+            android:id="@+id/check_box_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Filter Emotes" />
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/button_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Refresh" />
     </LinearLayout>
 
     <ListView

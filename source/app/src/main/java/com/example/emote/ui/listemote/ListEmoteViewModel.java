@@ -1,10 +1,11 @@
 package com.example.emote.ui.listemote;
+/**
+ * View model for Emote List.
+ */
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.emote.Emotion;
@@ -22,37 +23,123 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class ListEmoteViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
     private FireStoreHandler fsh;
     private FirebaseFirestore db;
 
+    /**
+     * Constructor which sets the username for firestore access
+     * and also gets a firestore reference.
+     */
     public ListEmoteViewModel() {
-        fsh = new FireStoreHandler("john123");
+        //
+        fsh = new FireStoreHandler("kenboo");
         db = fsh.getFireStoreDBReference();
     }
 
+    /**
+     * Function to grab the emote history from Firebase
+     * @param adapter EmoteListAdapter that is used by the list view
+     * @param emoteDataList ArrayList used by the EmoteListAdapter
+     * @param showFriends Whether or not to show friends' event history
+     */
+    public void grabFirebase(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList,
+                             boolean showFriends) {
 
-    public void grabFirebase(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList){
-        // TODO: Move this to FireStoreHandler
-        db.collection(FireStoreHandler.EMOTE_COLLECTION)
-                .whereEqualTo(EmotionEvent.USERNAME_KEY, fsh.getUsername())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ArrayList<EmotionEvent> new_emotes;
-                        if (task.isSuccessful()) {
-                            emoteDataList.clear();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                emoteDataList.add(document.toObject(EmotionEvent.class));
+        if (showFriends) {
+            db.collection(FireStoreHandler.EMOTE_COLLECTION).get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            ArrayList<EmotionEvent> new_emotes;
+                            if (task.isSuccessful()) {
+                                emoteDataList.clear();
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                    emoteDataList.add(document.toObject(EmotionEvent.class));
+                                }
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
                             }
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                    }
-                });
+                    });
+        } else {
+            db.collection(FireStoreHandler.EMOTE_COLLECTION)
+                    .whereEqualTo(EmotionEvent.USERNAME_KEY, fsh.getUsername())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            ArrayList<EmotionEvent> new_emotes;
+                            if (task.isSuccessful()) {
+                                emoteDataList.clear();
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                    emoteDataList.add(document.toObject(EmotionEvent.class));
+                                }
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+        }
+
+    }
+
+    /**
+     * Function to grab the emote history from Firebase but with filtering.
+     *  @param adapter EmoteListAdapter that is used by the list view
+     * @param emoteDataList ArrayList used by the EmoteListAdapter
+     * @param showFriends Whether or not to show friends' event history
+     * @param filterEmote Emote to filter for
+     */
+    public void grabFirebase(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList,
+                             boolean showFriends, Emotion filterEmote) {
+
+        if (showFriends) {
+            db.collection(FireStoreHandler.EMOTE_COLLECTION)
+                    .whereEqualTo("emote", filterEmote)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            ArrayList<EmotionEvent> new_emotes;
+                            if (task.isSuccessful()) {
+                                emoteDataList.clear();
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                    emoteDataList.add(document.toObject(EmotionEvent.class));
+                                }
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+        } else {
+            db.collection(FireStoreHandler.EMOTE_COLLECTION)
+                    .whereEqualTo(EmotionEvent.USERNAME_KEY, fsh.getUsername())
+                    .whereEqualTo("emote", filterEmote)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            ArrayList<EmotionEvent> new_emotes;
+                            if (task.isSuccessful()) {
+                                emoteDataList.clear();
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                    emoteDataList.add(document.toObject(EmotionEvent.class));
+                                }
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+        }
+
     }
 
 }

@@ -24,15 +24,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
+        app:helperText="Emotion"
         app:hintEnabled="true"
         app:layout_constraintTop_toBottomOf="@+id/text_add_emote"
         tools:layout_editor_absoluteX="16dp">
 
-        <EditText
-            android:id="@+id/text_emote_field"
+        <Spinner
+            android:id="@+id/spinnner_emote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Emote" />
+            android:layout_weight="1" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -48,9 +50,9 @@
             android:id="@+id/text_date_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="date"
+            android:focusable="false"
             android:hint="Date"
-            android:focusable="false" />
+            android:inputType="date" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -66,18 +68,29 @@
             android:id="@+id/text_time_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="time"
+            android:focusable="false"
             android:hint="Time"
-            android:focusable="false"/>
+            android:inputType="time" />
     </com.google.android.material.textfield.TextInputLayout>
 
-
-    <Spinner
-        android:id="@+id/spinner_situation"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_layout_situation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Situation"
-        app:layout_constraintTop_toBottomOf="@+id/text_layout_time" />
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        app:helperText="Situation"
+        app:hintEnabled="true"
+        app:layout_constraintTop_toBottomOf="@+id/text_layout_time"
+        tools:layout_editor_absoluteX="16dp">
+
+        <Spinner
+            android:id="@+id/spinner_situation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Situation" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -86,7 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
         app:hintEnabled="true"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_situation"
+        app:layout_constraintTop_toBottomOf="@+id/text_layout_situation"
         tools:layout_editor_absoluteX="16dp">
 
         <EditText

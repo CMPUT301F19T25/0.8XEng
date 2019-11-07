@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ALONE">Alone</string>
+    <string name="ONE_PERSON">One Person</string>
+    <string name="FEW_PEOPLE">A Few People</string>
+    <string name="CROWD">Crowd</string>
+</resources>

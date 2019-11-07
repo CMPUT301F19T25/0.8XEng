@@ -1,4 +1,7 @@
 package com.example.emote.ui.addemote;
+/**
+ *  Fragment to add a new emote to the firebase db.
+ */
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -12,22 +15,18 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.emote.Emotion;
-import com.example.emote.FireStoreHandler;
-import com.example.emote.MainActivity;
-import com.example.emote.R;
 import com.example.emote.EmotionEvent;
+import com.example.emote.FireStoreHandler;
+import com.example.emote.R;
 import com.example.emote.Situation;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -37,55 +36,56 @@ public class AddEmoteFragment extends Fragment {
     private static final String TAG = "AddEmoteFragment";
     private AddEmoteViewModel addEmoteViewModel;
 
-    private TextInputLayout textLayoutEmoteName;
-    private TextInputLayout textLayoutDate;
-    private TextInputLayout textLayoutTime;
-    private TextInputLayout textLayoutReason;
-    private EditText textEmoteField;
     private EditText textDateField;
     private EditText textTimeField;
     private EditText textReasonField;
-    DatePickerDialog datePicker;
-    TimePickerDialog timePicker;
-    Spinner situationSpinner;
+    private DatePickerDialog datePicker;
+    private TimePickerDialog timePicker;
+    private Spinner emotionSpinner;
+    private Spinner situationSpinner;
     private Button submitButton;
 
-    public void initializeViews() {
-
+    /**
+     * Initialize all the necessary views with findViewById
+     * @param inflater LayoutInflater to inflate Layour
+     * @param container ViewGroup Container
+     * @return Returns the root view object of fragmend
+     */
+    public View initializeViews(LayoutInflater inflater, ViewGroup container) {
+        View root = inflater.inflate(R.layout.fragment_add_emote, container, false);
+        textDateField = root.findViewById(R.id.text_date_field);
+        textTimeField = root.findViewById(R.id.text_time_field);
+        textReasonField = root.findViewById(R.id.text_reason_field);
+        situationSpinner = root.findViewById(R.id.spinner_situation);
+        emotionSpinner = root.findViewById(R.id.spinnner_emote);
+        submitButton = root.findViewById(R.id.submitButton);
+        return root;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         addEmoteViewModel =
                 ViewModelProviders.of(this).get(AddEmoteViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_add_emote, container, false);
-//        final TextView textView = root.findViewById(R.id.text_add_emote);
-//        addEmoteViewModel.getText().observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
+        View root = initializeViews(inflater, container);
 
-        textLayoutDate = root.findViewById(R.id.text_layout_date);
-        textLayoutTime = root.findViewById(R.id.text_layout_time);
-        textLayoutReason = root.findViewById(R.id.text_layout_reason);
-        textEmoteField = root.findViewById(R.id.text_emote_field);
-        textDateField = root.findViewById(R.id.text_date_field);
-        textTimeField = root.findViewById(R.id.text_time_field);
-        textReasonField = root.findViewById(R.id.text_reason_field);
-        situationSpinner = root.findViewById(R.id.spinner_situation);
-        submitButton = root.findViewById(R.id.submitButton);
-//        FireStoreHandler fsh = new FireStoreHandler("john123");
-//        EmotionEvent emoteEvent1 = new EmotionEvent("Happy", Situation.FEW_PEOPLE, "Good food");
-//        EmotionEvent emoteEvent2 = new EmotionEvent("Sad", Situation.FEW_PEOPLE, "Dog died");
-//        EmotionEvent emoteEvent3 = new EmotionEvent("Tired", Situation.FEW_PEOPLE, "Sleepy");
-//        fsh.addEmote(emoteEvent1);
-//        fsh.addEmote(emoteEvent2);
-//        fsh.addEmote(emoteEvent3);
+        situationSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Situation.getStrings(getContext())));
+        emotionSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Emotion.getStrings(getContext())));
 
-        situationSpinner.setAdapter(new ArrayAdapter<Situation>(getContext(), android.R.layout.simple_spinner_item, Situation.values()));
 
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addEmote(v);
+            }
+        });
+        resetFields();
+        return root;
+    }
+
+    /**
+     * Sets up the DatePickerDialog TimePickerDialog
+     */
+    public void setTimeAndDateListeners() {
         textDateField.setInputType(InputType.TYPE_NULL);
         textDateField.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +98,7 @@ public class AddEmoteFragment extends Fragment {
                 datePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        textDateField.setText(String.format("%02d:%02d", i, i1));
+                        textDateField.setText(String.format("%02d/%02d/%02d", i, i1 + 1, i2));
                     }
                 }, year, month, day);
                 datePicker.show();
@@ -116,35 +116,82 @@ public class AddEmoteFragment extends Fragment {
                 timePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        textTimeField.setText(i + ":" + i1);
+                        textTimeField.setText(String.format("%02d:%02d", i, i1));
                     }
                 }, hour, minute, true);
                 timePicker.show();
             }
         });
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addEmote(v);
-            }
-        });
-        return root;
     }
 
+    /**
+     * Add the defined Emotion event to the firebase DB and reset the fields.
+     * @param view
+     */
     public void addEmote(View view) {
-        String emoteString = textEmoteField.getText().toString();
-        String dateString = textDateField.getText().toString();
-        String timeString = textTimeField.getText().toString();
-        String reasonString = textReasonField.getText().toString();
+        EmotionEvent event;
+        try {
+            Date date = pickerToDate(textDateField.getText().toString(), textTimeField.getText().toString());
+            String reasonString = textReasonField.getText().toString();
+            Situation situation = Situation.values()[situationSpinner.getSelectedItemPosition()];
+            Emotion emotion = Emotion.values()[emotionSpinner.getSelectedItemPosition()];
+            event = new EmotionEvent(emotion, situation, reasonString, date);
 
-        EmotionEvent event = new EmotionEvent(Emotion.HAPPY, Situation.ALONE, reasonString, new Date(System.currentTimeMillis()));
+        } catch (Exception e) {
+            // TODO proper error messages
+            Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            resetFields();
+            return;
+        }
 
         FireStoreHandler fsh = new FireStoreHandler("dman");
         fsh.addEmote(event);
+        Toast.makeText(getContext(), "Emotion Event Added", Toast.LENGTH_LONG).show();
+        resetFields();
     }
 
-    public void editDateText() {
+    /**
+     * Resets the fields of the Fragment.
+     */
+    public void resetFields() {
+        textReasonField.setText("");
+        situationSpinner.setSelection(0);
+        situationSpinner.setSelection(0);
+        textDateField.setText("");
+        textTimeField.setText("");
+        setTimeAndDateListeners();
+    }
+
+    /**
+     * Converts date and time string to a Date object
+     * to pass into the Emote object
+     * @param date a string in the yyyy/mm/dd format
+     * @param time a string in the hh:mm format
+     * @return Date object built by the calendar
+     */
+    public Date pickerToDate(String date, String time) {
+        Calendar calendar = Calendar.getInstance();
+
+        String[] dateSplit = date.split("/");
+        int dateInt = Integer.parseInt(dateSplit[2]);
+        //Substract 1 since months are 0 indexed
+        int monthInt = Integer.parseInt(dateSplit[1]) - 1;
+        int yearInt = Integer.parseInt(dateSplit[0]);
+
+        String[] timeSplit = time.split(":");
+        int hour = Integer.parseInt(timeSplit[0]);
+        int minute = Integer.parseInt(timeSplit[1]);
+
+        calendar.set(Calendar.DATE, dateInt);
+        calendar.set(Calendar.MONTH, monthInt);
+        calendar.set(Calendar.YEAR, yearInt);
+
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+
+        return calendar.getTime();
 
     }
+
+
 }
