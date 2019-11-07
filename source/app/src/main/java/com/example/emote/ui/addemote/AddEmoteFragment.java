@@ -26,6 +26,7 @@ import com.example.emote.EmotionEvent;
 import com.example.emote.Situation;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -71,6 +72,18 @@ public class AddEmoteFragment extends Fragment {
         situationSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Situation.getStrings(getContext())));
         emotionSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Emotion.getStrings(getContext())));
 
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addEmote(v);
+            }
+        });
+        resetFields();
+        return root;
+    }
+
+    public void setTimeAndDateListeners() {
         textDateField.setInputType(InputType.TYPE_NULL);
         textDateField.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +96,7 @@ public class AddEmoteFragment extends Fragment {
                 datePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        textDateField.setText(String.format("%02d:%02d", i, i1));
+                        textDateField.setText(String.format("%02d/%02d/%02d", i, i1 + 1, i2));
                     }
                 }, year, month, day);
                 datePicker.show();
@@ -101,42 +114,67 @@ public class AddEmoteFragment extends Fragment {
                 timePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        textTimeField.setText(i + ":" + i1);
+                        textTimeField.setText(String.format("%02d:%02d", i, i1));
                     }
                 }, hour, minute, true);
                 timePicker.show();
             }
         });
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addEmote(v);
-            }
-        });
-        resetFields();
-        return root;
     }
 
     public void addEmote(View view) {
-        String dateString = textDateField.getText().toString();
-        String timeString = textTimeField.getText().toString();
-        String reasonString = textReasonField.getText().toString();
-        Situation situation = Situation.values()[situationSpinner.getSelectedItemPosition()];
-        Emotion emotion = Emotion.values()[emotionSpinner.getSelectedItemPosition()];
+        EmotionEvent event;
+        try {
+            Date date = pickerToDate(textDateField.getText().toString(), textTimeField.getText().toString());
+            String reasonString = textReasonField.getText().toString();
+            Situation situation = Situation.values()[situationSpinner.getSelectedItemPosition()];
+            Emotion emotion = Emotion.values()[emotionSpinner.getSelectedItemPosition()];
+            event = new EmotionEvent(emotion, situation, reasonString, date);
 
-        EmotionEvent event = new EmotionEvent(emotion, situation, reasonString, new Date(System.currentTimeMillis()));
+        } catch (Exception e) {
+            // TODO proper error messages
+            Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            resetFields();
+            return;
+        }
 
         FireStoreHandler fsh = new FireStoreHandler("dman");
         fsh.addEmote(event);
-        Toast.makeText(getContext(),"Emotion Event Added", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "Emotion Event Added", Toast.LENGTH_LONG).show();
         resetFields();
     }
 
-    public void resetFields(){
+    public void resetFields() {
         textReasonField.setText("");
         situationSpinner.setSelection(0);
         situationSpinner.setSelection(0);
+        textDateField.setText("");
+        textTimeField.setText("");
+        setTimeAndDateListeners();
+    }
+
+    public Date pickerToDate(String date, String time) {
+        Calendar calendar = Calendar.getInstance();
+
+        String[] dateSplit = date.split("/");
+        int dateInt = Integer.parseInt(dateSplit[2]);
+        //Substract 1 since months are 0 indexed
+        int monthInt = Integer.parseInt(dateSplit[1]) - 1;
+        int yearInt = Integer.parseInt(dateSplit[0]);
+
+        String[] timeSplit = time.split(":");
+        int hour = Integer.parseInt(timeSplit[0]);
+        int minute = Integer.parseInt(timeSplit[1]);
+
+        calendar.set(Calendar.DATE, dateInt);
+        calendar.set(Calendar.MONTH, monthInt);
+        calendar.set(Calendar.YEAR, yearInt);
+
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+
+        return calendar.getTime();
+
     }
 
 
