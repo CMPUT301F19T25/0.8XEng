@@ -1,4 +1,7 @@
 package com.example.emote.ui.listemote;
+/**
+ * ArrayAdapter to allow Emote List items to fill up.
+ */
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -23,19 +26,33 @@ public class EmoteListAdapter extends ArrayAdapter<EmotionEvent> {
     private ArrayList<EmotionEvent> emoteDataList;
     private Context context;
 
-    public EmoteListAdapter(Context context, ArrayList<EmotionEvent> emoteDataList){
+
+    /**
+     * Constructor for EmoteListAdapter
+     * @param context
+     * @param emoteDataList
+     */
+    public EmoteListAdapter(Context context, ArrayList<EmotionEvent> emoteDataList) {
         super(context, 0, emoteDataList);
         this.emoteDataList = emoteDataList;
         this.context = context;
     }
 
+    /**
+     * getView method for the EmoteListAdapter. Allows us to set text fields
+     * inside a list item.
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
 
-        if(view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.list_individual_emote, parent,false);
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.list_individual_emote, parent, false);
         }
 
         EmotionEvent emote = emoteDataList.get(position);
@@ -43,13 +60,13 @@ public class EmoteListAdapter extends ArrayAdapter<EmotionEvent> {
         TextView userTextView = view.findViewById(R.id.user_name);
         TextView dateTextView = view.findViewById(R.id.date);
 
-        int identifier = this.context.getResources().getIdentifier(emote.getEmote().toString(),"string", this.context.getPackageName());
+        int identifier = this.context.getResources().getIdentifier(emote.getEmote().toString(), "string", this.context.getPackageName());
         emoteTextView.setText(this.context.getResources().getString(identifier));
         userTextView.setText(emote.getUsername());
-        try{
+        try {
             DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
             dateTextView.setText(df.format(emote.getDate()));
-        }catch (NullPointerException np){
+        } catch (NullPointerException np) {
             dateTextView.setText("No date");
         }
 

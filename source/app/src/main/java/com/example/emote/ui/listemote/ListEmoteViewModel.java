@@ -1,10 +1,11 @@
 package com.example.emote.ui.listemote;
+/**
+ * View model for Emote List.
+ */
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.emote.Emotion;
@@ -25,16 +26,26 @@ public class ListEmoteViewModel extends ViewModel {
     private FireStoreHandler fsh;
     private FirebaseFirestore db;
 
+    /**
+     * Constructor which sets the username for firestore access
+     * and also gets a firestore reference.
+     */
     public ListEmoteViewModel() {
+        //
         fsh = new FireStoreHandler("kenboo");
         db = fsh.getFireStoreDBReference();
     }
 
-
+    /**
+     * Function to grab the emote history from Firebase
+     * @param adapter EmoteListAdapter that is used by the list view
+     * @param emoteDataList ArrayList used by the EmoteListAdapter
+     * @param showFriends Whether or not to show friends' event history
+     */
     public void grabFirebase(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList,
-                                boolean showFriends){
+                             boolean showFriends) {
 
-        if(showFriends){
+        if (showFriends) {
             db.collection(FireStoreHandler.EMOTE_COLLECTION).get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -52,7 +63,7 @@ public class ListEmoteViewModel extends ViewModel {
                             }
                         }
                     });
-        }else{
+        } else {
             db.collection(FireStoreHandler.EMOTE_COLLECTION)
                     .whereEqualTo(EmotionEvent.USERNAME_KEY, fsh.getUsername())
                     .get()
@@ -75,10 +86,18 @@ public class ListEmoteViewModel extends ViewModel {
         }
 
     }
-    public void grabFirebase(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList,
-                             boolean showFriends, Emotion filterEmote){
 
-        if(showFriends){
+    /**
+     * Function to grab the emote history from Firebase but with filtering.
+     *  @param adapter EmoteListAdapter that is used by the list view
+     * @param emoteDataList ArrayList used by the EmoteListAdapter
+     * @param showFriends Whether or not to show friends' event history
+     * @param filterEmote Emote to filter for
+     */
+    public void grabFirebase(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList,
+                             boolean showFriends, Emotion filterEmote) {
+
+        if (showFriends) {
             db.collection(FireStoreHandler.EMOTE_COLLECTION)
                     .whereEqualTo("emote", filterEmote)
                     .get()
@@ -98,7 +117,7 @@ public class ListEmoteViewModel extends ViewModel {
                             }
                         }
                     });
-        }else{
+        } else {
             db.collection(FireStoreHandler.EMOTE_COLLECTION)
                     .whereEqualTo(EmotionEvent.USERNAME_KEY, fsh.getUsername())
                     .whereEqualTo("emote", filterEmote)
