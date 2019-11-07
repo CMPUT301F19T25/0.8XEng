@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.emote.Emotion;
 import com.example.emote.FireStoreHandler;
 import com.example.emote.MainActivity;
 import com.example.emote.R;
@@ -28,6 +30,7 @@ import com.example.emote.Situation;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class AddEmoteFragment extends Fragment {
 
@@ -42,10 +45,10 @@ public class AddEmoteFragment extends Fragment {
     private EditText textDateField;
     private EditText textTimeField;
     private EditText textReasonField;
-    private EditText textSituationField;
     DatePickerDialog datePicker;
     TimePickerDialog timePicker;
     Spinner situationSpinner;
+    private Button submitButton;
 
     public void initializeViews() {
 
@@ -72,7 +75,7 @@ public class AddEmoteFragment extends Fragment {
         textTimeField = root.findViewById(R.id.text_time_field);
         textReasonField = root.findViewById(R.id.text_reason_field);
         situationSpinner = root.findViewById(R.id.spinner_situation);
-
+        submitButton = root.findViewById(R.id.submitButton);
 //        FireStoreHandler fsh = new FireStoreHandler("john123");
 //        EmotionEvent emoteEvent1 = new EmotionEvent("Happy", Situation.FEW_PEOPLE, "Good food");
 //        EmotionEvent emoteEvent2 = new EmotionEvent("Sad", Situation.FEW_PEOPLE, "Dog died");
@@ -120,6 +123,12 @@ public class AddEmoteFragment extends Fragment {
             }
         });
 
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addEmote(v);
+            }
+        });
         return root;
     }
 
@@ -128,9 +137,8 @@ public class AddEmoteFragment extends Fragment {
         String dateString = textDateField.getText().toString();
         String timeString = textTimeField.getText().toString();
         String reasonString = textReasonField.getText().toString();
-        String situationString = textSituationField.getText().toString();
 
-        EmotionEvent event = new EmotionEvent(emoteString, Situation.ALONE,reasonString);
+        EmotionEvent event = new EmotionEvent(Emotion.HAPPY, Situation.ALONE, reasonString, new Date(System.currentTimeMillis()));
 
         FireStoreHandler fsh = new FireStoreHandler("dman");
         fsh.addEmote(event);
