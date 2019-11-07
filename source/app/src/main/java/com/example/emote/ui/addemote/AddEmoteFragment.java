@@ -31,6 +31,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.zip.Inflater;
 
 public class AddEmoteFragment extends Fragment {
 
@@ -45,28 +46,13 @@ public class AddEmoteFragment extends Fragment {
     private EditText textDateField;
     private EditText textTimeField;
     private EditText textReasonField;
-    DatePickerDialog datePicker;
-    TimePickerDialog timePicker;
-    Spinner situationSpinner;
+    private DatePickerDialog datePicker;
+    private TimePickerDialog timePicker;
+    private Spinner situationSpinner;
     private Button submitButton;
 
-    public void initializeViews() {
-
-    }
-
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        addEmoteViewModel =
-                ViewModelProviders.of(this).get(AddEmoteViewModel.class);
+    public View initializeViews(LayoutInflater inflater, ViewGroup container) {
         View root = inflater.inflate(R.layout.fragment_add_emote, container, false);
-//        final TextView textView = root.findViewById(R.id.text_add_emote);
-//        addEmoteViewModel.getText().observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
-
         textLayoutDate = root.findViewById(R.id.text_layout_date);
         textLayoutTime = root.findViewById(R.id.text_layout_time);
         textLayoutReason = root.findViewById(R.id.text_layout_reason);
@@ -76,13 +62,14 @@ public class AddEmoteFragment extends Fragment {
         textReasonField = root.findViewById(R.id.text_reason_field);
         situationSpinner = root.findViewById(R.id.spinner_situation);
         submitButton = root.findViewById(R.id.submitButton);
-//        FireStoreHandler fsh = new FireStoreHandler("john123");
-//        EmotionEvent emoteEvent1 = new EmotionEvent("Happy", Situation.FEW_PEOPLE, "Good food");
-//        EmotionEvent emoteEvent2 = new EmotionEvent("Sad", Situation.FEW_PEOPLE, "Dog died");
-//        EmotionEvent emoteEvent3 = new EmotionEvent("Tired", Situation.FEW_PEOPLE, "Sleepy");
-//        fsh.addEmote(emoteEvent1);
-//        fsh.addEmote(emoteEvent2);
-//        fsh.addEmote(emoteEvent3);
+        return root;
+    }
+
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        addEmoteViewModel =
+                ViewModelProviders.of(this).get(AddEmoteViewModel.class);
+        View root = initializeViews(inflater, container);
 
         situationSpinner.setAdapter(new ArrayAdapter<Situation>(getContext(), android.R.layout.simple_spinner_item, Situation.values()));
 
@@ -144,7 +131,5 @@ public class AddEmoteFragment extends Fragment {
         fsh.addEmote(event);
     }
 
-    public void editDateText() {
 
-    }
 }
