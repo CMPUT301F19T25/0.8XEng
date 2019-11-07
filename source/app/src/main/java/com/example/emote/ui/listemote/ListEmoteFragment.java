@@ -46,13 +46,8 @@ public class ListEmoteFragment extends Fragment {
         emoteListView = root.findViewById(R.id.emote_list_view);
         spinner = root.findViewById(R.id.spinner);
 
-        String emotions[] = new String[Emotion.values().length];
-        for(int i = 0; i<Emotion.values().length;i++){
-            int identifier = getResources().getIdentifier(Emotion.values()[i].toString(),"string", getContext().getPackageName());
-            emotions[i] = getContext().getResources().getString(identifier);
 
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, emotions);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Emotion.getEmotionStrings(getContext()));
         spinner.setAdapter(adapter);
 
 
@@ -60,8 +55,6 @@ public class ListEmoteFragment extends Fragment {
         emoteAdapter = new EmoteListAdapter(getContext(), emoteDataList);
         emoteListView.setAdapter(emoteAdapter);
         listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList);
-
-
 
         return root;
     }

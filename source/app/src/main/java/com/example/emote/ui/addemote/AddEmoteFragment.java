@@ -12,18 +12,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.emote.Emotion;
 import com.example.emote.FireStoreHandler;
-import com.example.emote.MainActivity;
 import com.example.emote.R;
 import com.example.emote.EmotionEvent;
 import com.example.emote.Situation;
@@ -31,7 +27,6 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.zip.Inflater;
 
 public class AddEmoteFragment extends Fragment {
 
@@ -48,6 +43,7 @@ public class AddEmoteFragment extends Fragment {
     private EditText textReasonField;
     private DatePickerDialog datePicker;
     private TimePickerDialog timePicker;
+    private Spinner emotionSpinner;
     private Spinner situationSpinner;
     private Button submitButton;
 
@@ -56,11 +52,12 @@ public class AddEmoteFragment extends Fragment {
         textLayoutDate = root.findViewById(R.id.text_layout_date);
         textLayoutTime = root.findViewById(R.id.text_layout_time);
         textLayoutReason = root.findViewById(R.id.text_layout_reason);
-        textEmoteField = root.findViewById(R.id.text_emote_field);
+        textEmoteField = root.findViewById(R.id.spinner);
         textDateField = root.findViewById(R.id.text_date_field);
         textTimeField = root.findViewById(R.id.text_time_field);
         textReasonField = root.findViewById(R.id.text_reason_field);
         situationSpinner = root.findViewById(R.id.spinner_situation);
+        emotionSpinner = root.findViewById(R.id.spinnner_emote);
         submitButton = root.findViewById(R.id.submitButton);
         return root;
     }
@@ -72,6 +69,7 @@ public class AddEmoteFragment extends Fragment {
         View root = initializeViews(inflater, container);
 
         situationSpinner.setAdapter(new ArrayAdapter<Situation>(getContext(), android.R.layout.simple_spinner_item, Situation.values()));
+        emotionSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Emotion.getEmotionStrings(getContext())));
 
         textDateField.setInputType(InputType.TYPE_NULL);
         textDateField.setOnClickListener(new View.OnClickListener() {
