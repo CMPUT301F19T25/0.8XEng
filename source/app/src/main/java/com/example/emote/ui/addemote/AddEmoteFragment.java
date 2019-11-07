@@ -1,4 +1,7 @@
 package com.example.emote.ui.addemote;
+/**
+ *  Fragment to add a new emote to the firebase db.
+ */
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -20,13 +23,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.emote.Emotion;
+import com.example.emote.EmotionEvent;
 import com.example.emote.FireStoreHandler;
 import com.example.emote.R;
-import com.example.emote.EmotionEvent;
 import com.example.emote.Situation;
-import com.google.android.material.textfield.TextInputLayout;
 
-import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -35,11 +36,6 @@ public class AddEmoteFragment extends Fragment {
     private static final String TAG = "AddEmoteFragment";
     private AddEmoteViewModel addEmoteViewModel;
 
-    private TextInputLayout textLayoutEmoteName;
-    private TextInputLayout textLayoutDate;
-    private TextInputLayout textLayoutTime;
-    private TextInputLayout textLayoutReason;
-    private EditText textEmoteField;
     private EditText textDateField;
     private EditText textTimeField;
     private EditText textReasonField;
@@ -49,11 +45,14 @@ public class AddEmoteFragment extends Fragment {
     private Spinner situationSpinner;
     private Button submitButton;
 
+    /**
+     * Initialize all the necessary views with findViewById
+     * @param inflater LayoutInflater to inflate Layour
+     * @param container ViewGroup Container
+     * @return Returns the root view object of fragmend
+     */
     public View initializeViews(LayoutInflater inflater, ViewGroup container) {
         View root = inflater.inflate(R.layout.fragment_add_emote, container, false);
-        textLayoutDate = root.findViewById(R.id.text_layout_date);
-        textLayoutTime = root.findViewById(R.id.text_layout_time);
-        textLayoutReason = root.findViewById(R.id.text_layout_reason);
         textDateField = root.findViewById(R.id.text_date_field);
         textTimeField = root.findViewById(R.id.text_time_field);
         textReasonField = root.findViewById(R.id.text_reason_field);
@@ -83,6 +82,9 @@ public class AddEmoteFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Sets up the DatePickerDialog TimePickerDialog
+     */
     public void setTimeAndDateListeners() {
         textDateField.setInputType(InputType.TYPE_NULL);
         textDateField.setOnClickListener(new View.OnClickListener() {
@@ -122,6 +124,10 @@ public class AddEmoteFragment extends Fragment {
         });
     }
 
+    /**
+     * Add the defined Emotion event to the firebase DB and reset the fields.
+     * @param view
+     */
     public void addEmote(View view) {
         EmotionEvent event;
         try {
@@ -144,6 +150,9 @@ public class AddEmoteFragment extends Fragment {
         resetFields();
     }
 
+    /**
+     * Resets the fields of the Fragment.
+     */
     public void resetFields() {
         textReasonField.setText("");
         situationSpinner.setSelection(0);
@@ -153,6 +162,13 @@ public class AddEmoteFragment extends Fragment {
         setTimeAndDateListeners();
     }
 
+    /**
+     * Converts date and time string to a Date object
+     * to pass into the Emote object
+     * @param date a string in the yyyy/mm/dd format
+     * @param time a string in the hh:mm format
+     * @return Date object built by the calendar
+     */
     public Date pickerToDate(String date, String time) {
         Calendar calendar = Calendar.getInstance();
 
