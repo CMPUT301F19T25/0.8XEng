@@ -75,5 +75,52 @@ public class ListEmoteViewModel extends ViewModel {
         }
 
     }
+    public void grabFirebase(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList,
+                             boolean showFriends, Emotion filterEmote){
+
+        if(showFriends){
+            db.collection(FireStoreHandler.EMOTE_COLLECTION)
+                    .whereEqualTo("emote", filterEmote)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            ArrayList<EmotionEvent> new_emotes;
+                            if (task.isSuccessful()) {
+                                emoteDataList.clear();
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                    emoteDataList.add(document.toObject(EmotionEvent.class));
+                                }
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+        }else{
+            db.collection(FireStoreHandler.EMOTE_COLLECTION)
+                    .whereEqualTo(EmotionEvent.USERNAME_KEY, fsh.getUsername())
+                    .whereEqualTo("emote", filterEmote)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            ArrayList<EmotionEvent> new_emotes;
+                            if (task.isSuccessful()) {
+                                emoteDataList.clear();
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                    emoteDataList.add(document.toObject(EmotionEvent.class));
+                                }
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+        }
+
+    }
 
 }

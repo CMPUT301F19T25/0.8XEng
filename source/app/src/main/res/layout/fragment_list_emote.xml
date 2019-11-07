@@ -23,6 +23,12 @@
             android:clickable="true"
             android:text="Show Friends" />
 
+        <CheckBox
+            android:id="@+id/check_box_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Filter Emotes" />
+
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"

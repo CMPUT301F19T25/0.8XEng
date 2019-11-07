@@ -42,6 +42,7 @@ public class ListEmoteFragment extends Fragment {
     private Spinner spinner;
     private Button refreshButton;
     private CheckBox showFriends;
+    private CheckBox filterEmotes;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -63,12 +64,18 @@ public class ListEmoteFragment extends Fragment {
         listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, false);
 
         showFriends = root.findViewById(R.id.check_box_show_friends);
+        filterEmotes = root.findViewById(R.id.check_box_filter);
 
         refreshButton = root.findViewById(R.id.button_refresh);
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, showFriends.isChecked());
+                if(filterEmotes.isChecked()){
+                    listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList,
+                            showFriends.isChecked(),Emotion.values()[spinner.getSelectedItemPosition()]);
+                }else{
+                    listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, showFriends.isChecked());
+                }
             }
         });
 
