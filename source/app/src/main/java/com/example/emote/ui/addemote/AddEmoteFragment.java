@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -52,7 +53,6 @@ public class AddEmoteFragment extends Fragment {
         textLayoutDate = root.findViewById(R.id.text_layout_date);
         textLayoutTime = root.findViewById(R.id.text_layout_time);
         textLayoutReason = root.findViewById(R.id.text_layout_reason);
-        textEmoteField = root.findViewById(R.id.spinner);
         textDateField = root.findViewById(R.id.text_date_field);
         textTimeField = root.findViewById(R.id.text_time_field);
         textReasonField = root.findViewById(R.id.text_reason_field);
@@ -114,18 +114,29 @@ public class AddEmoteFragment extends Fragment {
                 addEmote(v);
             }
         });
+        resetFields();
         return root;
     }
 
     public void addEmote(View view) {
-        String emoteString = textEmoteField.getText().toString();
         String dateString = textDateField.getText().toString();
         String timeString = textTimeField.getText().toString();
         String reasonString = textReasonField.getText().toString();
-        EmotionEvent event = new EmotionEvent(Emotion.HAPPY, Situation.ALONE, reasonString, new Date(System.currentTimeMillis()));
+        Situation situation = Situation.values()[situationSpinner.getSelectedItemPosition()];
+        Emotion emotion = Emotion.values()[emotionSpinner.getSelectedItemPosition()];
+
+        EmotionEvent event = new EmotionEvent(emotion, situation, reasonString, new Date(System.currentTimeMillis()));
 
         FireStoreHandler fsh = new FireStoreHandler("dman");
         fsh.addEmote(event);
+        Toast.makeText(getContext(),"Emotion Event Added", Toast.LENGTH_LONG).show();
+        resetFields();
+    }
+
+    public void resetFields(){
+        textReasonField.setText("");
+        situationSpinner.setSelection(0);
+        situationSpinner.setSelection(0);
     }
 
 
