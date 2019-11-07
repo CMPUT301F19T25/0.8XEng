@@ -12,7 +12,7 @@ public enum Emotion {
     ANNOYED,
     STRESSED;
 
-    public static String[] getEmotionStrings(Context context) {
+    public static String[] getStrings(Context context) {
         String emotions[] = new String[Emotion.values().length];
         for (int i = 0; i < Emotion.values().length; i++) {
             int identifier = context.getResources().getIdentifier(Emotion.values()[i].toString(), "string", context.getPackageName());

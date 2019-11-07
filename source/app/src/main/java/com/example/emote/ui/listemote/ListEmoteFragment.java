@@ -47,7 +47,7 @@ public class ListEmoteFragment extends Fragment {
         spinner = root.findViewById(R.id.spinner);
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Emotion.getEmotionStrings(getContext()));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Emotion.getStrings(getContext()));
         spinner.setAdapter(adapter);
 
 

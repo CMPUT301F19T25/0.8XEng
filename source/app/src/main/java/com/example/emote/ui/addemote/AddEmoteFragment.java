@@ -68,8 +68,8 @@ public class AddEmoteFragment extends Fragment {
                 ViewModelProviders.of(this).get(AddEmoteViewModel.class);
         View root = initializeViews(inflater, container);
 
-        situationSpinner.setAdapter(new ArrayAdapter<Situation>(getContext(), android.R.layout.simple_spinner_item, Situation.values()));
-        emotionSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Emotion.getEmotionStrings(getContext())));
+        situationSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Situation.getStrings(getContext())));
+        emotionSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Emotion.getStrings(getContext())));
 
         textDateField.setInputType(InputType.TYPE_NULL);
         textDateField.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +122,6 @@ public class AddEmoteFragment extends Fragment {
         String dateString = textDateField.getText().toString();
         String timeString = textTimeField.getText().toString();
         String reasonString = textReasonField.getText().toString();
-
         EmotionEvent event = new EmotionEvent(Emotion.HAPPY, Situation.ALONE, reasonString, new Date(System.currentTimeMillis()));
 
         FireStoreHandler fsh = new FireStoreHandler("dman");
