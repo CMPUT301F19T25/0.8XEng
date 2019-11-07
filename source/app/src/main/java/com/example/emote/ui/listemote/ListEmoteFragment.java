@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -35,8 +37,12 @@ public class ListEmoteFragment extends Fragment {
 
     private ArrayList<EmotionEvent> emoteDataList;
     private EmoteListAdapter emoteAdapter;
+
     private ListView emoteListView;
     private Spinner spinner;
+    private Button refreshButton;
+    private CheckBox showFriends;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         listEmoteViewModel =
@@ -54,7 +60,17 @@ public class ListEmoteFragment extends Fragment {
         emoteDataList = new ArrayList<>();
         emoteAdapter = new EmoteListAdapter(getContext(), emoteDataList);
         emoteListView.setAdapter(emoteAdapter);
-        listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList);
+        listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, false);
+
+        showFriends = root.findViewById(R.id.check_box_show_friends);
+
+        refreshButton = root.findViewById(R.id.button_refresh);
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, showFriends.isChecked());
+            }
+        });
 
         return root;
     }
