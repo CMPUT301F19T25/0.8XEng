@@ -20,5 +20,9 @@ public enum Emotion {
         }
         return  emotions;
     }
+    public static int getColor(Context context, Emotion emotion){
+        int identifier = context.getResources().getIdentifier(emotion.toString(), "color", context.getPackageName());
+        return context.getResources().getColor(identifier);
+    }
 
 }

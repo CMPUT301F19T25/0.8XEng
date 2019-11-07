@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.emote.Emotion;
 import com.example.emote.R;
 import com.example.emote.EmotionEvent;
 
@@ -69,6 +70,7 @@ public class EmoteListAdapter extends ArrayAdapter<EmotionEvent> {
         } catch (NullPointerException np) {
             dateTextView.setText("No date");
         }
+        view.setBackgroundColor(Emotion.getColor(context, emote.getEmote()));
 
         return view;
     }
