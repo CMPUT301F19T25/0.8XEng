@@ -15,8 +15,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.lang.Long.MIN_VALUE;
 
 public class FireStoreHandler {
 
@@ -28,6 +31,7 @@ public class FireStoreHandler {
     public static final String CURRENT_FRIENDS = "CURRENT_FRIENDS";
 
     private String username;
+    private EmotionEvent recent_emote;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     /**
@@ -65,7 +69,6 @@ public class FireStoreHandler {
                     }
                 }
             });
-
         this.username = username;
     }
 
@@ -188,6 +191,30 @@ public class FireStoreHandler {
                     }
                 });
     }
+
+    public EmotionEvent getRecentEmote() {
+        db.collection(EMOTE_COLLECTION)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Date max_date = new Date(MIN_VALUE);
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                if (max_date.compareTo(document.toObject(EmotionEvent.class).getDate()) <= 0) {
+                                    recent_emote = document.toObject(EmotionEvent.class);
+                                    max_date = document.toObject(EmotionEvent.class).getDate();
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        return recent_emote;
+    }
+
 
     public FirebaseFirestore getFireStoreDBReference(){
         return db;

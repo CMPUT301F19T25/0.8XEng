@@ -12,11 +12,16 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.emote.FireStoreHandler;
 import com.example.emote.R;
 
 public class ProfileFragment extends Fragment {
 
+    private static final String TAG = "ProfileFragment";
     private ProfileViewModel profileViewModel;
+
+    private TextView usernameText;
+    private TextView currentmoodText;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -30,6 +35,14 @@ public class ProfileFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
+        usernameText = root.findViewById(R.id.profile_username);
+        currentmoodText = root.findViewById(R.id.profile_current_mood);
+
+        FireStoreHandler fsh = new FireStoreHandler("john123");
+        usernameText.setText(fsh.getUsername());
+        currentmoodText.setText(fsh.getRecentEmote().getEmote());
+
         return root;
     }
 }
