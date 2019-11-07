@@ -58,7 +58,8 @@ public class LoginActivity extends AppCompatActivity {
 
         if (mAuth.getCurrentUser() != null) {
             // user currently signed in
-            onLoginSuccess();
+            // onLoginSuccess();
+            // TODO: what do
         }
     }
 
@@ -112,16 +113,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-//        new android.os.Handler().postDelayed(
-//                new Runnable() {
-//                    public void run() {
-//                        // On complete call either onLoginSuccess or onLoginFailed
-//                        onLoginSuccess();
-//                        // onLoginFailed();
-//                        progressDialog.dismiss();
-//                    }
-//                }, 3000);
     }
 
     @Override
