@@ -28,56 +28,110 @@ public class FireStoreHandler {
     public static final String CURRENT_FRIENDS = "CURRENT_FRIENDS";
 
     private String username;
-    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
+
+    public void setupUser(){
+        // Create empty friend and friend request lists if they don't exist
+        db.collection(FRIEND_COLLECTION).document(username).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (!document.exists()) {
+                                Map<String, Object> friends = new HashMap<>();
+                                friends.put(CURRENT_FRIENDS, new ArrayList<String>());
+                                friends.put(INCOMING_FRIENDS, new ArrayList<String>());
+                                db.collection(FRIEND_COLLECTION).document(username).set(friends)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "DocumentSnapshot successfully written!");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w(TAG, "Error writing document", e);
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+    }
 
     /**
      * @param username Username of the logged-in user.
      */
     public FireStoreHandler(final String username){
-
-        // Create empty friend and friend request lists if they don't exist
-        db.collection(FRIEND_COLLECTION).document(username).get()
-            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (!document.exists()) {
-                            Map<String, Object> friends = new HashMap<>();
-                            friends.put(CURRENT_FRIENDS, new ArrayList<String>());
-                            friends.put(INCOMING_FRIENDS, new ArrayList<String>());
-                            db.collection(FRIEND_COLLECTION).document(username).set(friends)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "DocumentSnapshot successfully written!");
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.w(TAG, "Error writing document", e);
-                                        }
-                                    });
-                        }
-                    } else {
-                        Log.d(TAG, "get failed with ", task.getException());
-                    }
-                }
-            });
-
         this.username = username;
+        this.db = FirebaseFirestore.getInstance();
     }
 
+    public void addFriend(final String username, final String friend){
+        // Add to friend's friend list
+        db.collection(FRIEND_COLLECTION).document(friend)
+                .update(CURRENT_FRIENDS, FieldValue.arrayUnion(username))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Successfully added" + username + " to " + friend + "friends list");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding friend", e);
+                    }
+                });
+    }
     /**
      * Accept a friend request.
      * @param friendUsername Id for the friend to add.
      */
-    public void acceptFriendRequest(String friendUsername){
+    public void acceptFriendRequest(final String friendUsername){
+        // remove the incoming friend request
+        removeFriendRequest(friendUsername);
 
-        // Remove from Incoming Friend Request
+        // Add to friend's friend list
+        db.collection(FRIEND_COLLECTION).document(friendUsername)
+                .update(CURRENT_FRIENDS, FieldValue.arrayUnion(username))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Successfully added" + username + " to " + friendUsername + "friends list");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding friend", e);
+                    }
+                });
+
+        // Add to current user's friend list
         db.collection(FRIEND_COLLECTION).document(username)
-            .update(INCOMING_FRIENDS, FieldValue.arrayRemove(friendUsername))
+                .update(CURRENT_FRIENDS, FieldValue.arrayUnion(friendUsername))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Successfully added" + friendUsername + " to " + username + "friends list");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding friend", e);
+                    }
+                });
+    }
+
+    public void removeFriendRequest(String friendUsername) {
+        db.collection(FRIEND_COLLECTION).document(this.username)
+                .update(INCOMING_FRIENDS, FieldValue.arrayRemove(friendUsername))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -90,40 +144,11 @@ public class FireStoreHandler {
                         Log.w(TAG, "Error updating document", e);
                     }
                 });
-
-        // Add to friend's friend list
-        db.collection(FRIEND_COLLECTION).document(friendUsername)
-                .update(CURRENT_FRIENDS, FieldValue.arrayUnion(username))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Successfully added to current user to friends friend list");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating document", e);
-                    }
-                });
-
-        // Add to current user's friend list
-        db.collection(FRIEND_COLLECTION).document(username)
-                .update(CURRENT_FRIENDS, FieldValue.arrayUnion(friendUsername))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Successfully added friend to current user's friend list");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating document", e);
-                    }
-                });
     }
 
+    public void declineFollowRequest(String friendUsername) {
+        removeFriendRequest(friendUsername);
+    }
 
     /**
      * Send a friend request.
