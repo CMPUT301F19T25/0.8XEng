@@ -3,4 +3,12 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="SAD">#E1E1E1</color>
+    <color name="HAPPY">#8CFAFA</color>
+    <color name="LONELY">#8CC0FA</color>
+    <color name="DEPRESSED">#8F93FA</color>
+    <color name="EXCITED">#F7FA8F</color>
+    <color name="NEUTRAL">#FFFFFF</color>
+    <color name="ANNOYED">#CFFAB9</color>
+    <color name="STRESSED">#FACFB9</color>
 </resources>
