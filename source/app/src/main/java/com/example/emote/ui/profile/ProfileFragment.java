@@ -41,7 +41,12 @@ public class ProfileFragment extends Fragment {
 
         FireStoreHandler fsh = new FireStoreHandler("john123");
         usernameText.setText(fsh.getUsername());
-        currentmoodText.setText(fsh.getRecentEmote().getEmote());
+        if(fsh.getRecentEmote() == null) {
+            currentmoodText.setText("");
+        }
+        else {
+            currentmoodText.setText(fsh.getRecentEmote().getEmote());
+        }
 
         return root;
     }
