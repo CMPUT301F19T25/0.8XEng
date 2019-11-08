@@ -32,7 +32,7 @@ public class LoginSignupTest {
 
     private String invalidUserName = "invalidUserName";
     private String invalidPassword = "invalid123";
-    private String validUserName = "testuser";
+    private String validUserName = "testuser4";
     private String validPassword = "password123";
 
 
