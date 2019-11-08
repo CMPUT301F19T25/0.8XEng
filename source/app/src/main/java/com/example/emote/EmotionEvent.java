@@ -8,6 +8,9 @@ import com.example.emote.Situation;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * This is a class that defines an EmotionEvent
+ */
 public class EmotionEvent {
 
     public static final String USERNAME_KEY = "username";
@@ -22,6 +25,18 @@ public class EmotionEvent {
 
     public EmotionEvent(){}
 
+
+    /**
+     * The constructor for the EmotionEvent
+     * @param emote
+     *   The emote for the event
+     * @param situation
+     *   The social situation
+     * @param reason
+     *   The reason for the event
+     * @param date
+     *   The Date of the event
+     */
     public EmotionEvent(Emotion emote, Situation situation, String reason, Date date){
         setUsername(username);
         setEmote(emote);
@@ -63,6 +78,11 @@ public class EmotionEvent {
         this.username = username;
     }
 
+    /**
+     * Gets the fireStoreDocumentID
+     * @return
+     *   A string containing fireStoreDocumentID
+     */
     public String getFireStoreDocumentID() {
         return fireStoreDocumentID;
     }
