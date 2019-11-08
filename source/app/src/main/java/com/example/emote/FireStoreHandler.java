@@ -36,6 +36,7 @@ public class FireStoreHandler {
      *  */
     public void setupUser(){
         // Create empty friend and friend request lists if they don't exist
+        while (username == null) {}
         db.collection(FRIEND_COLLECTION).document(username).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
