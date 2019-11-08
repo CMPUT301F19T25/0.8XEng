@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This is a class used to handle FireStore operations
+ */
 public class FireStoreHandler {
 
     private static final String TAG = "FireStoreHandler";

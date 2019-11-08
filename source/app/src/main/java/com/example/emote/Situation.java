@@ -2,12 +2,21 @@ package com.example.emote;
 
 import android.content.Context;
 
+/**
+ * An Enum used to define social situations
+ */
 public enum Situation {
     ALONE,
     ONE_PERSON,
     FEW_PEOPLE,
     CROWD;
 
+    /**
+     * Get all the situation strings
+     * @param context
+     * @return
+     *   A string array containing all situation strings
+     */
     public static String[] getStrings(Context context) {
         String situations[] = new String[Situation.values().length];
         for (int i = 0; i < Situation.values().length; i++) {
