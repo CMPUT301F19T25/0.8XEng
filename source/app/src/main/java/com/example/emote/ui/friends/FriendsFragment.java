@@ -44,8 +44,7 @@ public class FriendsFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        getActivity().setTitle("Follow Requests");
+                             @Nullable Bundle savedInstAdanceState) {
         friendsViewModel = ViewModelProviders.of(this).get(FriendsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_friends, container, false);
 //        final TextView textView = root.findViewById(R.id.text_list_friends);
