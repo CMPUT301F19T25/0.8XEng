@@ -1,5 +1,7 @@
 package com.example.emote;
-
+/**
+ * Class to handle User Login
+ */
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -66,11 +68,17 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *  event to handle login failed
+     *  */
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
         loginButton.setEnabled(true);
     }
 
+    /**
+     *  event to handle login success
+     *  */
     public void onLoginSuccess() {
         loginButton.setEnabled(true);
         // move to user activity
@@ -78,6 +86,9 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     *  login the user
+     *  */
     public void login() {
         Log.d(TAG, "Login");
 
@@ -132,7 +143,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     *  validate login credentials
+     *  */
     private boolean validateLogin() {
         boolean valid = true;
 

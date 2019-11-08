@@ -1,5 +1,9 @@
 package com.example.emote.ui.friends;
 
+/*
+
+Friends list adapter
+ */
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
