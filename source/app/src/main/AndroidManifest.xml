@@ -28,5 +28,4 @@
             android:label="View or Edit Event">
         </activity>
     </application>
-
 </manifest>

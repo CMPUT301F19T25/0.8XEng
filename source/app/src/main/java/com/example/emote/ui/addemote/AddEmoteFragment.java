@@ -1,11 +1,12 @@
 package com.example.emote.ui.addemote;
-/**
- *  Fragment to add a new emote to the firebase db.
- */
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +15,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -28,9 +31,19 @@ import com.example.emote.EmotionEvent;
 import com.example.emote.FireStoreHandler;
 import com.example.emote.R;
 import com.example.emote.Situation;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
+
+/**
+ * Fragment to add a new emote to the firebase db.
+ */
 
 public class AddEmoteFragment extends Fragment {
 
@@ -45,12 +58,22 @@ public class AddEmoteFragment extends Fragment {
     private Spinner emotionSpinner;
     private Spinner situationSpinner;
     private Button submitButton;
+    private Button takePictureButton;
+    private ImageView cameraPreview;
+
+    FirebaseStorage storage;
+    String STORAGE_REF = "gs://emote-f75ce.appspot.com";
+
+    Bitmap cameraImage;
+
+
+    private static final int CAMERA_REQUEST = 1888;
 
     /**
      * Initialize all the necessary views with findViewById
      * @param inflater LayoutInflater to inflate Layour
      * @param container ViewGroup Container
-     * @return Returns the root view object of fragmend
+     * @return Returns the root view object of fragment
      */
     public View initializeViews(LayoutInflater inflater, ViewGroup container) {
         View root = inflater.inflate(R.layout.fragment_add_emote, container, false);
@@ -60,8 +83,13 @@ public class AddEmoteFragment extends Fragment {
         situationSpinner = root.findViewById(R.id.spinner_situation);
         emotionSpinner = root.findViewById(R.id.spinnner_emote);
         submitButton = root.findViewById(R.id.submitButton);
+        takePictureButton = root.findViewById(R.id.addPhotoButton);
+        cameraPreview = root.findViewById(R.id.cameraPreview);
+
+        storage = FirebaseStorage.getInstance();
         return root;
     }
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -72,19 +100,25 @@ public class AddEmoteFragment extends Fragment {
         situationSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Situation.getStrings(getContext())));
         emotionSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Emotion.getStrings(getContext())));
 
-
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addEmote(v);
             }
         });
+        takePictureButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                addPicture(view);
+            }
+        });
         resetFields();
         return root;
     }
 
-    /**
-     * Sets up the DatePickerDialog TimePickerDialog
+    /***
+     * Set time and date listeners
      */
     public void setTimeAndDateListeners() {
         textDateField.setInputType(InputType.TYPE_NULL);
@@ -125,6 +159,53 @@ public class AddEmoteFragment extends Fragment {
         });
     }
 
+    /***
+     *
+     * @param view
+     * Start camera intent
+     */
+    public void addPicture(View view) {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            cameraImage = (Bitmap) data.getExtras().get("data");
+
+            int newHeight = (int) Math.floor((double) cameraImage.getHeight() *( (double) cameraPreview.getWidth() / (double) cameraImage.getWidth()));
+            cameraImage = Bitmap.createScaledBitmap(cameraImage, cameraPreview.getWidth(), newHeight, true);
+
+            cameraPreview.setImageBitmap(cameraImage);
+
+        }
+    }
+
+    /**
+     *
+     * @param bitmap
+     * Upload the bitmap to Firebase storage using a random image name
+     * @return file name
+     */
+    public String uploadImage(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        byte[] data = outputStream.toByteArray();
+
+        UUID imageFileName = UUID.randomUUID();
+        StorageReference storageRef = storage.getReferenceFromUrl(STORAGE_REF).child(imageFileName.toString()+".png");
+        UploadTask task = storageRef.putBytes(data);
+        task.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
+        return imageFileName.toString();
+    }
     /**
      * Add the defined Emotion event to the firebase DB and reset the fields.
      * @param view
@@ -136,7 +217,8 @@ public class AddEmoteFragment extends Fragment {
             String reasonString = textReasonField.getText().toString();
             Situation situation = Situation.values()[situationSpinner.getSelectedItemPosition()];
             Emotion emotion = Emotion.values()[emotionSpinner.getSelectedItemPosition()];
-            event = new EmotionEvent(emotion, situation, reasonString, date);
+            String fileName = uploadImage(cameraImage);
+            event = new EmotionEvent(emotion, situation, reasonString, date, fileName);
 
         } catch (Exception e) {
             // TODO proper error messages
@@ -161,6 +243,7 @@ public class AddEmoteFragment extends Fragment {
         textDateField.setText("");
         textTimeField.setText("");
         setTimeAndDateListeners();
+        cameraPreview.setImageResource(0);
     }
 
     /**
@@ -191,8 +274,5 @@ public class AddEmoteFragment extends Fragment {
         calendar.set(Calendar.MINUTE, minute);
 
         return calendar.getTime();
-
     }
-
-
 }
