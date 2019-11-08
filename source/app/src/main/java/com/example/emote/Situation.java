@@ -2,6 +2,8 @@ package com.example.emote;
 
 import android.content.Context;
 
+import java.util.Arrays;
+
 public enum Situation {
     ALONE,
     ONE_PERSON,
@@ -15,5 +17,8 @@ public enum Situation {
             situations[i] = context.getResources().getString(identifier);
         }
         return  situations;
+    }
+    public static int getIndex(Situation situation){
+        return Arrays.asList(Situation.values()).indexOf(situation);
     }
 }

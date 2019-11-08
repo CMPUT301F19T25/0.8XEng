@@ -5,10 +5,11 @@ package com.example.emote;
 
 import com.example.emote.Situation;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-public class EmotionEvent {
+public class EmotionEvent implements Serializable {
 
     public static final String USERNAME_KEY = "username";
 
