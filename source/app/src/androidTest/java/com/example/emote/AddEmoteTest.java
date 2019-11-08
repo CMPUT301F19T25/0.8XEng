@@ -24,6 +24,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
+/**
+ * Test class for the add emotion fragment.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class AddEmoteTest {

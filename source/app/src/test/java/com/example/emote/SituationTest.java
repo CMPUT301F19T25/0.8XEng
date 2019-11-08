@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Test class for the Situation class.
+ */
 public class SituationTest {
 
     @Test

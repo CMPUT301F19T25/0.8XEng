@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Test class for the emotion class.
+ */
 public class EmotionTest {
 
     @Test

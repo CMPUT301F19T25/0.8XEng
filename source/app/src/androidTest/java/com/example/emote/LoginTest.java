@@ -14,9 +14,12 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
+/**
+ * Test class for the login activities.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class LoginSignupTest {
+public class LoginTest {
 
     private String invalidUserName = "invalidUserName";
     private String invalidPassword = "invalid123";

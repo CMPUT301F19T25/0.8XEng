@@ -12,6 +12,9 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+/**
+ * Test class for the profile fragment.
+ */
 public class ProfileTest {
 
     private String validUserName = "testuser4";

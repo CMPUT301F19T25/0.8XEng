@@ -7,6 +7,9 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Test class for the EmotionEvent class.
+ */
 public class EmotionEventTest {
 
     private EmotionEvent emotionEvent;
