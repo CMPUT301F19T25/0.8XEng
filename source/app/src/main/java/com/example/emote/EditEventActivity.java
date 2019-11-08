@@ -35,17 +35,48 @@ public class EditEventActivity extends AppCompatActivity {
 
     private static final String TAG = "AddEmoteFragment";
     private AddEmoteViewModel addEmoteViewModel;
+    private FireStoreHandler fsh;
 
     private TextView textDate;
     private TextView textTime;
     private EditText textReasonField;
-    private DatePickerDialog datePicker;
-    private TimePickerDialog timePicker;
     private Spinner emotionSpinner;
     private Spinner situationSpinner;
-    private Button submitButton;
+    private Button editButton;
+    private Button deleteButton;
 
     private EmotionEvent emotionEvent;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_event);
+
+        initializeViews();
+
+        Intent intent = getIntent();
+        emotionEvent = (EmotionEvent) intent.getSerializableExtra("event");
+
+        fsh = new FireStoreHandler("dman");
+        setFields();
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editEmote();
+                finish();
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fsh.removeEmote(emotionEvent.getFireStoreDocumentID());
+                finish();
+            }
+        });
+
+    }
 
     /**
      * Initialize all the necessary views with findViewById
@@ -56,7 +87,8 @@ public class EditEventActivity extends AppCompatActivity {
         textReasonField = this.findViewById(R.id.text_reason_field);
         situationSpinner = this.findViewById(R.id.spinner_situation);
         emotionSpinner = this.findViewById(R.id.spinnner_emote);
-        submitButton = this.findViewById(R.id.submitButton);
+        editButton = this.findViewById(R.id.button_edit);
+        deleteButton = this.findViewById(R.id.button_delete);
 
         situationSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Situation.getStrings(this)));
         emotionSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Emotion.getStrings(this)));
@@ -79,47 +111,36 @@ public class EditEventActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_event);
 
-        initializeViews();
-
-        Intent intent = getIntent();
-        emotionEvent = (EmotionEvent) intent.getSerializableExtra("event");
-        setFields();
-
-    }
 
 
 
     /**
      * Add the defined Emotion event to the firebase DB and reset the fields.
-     * @param view
 
-    public void addEmote(View view) {
+    */
+    public void editEmote() {
         EmotionEvent event;
         try {
-            Date date = pickerToDate(textDateField.getText().toString(), textTimeField.getText().toString());
             String reasonString = textReasonField.getText().toString();
             Situation situation = Situation.values()[situationSpinner.getSelectedItemPosition()];
             Emotion emotion = Emotion.values()[emotionSpinner.getSelectedItemPosition()];
-            event = new EmotionEvent(emotion, situation, reasonString, date);
+
+            emotionEvent.setReason(reasonString);
+            emotionEvent.setSituation(situation);
+            emotionEvent.setEmote(emotion);
 
         } catch (Exception e) {
             // TODO proper error messages
             Toast.makeText(EditEventActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            resetFields();
             return;
         }
 
-        FireStoreHandler fsh = new FireStoreHandler("dman");
-        fsh.addEmote(event);
-        Toast.makeText(getContext(), "Emotion Event Added", Toast.LENGTH_LONG).show();
-        resetFields();
+        fsh.removeEmote(emotionEvent.getFireStoreDocumentID());
+        fsh.addEmote(emotionEvent);
     }
-    */
+
+
 
 
 }
