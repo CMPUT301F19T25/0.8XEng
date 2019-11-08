@@ -1,5 +1,7 @@
 package com.example.emote;
-
+/**
+ * Activity to handle user signups
+ */
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;

@@ -1,5 +1,7 @@
 package com.example.emote.ui.friends;
-
+/*
+Friends fragment
+ */
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,17 +49,9 @@ public class FriendsFragment extends Fragment {
                              @Nullable Bundle savedInstAdanceState) {
         friendsViewModel = ViewModelProviders.of(this).get(FriendsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_friends, container, false);
-//        final TextView textView = root.findViewById(R.id.text_list_friends);
-//        friendsViewModel.getText().observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
 
         friendsListView = root.findViewById(R.id.friends_list_view);
         friendsDataList = new ArrayList<>();
-//        friendsDataList.add("hey");
         friendsAdapter = new FriendsListAdapter(getContext(), friendsDataList);
         friendsListView.setAdapter(friendsAdapter);
 

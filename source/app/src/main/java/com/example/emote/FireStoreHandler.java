@@ -31,6 +31,9 @@ public class FireStoreHandler {
     private String username;
     private FirebaseFirestore db;
 
+    /**
+     *  setup user at signup
+     *  */
     public void setupUser(){
         // Create empty friend and friend request lists if they don't exist
         db.collection(FRIEND_COLLECTION).document(username).get()
@@ -72,6 +75,11 @@ public class FireStoreHandler {
         this.db = FirebaseFirestore.getInstance();
     }
 
+    /**
+     *  add friend
+     * @param username
+     * @param friend
+     *  */
     public void addFriend(final String username, final String friend){
         // Add to friend's friend list
         db.collection(FRIEND_COLLECTION).document(friend)
@@ -89,6 +97,7 @@ public class FireStoreHandler {
                     }
                 });
     }
+
     /**
      * Accept a friend request.
      * @param friendUsername Id for the friend to add.
@@ -101,6 +110,11 @@ public class FireStoreHandler {
         addFriend(friendUsername, username);
     }
 
+    /**
+     remove friend request
+     * @param friendUsername
+     * @return
+     */
     public void removeFriendRequest(String friendUsername) {
         db.collection(FRIEND_COLLECTION).document(this.username)
                 .update(INCOMING_FRIENDS, FieldValue.arrayRemove(friendUsername))
@@ -118,6 +132,11 @@ public class FireStoreHandler {
                 });
     }
 
+    /**
+     decline a follower's friend request*
+     * @param friendUsername
+     * @return
+     */
     public void declineFollowRequest(String friendUsername) {
         removeFriendRequest(friendUsername);
     }
@@ -167,8 +186,10 @@ public class FireStoreHandler {
     }
 
     /**
-     * Delete an emote.
-     * @param fireStoreDocumentID The id of the emotion event to be deleted.
+     * Delete an emote
+     *
+     * @param fireStoreDocumentID
+     * @return
      */
     public void removeEmote(String fireStoreDocumentID){
         db.collection(EMOTE_COLLECTION).document(fireStoreDocumentID).delete()

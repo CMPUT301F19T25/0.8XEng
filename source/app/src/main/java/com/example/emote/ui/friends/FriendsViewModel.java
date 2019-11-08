@@ -1,5 +1,7 @@
 package com.example.emote.ui.friends;
-
+/*
+Friends view model
+ */
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
