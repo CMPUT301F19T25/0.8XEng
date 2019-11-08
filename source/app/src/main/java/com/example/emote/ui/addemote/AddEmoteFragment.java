@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.emote.Emotion;
@@ -122,6 +123,14 @@ public class AddEmoteFragment extends Fragment {
                 timePicker.show();
             }
         });
+    }
+    private static final int CONTENT_VIEW_ID = 10101010;
+
+
+    public void addPicture(View view) {
+        Fragment frag = new TakePicture();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.add(CONTENT_VIEW_ID, frag).commit();
     }
 
     /**
