@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ListEmoteTest {
+public class AddEmoteTest {
 
     private String validUserName = "testuser4";
 
