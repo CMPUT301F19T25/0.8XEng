@@ -28,6 +28,11 @@ import java.util.Date;
 import static com.example.emote.FireStoreHandler.EMOTE_COLLECTION;
 import static java.lang.Long.MIN_VALUE;
 
+/**
+ * Fragment to display the user's profile.
+ * Display's the user's username and the mood
+ * of their latest mood event.
+ */
 public class ProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
@@ -39,6 +44,13 @@ public class ProfileFragment extends Fragment {
     private FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
     private FirebaseFirestore db = fsh.getFireStoreDBReference();
 
+    /**
+     *
+     * @param inflater LayoutInflater to inflate the fragment view
+     * @param container Viewgroup container of fragment
+     * @param savedInstanceState Bundle of the saved instance state
+     * @return
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         profileViewModel =

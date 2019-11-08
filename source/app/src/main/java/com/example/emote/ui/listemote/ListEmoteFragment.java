@@ -1,7 +1,10 @@
 package com.example.emote.ui.listemote;
 /**
  * Fragment for the History of Emotion Events.
+ * This fragment show's the user and other user's
+ * emotion events.
  */
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -36,13 +38,13 @@ public class ListEmoteFragment extends Fragment {
 
     private ListView emoteListView;
     private Spinner spinner;
-    private Button refreshButton;
     private CheckBox showFriends;
     private CheckBox filterEmotes;
 
     /**
      * Main Method for this Emote fragment. Initializes the fragment,
      * sets the spinner items and onclicklisteners.
+     *
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -58,7 +60,6 @@ public class ListEmoteFragment extends Fragment {
         spinner = root.findViewById(R.id.spinner);
         showFriends = root.findViewById(R.id.check_box_show_friends);
         filterEmotes = root.findViewById(R.id.check_box_filter);
-        refreshButton = root.findViewById(R.id.button_refresh);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Emotion.getStrings(getContext()));
         spinner.setAdapter(adapter);
@@ -67,17 +68,6 @@ public class ListEmoteFragment extends Fragment {
         emoteListView.setAdapter(emoteAdapter);
         listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, false);
 
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (filterEmotes.isChecked()) {
-                    listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList,
-                            showFriends.isChecked(), Emotion.values()[spinner.getSelectedItemPosition()]);
-                } else {
-                    listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, showFriends.isChecked());
-                }
-            }
-        });
 
         emoteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -89,7 +79,43 @@ public class ListEmoteFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        // Refresh on check box clicks
+        showFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refresh();
+            }
+        });
+
+        filterEmotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refresh();
+            }
+        });
 
         return root;
     }
+
+    /**
+     * Override the resume so that the list is refreshed after an edit or delete
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+    /**
+     * Refresh the list to get the changes from firebase.
+     */
+    public void refresh() {
+        if (filterEmotes.isChecked()) {
+            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList,
+                    showFriends.isChecked(), Emotion.values()[spinner.getSelectedItemPosition()]);
+        } else {
+            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, showFriends.isChecked());
+        }
+    }
+
 }

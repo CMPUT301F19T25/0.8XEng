@@ -1,6 +1,8 @@
 package com.example.emote.ui.listemote;
 /**
  * View model for Emote List.
+ * Has all the methods to query Firebase
+ * with the necessary filters.
  */
 
 import android.util.Log;

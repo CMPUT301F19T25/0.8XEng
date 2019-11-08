@@ -96,6 +96,8 @@ public class LoginActivity extends AppCompatActivity {
         final String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
 
+
+
         LoginHelper.loginUser(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
