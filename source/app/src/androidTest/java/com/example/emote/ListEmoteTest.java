@@ -9,13 +9,14 @@ import org.junit.Test;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 /**
- * Test class for the profile fragment.
+ * Test class for the list emotion fragment.
  */
-public class ProfileTest {
+public class ListEmoteTest {
 
     private String validUserName = "testuser4";
 
@@ -27,13 +28,24 @@ public class ProfileTest {
     public void setup(){
 
         EmoteApplication.setUsername(validUserName);
-        onView(withId(R.id.navigation_profile)).perform(click());
+        onView(withId(R.id.navigation_list_emote)).perform(click());
     }
 
     @Test
-    public void testUserNameDisplayed(){
-        onView(withId(R.id.profile_username))
-                .check(matches(withText(validUserName)));
+    public void testShowFriendsButton(){
+        onView(withId(R.id.check_box_show_friends)).perform(click());
+    }
+
+
+    @Test
+    public void testFilterSelector(){
+        onView(withId(R.id.spinner)).perform(click());
+        onView(withText("Happy")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testFilterCheckBox(){
+        onView(withId(R.id.check_box_filter)).perform(click());
     }
 
 }

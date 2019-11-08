@@ -24,6 +24,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
+/**
+ * Test class for the add emotion fragment.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class AddEmoteTest {
@@ -73,7 +76,7 @@ public class AddEmoteTest {
 
     @Test
     public void testInvalidFieldsAddEmotion(){
-        onView(withId(R.id.add_emote_scroll_view))
+        onView(withId(R.id.scrollView2))
                 .perform(swipeUp());
         onView(withId(R.id.submitButton)).perform(click());
         onView(withText("Error: length=1; index=2"))
