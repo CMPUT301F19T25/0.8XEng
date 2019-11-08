@@ -72,7 +72,7 @@ public class AddEmoteFragment extends Fragment {
      * Initialize all the necessary views with findViewById
      * @param inflater LayoutInflater to inflate Layour
      * @param container ViewGroup Container
-     * @return Returns the root view object of fragmend
+     * @return Returns the root view object of fragment
      */
     public View initializeViews(LayoutInflater inflater, ViewGroup container) {
         View root = inflater.inflate(R.layout.fragment_add_emote, container, false);
@@ -89,6 +89,7 @@ public class AddEmoteFragment extends Fragment {
         return root;
     }
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         addEmoteViewModel =
@@ -97,7 +98,6 @@ public class AddEmoteFragment extends Fragment {
 
         situationSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Situation.getStrings(getContext())));
         emotionSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Emotion.getStrings(getContext())));
-
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,8 +116,8 @@ public class AddEmoteFragment extends Fragment {
         return root;
     }
 
-    /**
-     * Sets up the DatePickerDialog TimePickerDialog
+    /***
+     * Set time and date listeners
      */
     public void setTimeAndDateListeners() {
         textDateField.setInputType(InputType.TYPE_NULL);
@@ -158,10 +158,16 @@ public class AddEmoteFragment extends Fragment {
         });
     }
 
+    /***
+     *
+     * @param view
+     * Start camera intent
+     */
     public void addPicture(View view) {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -176,7 +182,12 @@ public class AddEmoteFragment extends Fragment {
         }
     }
 
-
+    /**
+     *
+     * @param bitmap
+     * Upload the bitmap to Firebase storage using a random image name
+     * @return file name
+     */
     public String uploadImage(Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
