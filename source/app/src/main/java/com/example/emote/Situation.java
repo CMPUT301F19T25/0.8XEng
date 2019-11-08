@@ -2,6 +2,8 @@ package com.example.emote;
 
 import android.content.Context;
 
+import java.util.Arrays;
+
 /**
  * An Enum used to define social situations
  */
@@ -24,5 +26,8 @@ public enum Situation {
             situations[i] = context.getResources().getString(identifier);
         }
         return  situations;
+    }
+    public static int getIndex(Situation situation){
+        return Arrays.asList(Situation.values()).indexOf(situation);
     }
 }

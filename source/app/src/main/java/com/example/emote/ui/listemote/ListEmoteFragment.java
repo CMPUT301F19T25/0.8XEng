@@ -2,10 +2,12 @@ package com.example.emote.ui.listemote;
 /**
  * Fragment for the History of Emotion Events.
  */
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.emote.EditEventActivity;
+import com.example.emote.EmoteApplication;
 import com.example.emote.Emotion;
 import com.example.emote.EmotionEvent;
 import com.example.emote.R;
@@ -72,6 +76,17 @@ public class ListEmoteFragment extends Fragment {
                 } else {
                     listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, showFriends.isChecked());
                 }
+            }
+        });
+
+        emoteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getContext(), EditEventActivity.class);
+                intent.putExtra("event", emoteAdapter.getItem(position));
+                boolean isEditable = emoteAdapter.getItem(position).getUsername().equals(EmoteApplication.getUsername());
+                intent.putExtra("editable", isEditable);
+                startActivity(intent);
             }
         });
 
