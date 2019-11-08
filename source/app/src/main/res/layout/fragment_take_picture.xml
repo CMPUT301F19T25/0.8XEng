@@ -6,6 +6,12 @@
     tools:context=".ui.addemote.TakePicture">
 
     <!-- TODO: Update blank fragment layout -->
-
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="140dp"
+        android:id="@+id/cameraButton"
+        android:text="Take Picture"
+        />
 
 </FrameLayout>

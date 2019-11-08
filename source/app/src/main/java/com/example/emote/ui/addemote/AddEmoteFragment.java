@@ -45,6 +45,7 @@ public class AddEmoteFragment extends Fragment {
     private Spinner emotionSpinner;
     private Spinner situationSpinner;
     private Button submitButton;
+    private Button takePictureButton;
 
     /**
      * Initialize all the necessary views with findViewById
@@ -60,6 +61,7 @@ public class AddEmoteFragment extends Fragment {
         situationSpinner = root.findViewById(R.id.spinner_situation);
         emotionSpinner = root.findViewById(R.id.spinnner_emote);
         submitButton = root.findViewById(R.id.submitButton);
+        takePictureButton = root.findViewById(R.id.addPhotoButton);
         return root;
     }
 
@@ -77,6 +79,13 @@ public class AddEmoteFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 addEmote(v);
+            }
+        });
+        takePictureButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                addPicture(view);
             }
         });
         resetFields();
