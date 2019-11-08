@@ -36,7 +36,6 @@ public class ListEmoteFragment extends Fragment {
 
     private ListView emoteListView;
     private Spinner spinner;
-    private Button refreshButton;
     private CheckBox showFriends;
     private CheckBox filterEmotes;
 
@@ -58,7 +57,6 @@ public class ListEmoteFragment extends Fragment {
         spinner = root.findViewById(R.id.spinner);
         showFriends = root.findViewById(R.id.check_box_show_friends);
         filterEmotes = root.findViewById(R.id.check_box_filter);
-        refreshButton = root.findViewById(R.id.button_refresh);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Emotion.getStrings(getContext()));
         spinner.setAdapter(adapter);
@@ -67,17 +65,6 @@ public class ListEmoteFragment extends Fragment {
         emoteListView.setAdapter(emoteAdapter);
         listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, false);
 
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (filterEmotes.isChecked()) {
-                    listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList,
-                            showFriends.isChecked(), Emotion.values()[spinner.getSelectedItemPosition()]);
-                } else {
-                    listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, showFriends.isChecked());
-                }
-            }
-        });
 
         emoteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -89,7 +76,30 @@ public class ListEmoteFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        // Refresh on check box clicks
+        showFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refresh();
+            }
+        });
+
+        filterEmotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refresh();
+            }
+        });
 
         return root;
+    }
+
+    public void refresh(){
+        if (filterEmotes.isChecked()) {
+            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList,
+                    showFriends.isChecked(), Emotion.values()[spinner.getSelectedItemPosition()]);
+        } else {
+            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, showFriends.isChecked());
+        }
     }
 }
