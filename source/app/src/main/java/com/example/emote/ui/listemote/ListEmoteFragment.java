@@ -1,7 +1,10 @@
 package com.example.emote.ui.listemote;
 /**
  * Fragment for the History of Emotion Events.
+ * This fragment show's the user and other user's
+ * emotion events.
  */
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -42,6 +44,7 @@ public class ListEmoteFragment extends Fragment {
     /**
      * Main Method for this Emote fragment. Initializes the fragment,
      * sets the spinner items and onclicklisteners.
+     *
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -94,7 +97,19 @@ public class ListEmoteFragment extends Fragment {
         return root;
     }
 
-    public void refresh(){
+    /**
+     * Override the resume so that the list is refreshed after an edit or delete
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+    /**
+     * Refresh the list to get the changes from firebase.
+     */
+    public void refresh() {
         if (filterEmotes.isChecked()) {
             listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList,
                     showFriends.isChecked(), Emotion.values()[spinner.getSelectedItemPosition()]);
@@ -102,4 +117,5 @@ public class ListEmoteFragment extends Fragment {
             listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, showFriends.isChecked());
         }
     }
+
 }
