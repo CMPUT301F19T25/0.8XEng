@@ -159,13 +159,6 @@ public class AddEmoteFragment extends Fragment {
     }
 
     public void addPicture(View view) {
-//        TakePicture takePicFragment = new TakePicture();
-//        FragmentManager fragmentManager = getFragmentManager();
-//
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id.fragment_container, takePicFragment);
-//        fragmentTransaction.addToBackStack(null);
-//        fragmentTransaction.commit();
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
@@ -184,7 +177,7 @@ public class AddEmoteFragment extends Fragment {
     }
 
 
-    public void uploadImage(Bitmap bitmap) {
+    public String uploadImage(Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
         byte[] data = outputStream.toByteArray();
@@ -198,6 +191,8 @@ public class AddEmoteFragment extends Fragment {
 
             }
         });
+
+        return imageFileName.toString();
     }
     /**
      * Add the defined Emotion event to the firebase DB and reset the fields.
@@ -210,7 +205,8 @@ public class AddEmoteFragment extends Fragment {
             String reasonString = textReasonField.getText().toString();
             Situation situation = Situation.values()[situationSpinner.getSelectedItemPosition()];
             Emotion emotion = Emotion.values()[emotionSpinner.getSelectedItemPosition()];
-            event = new EmotionEvent(emotion, situation, reasonString, date);
+            String fileName = uploadImage(cameraImage);
+            event = new EmotionEvent(emotion, situation, reasonString, date, fileName);
 
         } catch (Exception e) {
             // TODO proper error messages
@@ -221,7 +217,6 @@ public class AddEmoteFragment extends Fragment {
 
         FireStoreHandler fsh = new FireStoreHandler("dman");
         fsh.addEmote(event);
-        uploadImage(cameraImage);
         Toast.makeText(getContext(), "Emotion Event Added", Toast.LENGTH_LONG).show();
         resetFields();
     }
@@ -267,8 +262,5 @@ public class AddEmoteFragment extends Fragment {
         calendar.set(Calendar.MINUTE, minute);
 
         return calendar.getTime();
-
     }
-
-
 }

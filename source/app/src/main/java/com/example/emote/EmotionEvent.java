@@ -16,6 +16,7 @@ public class EmotionEvent {
     private Situation situation;
     private String reason;
     private String username;
+    private String imageFile;
 
     private Date date;
     private String fireStoreDocumentID;
@@ -27,6 +28,16 @@ public class EmotionEvent {
         setEmote(emote);
         setSituation(situation);
         setReason(reason);
+        setDate(date);
+        fireStoreDocumentID = UUID.randomUUID().toString();
+    }
+
+    public EmotionEvent(Emotion emote, Situation situation, String reason, Date date, String imageFile){
+        setUsername(username);
+        setEmote(emote);
+        setSituation(situation);
+        setReason(reason);
+        setImageFile(imageFile);
         setDate(date);
         fireStoreDocumentID = UUID.randomUUID().toString();
     }
@@ -66,6 +77,10 @@ public class EmotionEvent {
     public String getFireStoreDocumentID() {
         return fireStoreDocumentID;
     }
+
+    public void setImageFile(String imageFile) { this.imageFile = imageFile; }
+
+    public String getImageFile() { return imageFile; }
 
     public Date getDate() { return date; }
 
