@@ -73,7 +73,7 @@ public class ProfileFragment extends Fragment {
                                 }
                             }
                             if (recent_emote == null) {
-                                currentmoodText.setText("");
+                                currentmoodText.setText("No emotions found");
                             } else {
                                 currentmoodText.setText(recent_emote.getEmote().toString());
                             }
