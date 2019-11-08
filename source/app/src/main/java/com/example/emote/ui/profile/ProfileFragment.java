@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.emote.EmoteApplication;
 import com.example.emote.EmotionEvent;
 import com.example.emote.FireStoreHandler;
 import com.example.emote.R;
@@ -35,7 +36,7 @@ public class ProfileFragment extends Fragment {
     private TextView usernameText;
     private TextView currentmoodText;
 
-    private FireStoreHandler fsh = new FireStoreHandler("xinyu");
+    private FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
     private FirebaseFirestore db = fsh.getFireStoreDBReference();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -66,7 +67,7 @@ public class ProfileFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 EmotionEvent current_emote = document.toObject(EmotionEvent.class);
-                                if (current_emote.getUsername().equals("xinyu") && (max_date.compareTo(current_emote.getDate()) <= 0)) {
+                                if (current_emote.getUsername().equals(EmoteApplication.getUsername()) && (max_date.compareTo(current_emote.getDate()) <= 0)) {
                                     recent_emote = current_emote;
                                     max_date = document.toObject(EmotionEvent.class).getDate();
                                 }
