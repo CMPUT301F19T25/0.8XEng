@@ -217,8 +217,14 @@ public class AddEmoteFragment extends Fragment {
             String reasonString = textReasonField.getText().toString();
             Situation situation = Situation.values()[situationSpinner.getSelectedItemPosition()];
             Emotion emotion = Emotion.values()[emotionSpinner.getSelectedItemPosition()];
-            String fileName = uploadImage(cameraImage);
-            event = new EmotionEvent(emotion, situation, reasonString, date, fileName);
+            if (cameraImage != null) {
+                String fileName = uploadImage(cameraImage);
+                event = new EmotionEvent(emotion, situation, reasonString, date, fileName);
+            }
+            else{
+                event = new EmotionEvent(emotion, situation, reasonString, date);
+            }
+
 
         } catch (Exception e) {
             // TODO proper error messages
