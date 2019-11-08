@@ -6,37 +6,46 @@
     android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="60dp">
+    android:background="@drawable/add_emote_background">
+
+    <TextView
+        android:id="@+id/text_add_emote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="What's on your mind?"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
-        android:id="@+id/add_emote_scroll_view"
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_add_emote">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/text_add_emote"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="What's on your mind?"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_layout_emote_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
+                app:errorTextAppearance="@style/LargerHintsForAddEmoteStyle.ErrorTextStyle"
                 app:helperText="Emotion"
                 app:hintEnabled="true"
                 app:layout_constraintTop_toBottomOf="@+id/text_add_emote"
@@ -46,7 +55,10 @@
                     android:id="@+id/spinnner_emote"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_black_border"
+                    android:padding="10dp"
+                    android:textSize="24sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,9 +75,12 @@
                     android:id="@+id/text_date_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_corner_black_border"
                     android:focusable="false"
                     android:hint="Date"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:padding="10dp"
+                    android:textSize="24sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -73,6 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
+                app:errorTextAppearance="@style/LargerHintsForAddEmoteStyle.ErrorTextStyle"
                 app:hintEnabled="true"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_date"
                 tools:layout_editor_absoluteX="16dp">
@@ -81,9 +97,12 @@
                     android:id="@+id/text_time_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_corner_black_border"
                     android:focusable="false"
                     android:hint="Time"
-                    android:inputType="time" />
+                    android:inputType="time"
+                    android:padding="10dp"
+                    android:textSize="24sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -101,7 +120,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Situation" />
+                    android:background="@drawable/rounded_corner_black_border"
+                    android:hint="Situation"
+                    android:padding="10dp"
+                    android:textSize="24sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -119,7 +141,10 @@
                     android:id="@+id/text_reason_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Reason" />
+                    android:background="@drawable/rounded_corner_black_border"
+                    android:hint="Reason"
+                    android:padding="10dp"
+                    android:textSize="24sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
@@ -136,6 +161,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 app:layout_constraintTop_toBottomOf="@+id/cameraPreview"
                 tools:layout_editor_absoluteX="197dp">
 
@@ -143,14 +170,22 @@
                     android:id="@+id/addPhotoButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
                     android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_blue"
+                    android:padding="5dp"
+                    android:textSize="20sp"
                     android:text="Photo" />
 
                 <Button
                     android:id="@+id/addLocationButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
                     android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_blue"
+                    android:padding="5dp"
+                    android:textSize="20sp"
                     android:text="Location" />
             </LinearLayout>
 
@@ -158,8 +193,13 @@
                 android:id="@+id/submitButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/rounded_corner_blue"
                 android:onClick="addEmote"
+                android:padding="12dp"
+                android:textSize="30sp"
                 android:text="Add"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
         </LinearLayout>
