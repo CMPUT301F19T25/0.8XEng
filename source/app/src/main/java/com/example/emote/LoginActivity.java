@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String username = usernameText.getText().toString();
+        final String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
 
         LoginHelper.loginUser(username, password)
@@ -102,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             progressDialog.dismiss();
+                            EmoteApplication.setUsername(username);
                             onLoginSuccess();
                         } else {
                             // If sign in fails, display a message to the user.

@@ -10,7 +10,7 @@ public class FriendsViewModel extends ViewModel {
 
     public FriendsViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is the friends fragment");
+        mText.setValue("Friends");
     }
 
     public LiveData<String> getText() { return mText; }
