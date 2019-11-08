@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.emote.EditEventActivity;
+import com.example.emote.EmoteApplication;
 import com.example.emote.Emotion;
 import com.example.emote.EmotionEvent;
 import com.example.emote.R;
@@ -83,6 +84,8 @@ public class ListEmoteFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getContext(), EditEventActivity.class);
                 intent.putExtra("event", emoteAdapter.getItem(position));
+                boolean isEditable = emoteAdapter.getItem(position).getUsername().equals(EmoteApplication.getUsername());
+                intent.putExtra("editable", isEditable);
                 startActivity(intent);
             }
         });
