@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
+import com.example.emote.EmoteApplication;
 import com.example.emote.Emotion;
 import com.example.emote.EmotionEvent;
 import com.example.emote.FireStoreHandler;
@@ -32,7 +33,7 @@ public class ListEmoteViewModel extends ViewModel {
      */
     public ListEmoteViewModel() {
         //
-        fsh = new FireStoreHandler("kenboo");
+        fsh = new FireStoreHandler(EmoteApplication.getUsername());
         db = fsh.getFireStoreDBReference();
     }
 

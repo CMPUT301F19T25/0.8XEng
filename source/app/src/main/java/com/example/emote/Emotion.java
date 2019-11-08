@@ -2,6 +2,9 @@ package com.example.emote;
 
 import android.content.Context;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public enum Emotion {
     SAD,
     HAPPY,
@@ -23,6 +26,9 @@ public enum Emotion {
     public static int getColor(Context context, Emotion emotion){
         int identifier = context.getResources().getIdentifier(emotion.toString(), "color", context.getPackageName());
         return context.getResources().getColor(identifier);
+    }
+    public static int getIndex(Emotion emotion){
+        return Arrays.asList(Emotion.values()).indexOf(emotion);
     }
 
 }

@@ -55,6 +55,8 @@ public class SignupActivity extends AppCompatActivity {
     public void onSignupSuccess() {
         createAccountButton.setEnabled(true);
         setResult(RESULT_OK, null);
+        FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
+        fsh.setupUser();
         finish();
     }
 
@@ -73,7 +75,7 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
-        String username = usernameText.getText().toString();
+        final String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
 
         LoginHelper.signupUser(username, password)
@@ -84,6 +86,7 @@ public class SignupActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            EmoteApplication.setUsername(username);
                             onSignupSuccess();
                         } else {
                             // If sign in fails, display a message to the user.
