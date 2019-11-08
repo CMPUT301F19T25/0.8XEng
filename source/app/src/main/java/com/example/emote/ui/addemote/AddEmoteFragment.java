@@ -1,11 +1,12 @@
 package com.example.emote.ui.addemote;
-/**
- *  Fragment to add a new emote to the firebase db.
- */
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +15,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.emote.Emotion;
@@ -28,9 +30,19 @@ import com.example.emote.EmotionEvent;
 import com.example.emote.FireStoreHandler;
 import com.example.emote.R;
 import com.example.emote.Situation;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
+
+/**
+ * Fragment to add a new emote to the firebase db.
+ */
 
 public class AddEmoteFragment extends Fragment {
 
@@ -46,6 +58,15 @@ public class AddEmoteFragment extends Fragment {
     private Spinner situationSpinner;
     private Button submitButton;
     private Button takePictureButton;
+    private ImageView cameraPreview;
+
+    FirebaseStorage storage;
+    String STORAGE_REF = "gs://emote-f75ce.appspot.com";
+
+    Bitmap cameraImage;
+
+
+    private static final int CAMERA_REQUEST = 1888;
 
     /**
      * Initialize all the necessary views with findViewById
@@ -62,6 +83,9 @@ public class AddEmoteFragment extends Fragment {
         emotionSpinner = root.findViewById(R.id.spinnner_emote);
         submitButton = root.findViewById(R.id.submitButton);
         takePictureButton = root.findViewById(R.id.addPhotoButton);
+        cameraPreview = root.findViewById(R.id.cameraPreview);
+
+        storage = FirebaseStorage.getInstance();
         return root;
     }
 
@@ -133,15 +157,48 @@ public class AddEmoteFragment extends Fragment {
             }
         });
     }
-    private static final int CONTENT_VIEW_ID = 10101010;
-
 
     public void addPicture(View view) {
-        Fragment frag = new TakePicture();
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.add(CONTENT_VIEW_ID, frag).commit();
+//        TakePicture takePicFragment = new TakePicture();
+//        FragmentManager fragmentManager = getFragmentManager();
+//
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.fragment_container, takePicFragment);
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.commit();
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            cameraImage = (Bitmap) data.getExtras().get("data");
+
+            int newHeight = (int) Math.floor((double) cameraImage.getHeight() *( (double) cameraPreview.getWidth() / (double) cameraImage.getWidth()));
+            cameraImage = Bitmap.createScaledBitmap(cameraImage, cameraPreview.getWidth(), newHeight, true);
+
+            cameraPreview.setImageBitmap(cameraImage);
+
+        }
+    }
+
+
+    public void uploadImage(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        byte[] data = outputStream.toByteArray();
+
+        UUID imageFileName = UUID.randomUUID();
+        StorageReference storageRef = storage.getReferenceFromUrl(STORAGE_REF).child(imageFileName.toString()+".png");
+        UploadTask task = storageRef.putBytes(data);
+        task.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
     /**
      * Add the defined Emotion event to the firebase DB and reset the fields.
      * @param view
@@ -164,6 +221,7 @@ public class AddEmoteFragment extends Fragment {
 
         FireStoreHandler fsh = new FireStoreHandler("dman");
         fsh.addEmote(event);
+        uploadImage(cameraImage);
         Toast.makeText(getContext(), "Emotion Event Added", Toast.LENGTH_LONG).show();
         resetFields();
     }
@@ -178,6 +236,7 @@ public class AddEmoteFragment extends Fragment {
         textDateField.setText("");
         textTimeField.setText("");
         setTimeAndDateListeners();
+        cameraPreview.setImageResource(0);
     }
 
     /**
