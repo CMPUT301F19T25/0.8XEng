@@ -45,20 +45,12 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        getActivity().setTitle("Follow Requests");
+
         friendsViewModel = ViewModelProviders.of(this).get(FriendsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_friends, container, false);
-//        final TextView textView = root.findViewById(R.id.text_list_friends);
-//        friendsViewModel.getText().observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
 
         friendsListView = root.findViewById(R.id.friends_list_view);
         friendsDataList = new ArrayList<>();
-//        friendsDataList.add("hey");
         friendsAdapter = new FriendsListAdapter(getContext(), friendsDataList);
         friendsListView.setAdapter(friendsAdapter);
 
@@ -72,7 +64,6 @@ public class FriendsFragment extends Fragment {
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()){
                         DocumentSnapshot document = task.getResult();
-//                        friendsDataList.clear();
                         friendsDataList.addAll ((ArrayList<String>) document.get(FireStoreHandler.INCOMING_FRIENDS));
                         Log.d(TAG, "got some friends: " + friendsDataList.size());
                         for(int i = 0; i < friendsDataList.size(); i++){
