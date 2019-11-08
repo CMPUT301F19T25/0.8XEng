@@ -22,7 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.emote.EmoteApplication;
 import com.example.emote.Emotion;
 import com.example.emote.EmotionEvent;
 import com.example.emote.FireStoreHandler;
@@ -145,7 +144,7 @@ public class AddEmoteFragment extends Fragment {
             return;
         }
 
-        FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
+        FireStoreHandler fsh = new FireStoreHandler("dman");
         fsh.addEmote(event);
         Toast.makeText(getContext(), "Emotion Event Added", Toast.LENGTH_LONG).show();
         resetFields();

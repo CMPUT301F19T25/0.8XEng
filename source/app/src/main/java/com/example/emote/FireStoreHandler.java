@@ -95,38 +95,9 @@ public class FireStoreHandler {
     public void acceptFriendRequest(final String friendUsername){
         // remove the incoming friend request
         removeFriendRequest(friendUsername);
-
-        // Add to friend's friend list
-        db.collection(FRIEND_COLLECTION).document(friendUsername)
-                .update(CURRENT_FRIENDS, FieldValue.arrayUnion(username))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Successfully added" + username + " to " + friendUsername + "friends list");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding friend", e);
-                    }
-                });
-
-        // Add to current user's friend list
-        db.collection(FRIEND_COLLECTION).document(username)
-                .update(CURRENT_FRIENDS, FieldValue.arrayUnion(friendUsername))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Successfully added" + friendUsername + " to " + username + "friends list");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding friend", e);
-                    }
-                });
+        // add users to each other's friend list
+        addFriend(username, friendUsername);
+        addFriend(friendUsername, username);
     }
 
     public void removeFriendRequest(String friendUsername) {

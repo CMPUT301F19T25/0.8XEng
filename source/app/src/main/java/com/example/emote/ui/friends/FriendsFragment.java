@@ -62,10 +62,14 @@ public class FriendsFragment extends Fragment {
         friendsAdapter = new FriendsListAdapter(getContext(), friendsDataList);
         friendsListView.setAdapter(friendsAdapter);
 
+<<<<<<< HEAD
         String username = EmoteApplication.getUsername();
         FireStoreHandler fsh = new FireStoreHandler(username);
+=======
+        FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
+>>>>>>> use global username
         FirebaseFirestore db = fsh.getFireStoreDBReference();
-        db.collection(FireStoreHandler.FRIEND_COLLECTION).document(username)
+        db.collection(FireStoreHandler.FRIEND_COLLECTION).document(fsh.getUsername())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
