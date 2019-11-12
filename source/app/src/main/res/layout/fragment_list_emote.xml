@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="60dp">
+    android:layout_marginBottom="60dp"
+    android:background="@drawable/add_emote_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,6 +16,23 @@
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="vertical"
         android:id="@+id/filter_layout">
+
+        <TextView
+            android:id="@+id/text_add_emote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Past Emotes"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
