@@ -36,12 +36,6 @@
                 android:layout_height="match_parent" />
         </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/check_box_filter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Filter Emotes" />
-
     </LinearLayout>
 
     <ListView
