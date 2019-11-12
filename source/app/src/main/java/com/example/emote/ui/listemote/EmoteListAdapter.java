@@ -4,6 +4,12 @@ package com.example.emote.ui.listemote;
  */
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.Shape;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.example.emote.Emotion;
 import com.example.emote.R;
@@ -71,7 +78,18 @@ public class EmoteListAdapter extends ArrayAdapter<EmotionEvent> {
         } catch (NullPointerException np) {
             dateTextView.setText("No date");
         }
-        view.setBackgroundColor(Emotion.getColor(context, emote.getEmote()));
+
+//        ShapeDrawable backgroundRectDrawable = new ShapeDrawable();
+//        Paint paint = backgroundRectDrawable.getPaint();
+//
+//        paint.setColor(Emotion.getColor(context, emote.getEmote()));
+//        paint.setStyle(Paint.Style.STROKE);
+//        paint.setStrokeWidth(2);
+//        view.setBackgroundDrawable(backgroundRectDrawable);
+//        view.setBackgroundColor(Emotion.getColor(context, emote.getEmote()));
+
+        GradientDrawable drawable = (GradientDrawable) view.getBackground();
+        drawable.setColor(Emotion.getColor(context, emote.getEmote()));
 
         return view;
     }

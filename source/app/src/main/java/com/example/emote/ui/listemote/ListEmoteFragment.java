@@ -27,6 +27,8 @@ import com.example.emote.EmotionEvent;
 import com.example.emote.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ListEmoteFragment extends Fragment {
 
@@ -61,7 +63,9 @@ public class ListEmoteFragment extends Fragment {
         showFriends = root.findViewById(R.id.check_box_show_friends);
         filterEmotes = root.findViewById(R.id.check_box_filter);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Emotion.getStrings(getContext()));
+        List<String> emotionStrings = new ArrayList<>(Arrays.asList(Emotion.getStrings(getContext())));
+        emotionStrings.add("All");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, emotionStrings);
         spinner.setAdapter(adapter);
         emoteDataList = new ArrayList<>();
         emoteAdapter = new EmoteListAdapter(getContext(), emoteDataList);
@@ -87,12 +91,12 @@ public class ListEmoteFragment extends Fragment {
             }
         });
 
-        filterEmotes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refresh();
-            }
-        });
+//        filterEmotes.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                refresh();
+//            }
+//        });
 
         return root;
     }
