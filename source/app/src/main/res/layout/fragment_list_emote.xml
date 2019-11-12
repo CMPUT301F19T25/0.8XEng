@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="60dp"
-    android:background="@drawable/add_emote_background">
+    android:background="@drawable/emote_list_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +38,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
 
             <CheckBox
                 android:id="@+id/check_box_show_friends"
@@ -46,12 +48,18 @@
                 android:layout_height="wrap_content"
                 android:checked="false"
                 android:clickable="true"
-                android:text="Show Friends" />
+                android:text="Show Friends"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="15sp"/>
 
             <Spinner
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:textColor="#ffffff"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="15sp"
+                />
         </LinearLayout>
 
     </LinearLayout>
