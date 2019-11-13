@@ -49,6 +49,7 @@
                 android:checked="false"
                 android:clickable="true"
                 android:text="Show Friends"
+                android:textColor="#ffffff"
                 android:fontFamily="sans-serif-condensed"
                 android:textSize="15sp"/>
 
