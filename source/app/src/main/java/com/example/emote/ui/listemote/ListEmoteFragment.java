@@ -62,7 +62,7 @@ public class ListEmoteFragment extends Fragment {
         showFriends = root.findViewById(R.id.check_box_show_friends);
 
         List<String> emotionStrings = new ArrayList<>(Arrays.asList(Emotion.getStrings(getContext())));
-        emotionStrings.add("All");
+        emotionStrings.add(0, "All");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, emotionStrings);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(adapter);
