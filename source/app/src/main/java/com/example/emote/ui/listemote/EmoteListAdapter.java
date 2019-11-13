@@ -78,7 +78,7 @@ public class EmoteListAdapter extends ArrayAdapter<EmotionEvent> {
         } catch (NullPointerException np) {
             dateTextView.setText("No date");
         }
-        
+
         GradientDrawable drawable = (GradientDrawable) view.getBackground();
         drawable.setColor(Emotion.getColor(context, emote.getEmote()));
 

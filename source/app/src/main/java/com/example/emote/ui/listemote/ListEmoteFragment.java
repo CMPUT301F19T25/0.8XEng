@@ -63,7 +63,8 @@ public class ListEmoteFragment extends Fragment {
 
         List<String> emotionStrings = new ArrayList<>(Arrays.asList(Emotion.getStrings(getContext())));
         emotionStrings.add("All");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, emotionStrings);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, emotionStrings);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(adapter);
         emoteDataList = new ArrayList<>();
         emoteAdapter = new EmoteListAdapter(getContext(), emoteDataList);
