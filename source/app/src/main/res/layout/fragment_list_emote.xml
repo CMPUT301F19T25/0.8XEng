@@ -51,7 +51,7 @@
                 android:text="Show Friends"
                 android:textColor="#ffffff"
                 android:fontFamily="sans-serif-condensed"
-                android:textSize="15sp"/>
+                android:textSize="20sp"/>
 
             <Spinner
                 android:id="@+id/spinner"
