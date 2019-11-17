@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -37,17 +38,20 @@ public class FriendsFragment extends Fragment {
     private static final String TAG = "FriendsFragment";
     private FriendsViewModel friendsViewModel;
 
-    private ArrayList<String> friendsDataList = new ArrayList<>();
-    private ArrayAdapter<String> friendsAdapter;
+    private ArrayList<String> friendsDataList;
+    private FriendsListAdapter friendsAdapter;
     private ListView friendsListView;
+
+    private ArrayList<String> searchFriendDataList;
+    private ArrayAdapter<String> searchFriendAdapater;
+    private AutoCompleteTextView searchAutoComplete;
+
     public static FriendsFragment newInstance() {
         return new FriendsFragment();
     }
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstAdanceState) {
-        friendsViewModel = ViewModelProviders.of(this).get(FriendsViewModel.class);
+
+    public View initializeViews(LayoutInflater inflater, ViewGroup container){
         View root = inflater.inflate(R.layout.fragment_friends, container, false);
 
         friendsListView = root.findViewById(R.id.friends_list_view);
@@ -55,9 +59,27 @@ public class FriendsFragment extends Fragment {
         friendsAdapter = new FriendsListAdapter(getContext(), friendsDataList);
         friendsListView.setAdapter(friendsAdapter);
 
+        searchFriendDataList = new ArrayList<>();
+        searchFriendAdapater = new SearchListAdapter(getContext(),
+                R.layout.list_individual_friend_search,
+                searchFriendDataList);
+        searchAutoComplete = root.findViewById(R.id.auto_complete_friends);
+        searchAutoComplete.setAdapter(searchFriendAdapater);
+        searchAutoComplete.setThreshold(1);
+        return root;
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstAdanceState) {
+        friendsViewModel = ViewModelProviders.of(this).get(FriendsViewModel.class);
+
+        View root = initializeViews(inflater, container);
+
         String username = EmoteApplication.getUsername();
         FireStoreHandler fsh = new FireStoreHandler(username);
         FirebaseFirestore db = fsh.getFireStoreDBReference();
+
         db.collection(FireStoreHandler.FRIEND_COLLECTION).document(fsh.getUsername())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -78,6 +100,22 @@ public class FriendsFragment extends Fragment {
                 }
             });
 
+        db.collection(FireStoreHandler.FRIEND_COLLECTION)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        searchFriendDataList.clear();
+                        for(DocumentSnapshot doc: querySnapshot.getDocuments()){
+                            searchFriendDataList.add(doc.getId());
+                        }
+                        for(int i = 0; i < searchFriendDataList.size(); i++){
+                            Log.d(TAG, "Other User: " + searchFriendDataList.get(i));
+                        }
+                        searchFriendAdapater.notifyDataSetChanged();
+                    }
+                });
         return root;
     }
 
