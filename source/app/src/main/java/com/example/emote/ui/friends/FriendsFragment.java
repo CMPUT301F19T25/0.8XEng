@@ -34,6 +34,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FriendsFragment extends Fragment {
 
@@ -58,7 +60,7 @@ public class FriendsFragment extends Fragment {
 
         friendsListView = root.findViewById(R.id.friends_list_view);
         friendsDataList = new ArrayList<>();
-        friendsAdapter = new FriendsListAdapter(getContext(), friendsDataList);
+        friendsAdapter = new FriendsListAdapttester(getContext(), friendsDataList);
         friendsListView.setAdapter(friendsAdapter);
 
         searchFriendDataList = new ArrayList<>();
@@ -83,7 +85,7 @@ public class FriendsFragment extends Fragment {
         View root = initializeViews(inflater, container);
 
         String username = EmoteApplication.getUsername();
-        FireStoreHandler fsh = new FireStoreHandler(username);
+        final FireStoreHandler fsh = new FireStoreHandler(username);
         FirebaseFirestore db = fsh.getFireStoreDBReference();
 
         db.collection(FireStoreHandler.FRIEND_COLLECTION).document(fsh.getUsername())
@@ -112,9 +114,19 @@ public class FriendsFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         QuerySnapshot querySnapshot = task.getResult();
+                        ArrayList<String> currentFriends = new ArrayList<>();
+                        for(DocumentSnapshot doc: querySnapshot.getDocuments()){
+                            if(doc.getId().equals(fsh.getUsername())){
+                                currentFriends = (ArrayList<String>) doc.get(FireStoreHandler.CURRENT_FRIENDS);
+                            }
+                        }
+                        HashSet<String> currentFriendsHash = new HashSet<>(currentFriends);
+                        Log.d(TAG, "Current friends:" + currentFriends.size());
                         searchFriendDataList.clear();
                         for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
-                            searchFriendDataList.add(doc.getId());
+                            if(!currentFriendsHash.contains(doc.getId())){
+                                searchFriendDataList.add(doc.getId());
+                            }
                         }
                         for (int i = 0; i < searchFriendDataList.size(); i++) {
                             Log.d(TAG, "Other User: " + searchFriendDataList.get(i));
