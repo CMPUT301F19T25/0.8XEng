@@ -2,6 +2,7 @@ package com.example.emote.ui.friends;
 /*
 Friends fragment
  */
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +34,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+
 public class FriendsFragment extends Fragment {
 
     private static final String TAG = "FriendsFragment";
@@ -43,7 +45,7 @@ public class FriendsFragment extends Fragment {
     private ListView friendsListView;
 
     private ArrayList<String> searchFriendDataList;
-    private ArrayAdapter<String> searchFriendAdapater;
+    private SearchListAdapter searchFriendAdapater;
     private AutoCompleteTextView searchAutoComplete;
 
     public static FriendsFragment newInstance() {
@@ -51,7 +53,7 @@ public class FriendsFragment extends Fragment {
     }
 
 
-    public View initializeViews(LayoutInflater inflater, ViewGroup container){
+    public View initializeViews(LayoutInflater inflater, ViewGroup container) {
         View root = inflater.inflate(R.layout.fragment_friends, container, false);
 
         friendsListView = root.findViewById(R.id.friends_list_view);
@@ -60,9 +62,13 @@ public class FriendsFragment extends Fragment {
         friendsListView.setAdapter(friendsAdapter);
 
         searchFriendDataList = new ArrayList<>();
+        /**
         searchFriendAdapater = new SearchListAdapter(getContext(),
                 R.layout.list_individual_friend_search,
                 searchFriendDataList);
+        **/
+
+        searchFriendAdapater = new SearchListAdapter(getContext(), android.R.layout.simple_dropdown_item_1line, searchFriendDataList);
         searchAutoComplete = root.findViewById(R.id.auto_complete_friends);
         searchAutoComplete.setAdapter(searchFriendAdapater);
         searchAutoComplete.setThreshold(1);
@@ -83,22 +89,22 @@ public class FriendsFragment extends Fragment {
         db.collection(FireStoreHandler.FRIEND_COLLECTION).document(fsh.getUsername())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()){
-                        DocumentSnapshot document = task.getResult();
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
 //                        friendsDataList.clear();
-                        friendsDataList.addAll ((ArrayList<String>) document.get(FireStoreHandler.INCOMING_FRIENDS));
-                        Log.d(TAG, "got some friends: " + friendsDataList.size());
-                        for(int i = 0; i < friendsDataList.size(); i++){
-                            Log.d(TAG, "friend: " + friendsDataList.get(i));
+                            friendsDataList.addAll((ArrayList<String>) document.get(FireStoreHandler.INCOMING_FRIENDS));
+                            Log.d(TAG, "got some friends: " + friendsDataList.size());
+                            for (int i = 0; i < friendsDataList.size(); i++) {
+                                Log.d(TAG, "friend: " + friendsDataList.get(i));
+                            }
+                            friendsAdapter.notifyDataSetChanged();
+                        } else {
+                            Log.d(TAG, "Error getting friends: ", task.getException());
                         }
-                        friendsAdapter.notifyDataSetChanged();
-                    } else {
-                        Log.d(TAG, "Error getting friends: ", task.getException());
                     }
-                }
-            });
+                });
 
         db.collection(FireStoreHandler.FRIEND_COLLECTION)
                 .get()
@@ -107,10 +113,10 @@ public class FriendsFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         QuerySnapshot querySnapshot = task.getResult();
                         searchFriendDataList.clear();
-                        for(DocumentSnapshot doc: querySnapshot.getDocuments()){
+                        for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
                             searchFriendDataList.add(doc.getId());
                         }
-                        for(int i = 0; i < searchFriendDataList.size(); i++){
+                        for (int i = 0; i < searchFriendDataList.size(); i++) {
                             Log.d(TAG, "Other User: " + searchFriendDataList.get(i));
                         }
                         searchFriendAdapater.notifyDataSetChanged();

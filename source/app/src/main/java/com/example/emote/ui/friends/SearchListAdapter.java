@@ -20,13 +20,10 @@ import java.util.ArrayList;
 
 public class SearchListAdapter extends ArrayAdapter<String> {
 
-    private Context context;
-    private ArrayList<String> otherUsers;
 
     public SearchListAdapter(Context context, int resourceId, ArrayList<String> otherUsers){
-        super(context, resourceId, otherUsers);
-        this.context = context;
-        this.otherUsers = otherUsers;
+        super(context, resourceId, 0, otherUsers);
+
     }
 
     @NonNull
@@ -35,10 +32,10 @@ public class SearchListAdapter extends ArrayAdapter<String> {
         View view = convertView;
 
         if (view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.list_individual_friend_search, parent, false);
+            view = LayoutInflater.from(this.getContext()).inflate(R.layout.list_individual_friend_search, parent, false);
         }
 
-        final String friend = otherUsers.get(position);
+        final String friend = this.getItem(position);
         TextView friendTextView = view.findViewById(R.id.friend_text);
         friendTextView.setText(friend);
 
