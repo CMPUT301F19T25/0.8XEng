@@ -50,26 +50,22 @@ public class FriendsFragment extends Fragment {
     private SearchListAdapter searchFriendAdapater;
     private AutoCompleteTextView searchAutoComplete;
 
-    public static FriendsFragment newInstance() {
-        return new FriendsFragment();
-    }
-
-
+    /**
+     * Function to initialize all the views, lists and adapters. Returns the root view.
+     *
+     * @param inflater  LayoutInflater
+     * @param container container to grab the root from
+     * @return Root view for the fragment
+     */
     public View initializeViews(LayoutInflater inflater, ViewGroup container) {
         View root = inflater.inflate(R.layout.fragment_friends, container, false);
 
         friendsListView = root.findViewById(R.id.friends_list_view);
         friendsDataList = new ArrayList<>();
-        friendsAdapter = new FriendsListAdapttester(getContext(), friendsDataList);
+        friendsAdapter = new FriendsListAdapter(getContext(), friendsDataList);
         friendsListView.setAdapter(friendsAdapter);
 
         searchFriendDataList = new ArrayList<>();
-        /**
-        searchFriendAdapater = new SearchListAdapter(getContext(),
-                R.layout.list_individual_friend_search,
-                searchFriendDataList);
-        **/
-
         searchFriendAdapater = new SearchListAdapter(getContext(), android.R.layout.simple_dropdown_item_1line, searchFriendDataList);
         searchAutoComplete = root.findViewById(R.id.auto_complete_friends);
         searchAutoComplete.setAdapter(searchFriendAdapater);
@@ -77,6 +73,13 @@ public class FriendsFragment extends Fragment {
         return root;
     }
 
+    /**
+     * onCreateView of the Friend's Fragment
+     * @param inflater
+     * @param container
+     * @param savedInstAdanceState
+     * @return
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstAdanceState) {
@@ -113,25 +116,29 @@ public class FriendsFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        QuerySnapshot querySnapshot = task.getResult();
-                        ArrayList<String> currentFriends = new ArrayList<>();
-                        for(DocumentSnapshot doc: querySnapshot.getDocuments()){
-                            if(doc.getId().equals(fsh.getUsername())){
-                                currentFriends = (ArrayList<String>) doc.get(FireStoreHandler.CURRENT_FRIENDS);
+                        if (task.isSuccessful()) {
+                            QuerySnapshot querySnapshot = task.getResult();
+                            HashSet<String> currentFriendsHash = new HashSet<>();
+                            for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                                if (doc.getId().equals(fsh.getUsername())) {
+                                    currentFriendsHash = new HashSet((ArrayList<String>) doc.get(FireStoreHandler.CURRENT_FRIENDS));
+                                }
                             }
-                        }
-                        HashSet<String> currentFriendsHash = new HashSet<>(currentFriends);
-                        Log.d(TAG, "Current friends:" + currentFriends.size());
-                        searchFriendDataList.clear();
-                        for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
-                            if(!currentFriendsHash.contains(doc.getId())){
-                                searchFriendDataList.add(doc.getId());
+                            Log.d(TAG, "Current friends:" + currentFriendsHash.size());
+                            searchFriendDataList.clear();
+                            for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                                if (!currentFriendsHash.contains(doc.getId())) {
+                                    searchFriendDataList.add(doc.getId());
+                                }
                             }
+                            for (int i = 0; i < searchFriendDataList.size(); i++) {
+                                Log.d(TAG, "Other User: " + searchFriendDataList.get(i));
+                            }
+                            searchFriendAdapater.notifyDataSetChanged();
+                        } else {
+                            Log.d(TAG, "Error getting all users");
                         }
-                        for (int i = 0; i < searchFriendDataList.size(); i++) {
-                            Log.d(TAG, "Other User: " + searchFriendDataList.get(i));
-                        }
-                        searchFriendAdapater.notifyDataSetChanged();
+
                     }
                 });
         return root;
