@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -68,6 +69,7 @@ public class EmoteListAdapter extends ArrayAdapter<EmotionEvent> {
         TextView emoteTextView = view.findViewById(R.id.emote_text);
         TextView userTextView = view.findViewById(R.id.user_name);
         TextView dateTextView = view.findViewById(R.id.date);
+        ImageView emoticonImage = view.findViewById(R.id.emoticon);
 
         int identifier = this.context.getResources().getIdentifier(emote.getEmote().toString(), "string", this.context.getPackageName());
         emoteTextView.setText(this.context.getResources().getString(identifier));
@@ -81,6 +83,12 @@ public class EmoteListAdapter extends ArrayAdapter<EmotionEvent> {
 
         GradientDrawable drawable = (GradientDrawable) view.getBackground();
         drawable.setColor(Emotion.getColor(context, emote.getEmote()));
+
+
+        int emoticonIdentifier = context.getResources().getIdentifier(emote.getEmote().toString()+"_EMOTICON", "string", context.getPackageName());
+        String emotePath = context.getResources().getString(emoticonIdentifier);
+        int emoticonId = context.getResources().getIdentifier(emotePath, "drawable", context.getPackageName());
+        emoticonImage.setImageResource(emoticonId);
 
         return view;
     }
