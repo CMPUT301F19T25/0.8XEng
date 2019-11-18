@@ -3,39 +3,30 @@ package com.example.emote.ui.friends;
 Friends fragment
  */
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.emote.EmoteApplication;
 import com.example.emote.FireStoreHandler;
 import com.example.emote.R;
-import com.example.emote.EmotionEvent;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 public class FriendsFragment extends Fragment {
 
@@ -127,7 +118,8 @@ public class FriendsFragment extends Fragment {
                             Log.d(TAG, "Current friends:" + currentFriendsHash.size());
                             searchFriendDataList.clear();
                             for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
-                                if (!currentFriendsHash.contains(doc.getId())) {
+                                if (!currentFriendsHash.contains(doc.getId()) &&
+                                        !doc.getId().equals(fsh.getUsername())) {
                                     searchFriendDataList.add(doc.getId());
                                 }
                             }
