@@ -108,7 +108,6 @@ public class FireStoreHandler {
         removeFriendRequest(friendUsername);
         // add users to each other's friend list
         addFriend(username, friendUsername);
-        addFriend(friendUsername, username);
     }
 
     /**
