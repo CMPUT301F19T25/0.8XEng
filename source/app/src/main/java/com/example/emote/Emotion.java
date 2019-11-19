@@ -44,6 +44,10 @@ public enum Emotion {
         int identifier = context.getResources().getIdentifier(emotion.toString(), "color", context.getPackageName());
         return context.getResources().getColor(identifier);
     }
+    public static int getEmoticonPath(Context context, Emotion emotion){
+        int identifier = context.getResources().getIdentifier(emotion.toString(), "color", context.getPackageName());
+        return context.getResources().getColor(identifier);
+    }
     public static int getIndex(Emotion emotion){
         return Arrays.asList(Emotion.values()).indexOf(emotion);
     }

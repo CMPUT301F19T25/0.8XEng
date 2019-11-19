@@ -27,6 +27,8 @@ import com.example.emote.EmotionEvent;
 import com.example.emote.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ListEmoteFragment extends Fragment {
 
@@ -39,7 +41,6 @@ public class ListEmoteFragment extends Fragment {
     private ListView emoteListView;
     private Spinner spinner;
     private CheckBox showFriends;
-    private CheckBox filterEmotes;
 
     /**
      * Main Method for this Emote fragment. Initializes the fragment,
@@ -59,9 +60,11 @@ public class ListEmoteFragment extends Fragment {
         emoteListView = root.findViewById(R.id.emote_list_view);
         spinner = root.findViewById(R.id.spinner);
         showFriends = root.findViewById(R.id.check_box_show_friends);
-        filterEmotes = root.findViewById(R.id.check_box_filter);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, Emotion.getStrings(getContext()));
+        List<String> emotionStrings = new ArrayList<>(Arrays.asList(Emotion.getStrings(getContext())));
+        emotionStrings.add(0, "All");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, emotionStrings);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(adapter);
         emoteDataList = new ArrayList<>();
         emoteAdapter = new EmoteListAdapter(getContext(), emoteDataList);
@@ -87,10 +90,15 @@ public class ListEmoteFragment extends Fragment {
             }
         });
 
-        filterEmotes.setOnClickListener(new View.OnClickListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 refresh();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 
@@ -110,7 +118,7 @@ public class ListEmoteFragment extends Fragment {
      * Refresh the list to get the changes from firebase.
      */
     public void refresh() {
-        if (filterEmotes.isChecked()) {
+        if (spinner.getSelectedItem().toString() != "All") {
             listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList,
                     showFriends.isChecked(), Emotion.values()[spinner.getSelectedItemPosition()]);
         } else {
