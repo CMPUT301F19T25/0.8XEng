@@ -89,26 +89,18 @@ public class SignupActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             EmoteApplication.setUsername(username);
+                            progressDialog.dismiss();
                             onSignupSuccess();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            progressDialog.dismiss();
                             Toast.makeText(getBaseContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             onSignupFailed();
                         }
                     }
                 });
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // call either onSignupSuccess or onSignupFailed
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
     }
 
     private boolean validate(){
