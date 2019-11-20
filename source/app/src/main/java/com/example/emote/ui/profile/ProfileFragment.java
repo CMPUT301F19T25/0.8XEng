@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.example.emote.FireStoreHandler;
 import com.example.emote.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -26,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.Date;
 
 import static com.example.emote.FireStoreHandler.EMOTE_COLLECTION;
+import static com.example.emote.FireStoreHandler.FRIEND_COLLECTION;
 import static java.lang.Long.MIN_VALUE;
 
 /**
@@ -40,6 +43,7 @@ public class ProfileFragment extends Fragment {
 
     private TextView usernameText;
     private TextView currentmoodText;
+    private Button signoutButton;
 
     private FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
     private FirebaseFirestore db = fsh.getFireStoreDBReference();
@@ -66,6 +70,7 @@ public class ProfileFragment extends Fragment {
 
         usernameText = root.findViewById(R.id.profile_username);
         currentmoodText = root.findViewById(R.id.profile_current_mood);
+        signoutButton = root.findViewById(R.id.signoutButton);
 
         usernameText.setText(fsh.getUsername());
         db.collection(EMOTE_COLLECTION)
@@ -94,6 +99,13 @@ public class ProfileFragment extends Fragment {
                         }
                     }
                 });
+
+        signoutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+            }
+        });
+
         return root;
     }
 }
