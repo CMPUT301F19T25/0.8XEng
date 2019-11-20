@@ -1,5 +1,6 @@
 package com.example.emote.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,10 +18,13 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.emote.EmoteApplication;
 import com.example.emote.EmotionEvent;
 import com.example.emote.FireStoreHandler;
+import com.example.emote.LoginActivity;
+import com.example.emote.MainActivity;
 import com.example.emote.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -102,7 +106,14 @@ public class ProfileFragment extends Fragment {
 
         signoutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
+                try {
+                    FirebaseAuth.getInstance().signOut();
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
