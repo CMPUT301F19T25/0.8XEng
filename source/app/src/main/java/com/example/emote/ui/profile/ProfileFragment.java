@@ -25,11 +25,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Date;
+import java.util.List;
 
 import static com.example.emote.FireStoreHandler.EMOTE_COLLECTION;
 import static com.example.emote.FireStoreHandler.FRIEND_COLLECTION;
@@ -47,6 +49,7 @@ public class ProfileFragment extends Fragment {
 
     private TextView usernameText;
     private TextView currentmoodText;
+    private TextView friendsText;
     private Button signoutButton;
 
     private FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
@@ -74,9 +77,27 @@ public class ProfileFragment extends Fragment {
 
         usernameText = root.findViewById(R.id.profile_username);
         currentmoodText = root.findViewById(R.id.profile_current_mood);
+        friendsText = root.findViewById(R.id.profile_number_friends);
         signoutButton = root.findViewById(R.id.signoutButton);
 
         usernameText.setText(fsh.getUsername());
+        db.collection(FRIEND_COLLECTION).document(EmoteApplication.getUsername())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                friendsText.setText(Integer.toString(((List<String>) document.get("CURRENT_FRIENDS")).size()) + " friends");
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
         db.collection(EMOTE_COLLECTION)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
