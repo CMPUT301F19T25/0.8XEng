@@ -18,13 +18,12 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.emote.EmoteApplication;
 import com.example.emote.EmotionEvent;
 import com.example.emote.FireStoreHandler;
+import com.example.emote.FriendsListActivity;
 import com.example.emote.LoginActivity;
-import com.example.emote.MainActivity;
 import com.example.emote.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -124,6 +123,17 @@ public class ProfileFragment extends Fragment {
                         }
                     }
                 });
+
+        friendsText.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(getContext(), FriendsListActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         signoutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
