@@ -10,10 +10,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -22,9 +26,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.GeoPoint;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -36,6 +42,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final int DEFAULT_ZOOM = 15;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
+    private Marker selectedMarker;
+    private MapMode mode;
+
+    private Button ConfirmButton;
+    private Button DeleteButton;
 
 //    // The entry points to the Places API.
 //    private GeoDataClient mGeoDataClient;
@@ -48,6 +59,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     // location retrieved by the Fused Location Provider.
     private Location mLastKnownLocation;
 
+    public enum MapMode {
+        EditLocation,
+        ViewLocation,
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,15 +75,55 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        mode = (MapMode)extras.getSerializable("MAP_MODE");
+
+        ConfirmButton = findViewById(R.id.confirm_button);
+        ConfirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ConfirmButtonOnClickHandler(view);
+            }
+        });
+
+        DeleteButton = findViewById(R.id.delete_button);
+        DeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DeleteButtonOnClickHandler(view);
+            }
+        });
+
         mapFragment.getMapAsync(this);
     }
 
+    public void ConfirmButtonOnClickHandler(View view) {
+        if (selectedMarker != null) {
+            LatLng result = new LatLng(selectedMarker.getPosition().latitude, selectedMarker.getPosition().longitude);
+            Bundle extras = new Bundle();
+            extras.putParcelable("location", result);
+            Intent intent = new Intent();
+            intent.putExtras(extras);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        }
+    }
+
+    public void DeleteButtonOnClickHandler(View view) {
+        if (selectedMarker != null) {
+            selectedMarker.remove();
+            selectedMarker = null;
+
+            ConfirmButton.setVisibility(View.GONE);
+            DeleteButton.setVisibility(View.GONE);
+        }
+    }
 
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -76,7 +132,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
         // Add a marker in Sydney and move the camera
 //        LatLng sydney = new LatLng(-34, 151);
 //        mMap.addMarker(new MarkerOptions().position(DefaultLocation).title("DefaultLocation"));
@@ -85,6 +142,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getLocationPermission();
 
         getDeviceLocation();
+
+        if (mode == MapMode.EditLocation) {
+            mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                @Override
+                public void onMapLongClick(LatLng latLng) {
+                    if (selectedMarker != null) {
+                        selectedMarker.remove();
+                    }
+                    selectedMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Selected"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                    ConfirmButton.setVisibility(View.VISIBLE);
+                    DeleteButton.setVisibility(View.VISIBLE);
+                }
+            });
+        }
     }
 
     private void getLocationPermission() {
