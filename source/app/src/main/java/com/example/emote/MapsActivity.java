@@ -77,8 +77,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
 
         Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        mode = (MapMode)extras.getSerializable("MAP_MODE");
+        mode = (MapMode)intent.getExtras().getSerializable("MAP_MODE");
 
         ConfirmButton = findViewById(R.id.confirm_button);
         ConfirmButton.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +150,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         selectedMarker.remove();
                     }
                     selectedMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Selected"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
                     ConfirmButton.setVisibility(View.VISIBLE);
                     DeleteButton.setVisibility(View.VISIBLE);

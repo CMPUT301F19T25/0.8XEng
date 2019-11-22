@@ -48,11 +48,17 @@ public class MapFragment extends Fragment {
 
     public void ViewPersonalLocation(View view) {
         Intent intent = new Intent(this.getContext(), MapsActivity.class);
+        Bundle extras = new Bundle();
+        extras.putSerializable("MAP_MODE", MapsActivity.MapMode.ViewLocation);
+        intent.putExtras(extras);
         startActivity(intent);
     }
 
     public void ViewFriendsLocation(View view) {
         Intent intent = new Intent(this.getContext(), MapsActivity.class);
+        Bundle extras = new Bundle();
+        extras.putSerializable("MAP_MODE", MapsActivity.MapMode.ViewLocation);
+        intent.putExtras(extras);
         startActivity(intent);
     }
 }
