@@ -43,9 +43,4 @@ public class ListEmoteTest {
         onView(withText("Happy")).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testFilterCheckBox(){
-        onView(withId(R.id.check_box_filter)).perform(click());
-    }
-
 }

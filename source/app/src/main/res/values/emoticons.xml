@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="SAD_EMOTICON">sad</string>
+    <string name="HAPPY_EMOTICON">happy</string>
+    <string name="LONELY_EMOTICON">lonely</string>
+    <string name="DEPRESSED_EMOTICON">depressed</string>
+    <string name="EXCITED_EMOTICON">excited</string>
+    <string name="NEUTRAL_EMOTICON">neural</string>
+    <string name="ANNOYED_EMOTICON">annoyed</string>
+    <string name="STRESSED_EMOTICON">stressed</string>
+</resources>

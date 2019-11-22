@@ -2,15 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/emote_list_item_border"
+    android:layout_margin="0dp">
 
-    <TextView
-        android:id="@+id/emote_text"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:text="Emote"
-        android:textSize="30sp"/>
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/emoticon"
+            android:scaleType="fitXY"
+            android:layout_height="60dp"
+            android:layout_width="60dp"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            />
+
+        <TextView
+            android:id="@+id/emote_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="Emote"
+            android:textSize="30sp" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
