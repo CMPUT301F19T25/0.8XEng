@@ -44,6 +44,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean mLocationPermissionGranted;
     private Marker selectedMarker;
     private MapMode mode;
+    private LatLng oldLocation;
 
     private Button ConfirmButton;
     private Button DeleteButton;
@@ -78,6 +79,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Intent intent = getIntent();
         mode = (MapMode)intent.getExtras().getSerializable("MAP_MODE");
+        if (mode == MapMode.EditLocation) {
+            try {
+                oldLocation = (LatLng)intent.getExtras().get("location");
+
+            } catch (Exception e){
+
+            }
+        }
 
         ConfirmButton = findViewById(R.id.confirm_button);
         ConfirmButton.setOnClickListener(new View.OnClickListener() {
@@ -143,6 +152,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getDeviceLocation();
 
         if (mode == MapMode.EditLocation) {
+            if (oldLocation != null) {
+                selectedMarker = mMap.addMarker(new MarkerOptions().position(oldLocation).title("Selected"));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(oldLocation, DEFAULT_ZOOM));
+
+                ConfirmButton.setVisibility(View.VISIBLE);
+                DeleteButton.setVisibility(View.VISIBLE);
+            }
+
             mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                 @Override
                 public void onMapLongClick(LatLng latLng) {
@@ -189,10 +206,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
-                            mLastKnownLocation = task.getResult();
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            if (oldLocation == null) {
+                                mLastKnownLocation = task.getResult();
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                        new LatLng(mLastKnownLocation.getLatitude(),
+                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());

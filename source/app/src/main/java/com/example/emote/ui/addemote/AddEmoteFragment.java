@@ -251,9 +251,16 @@ public class AddEmoteFragment extends Fragment {
             String reasonString = textReasonField.getText().toString();
             Situation situation = Situation.values()[situationSpinner.getSelectedItemPosition()];
             Emotion emotion = Emotion.values()[emotionSpinner.getSelectedItemPosition()];
-            if (cameraImage != null) {
+            if (cameraImage != null && mapLocation != null) {
+                String fileName = uploadImage(cameraImage);
+                event = new EmotionEvent(emotion, situation, reasonString, date, fileName, mapLocation);
+            }
+            else if (cameraImage != null && mapLocation == null) {
                 String fileName = uploadImage(cameraImage);
                 event = new EmotionEvent(emotion, situation, reasonString, date, fileName);
+            }
+            else if (cameraImage == null && mapLocation != null) {
+                event = new EmotionEvent(emotion, situation, reasonString, date, mapLocation);
             }
             else{
                 event = new EmotionEvent(emotion, situation, reasonString, date);
@@ -284,6 +291,9 @@ public class AddEmoteFragment extends Fragment {
         textTimeField.setText("");
         setTimeAndDateListeners();
         cameraPreview.setImageResource(0);
+        mapText.setText("");
+        mapText.setVisibility(View.GONE);
+        mapLocation = null;
     }
 
     /**
