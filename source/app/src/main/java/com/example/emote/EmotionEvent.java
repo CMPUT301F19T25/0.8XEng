@@ -26,6 +26,8 @@ public class EmotionEvent implements Serializable {
     private Date date;
     private String fireStoreDocumentID;
 
+    // workaround to allow the class to be serializable
+    // otherwise geopoint will trigger error when passed in bundle
     private double lat = -1;
     private double lng = -1;
 

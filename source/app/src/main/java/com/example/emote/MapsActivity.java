@@ -49,10 +49,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Button ConfirmButton;
     private Button DeleteButton;
 
-//    // The entry points to the Places API.
-//    private GeoDataClient mGeoDataClient;
-//    private PlaceDetectionClient mPlaceDetectionClient;
-
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
@@ -60,6 +56,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     // location retrieved by the Fused Location Provider.
     private Location mLastKnownLocation;
 
+    // a enum to indicate whether the activity is under edit or viewing
     public enum MapMode {
         EditLocation,
         ViewLocation,
@@ -81,10 +78,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mode = (MapMode)intent.getExtras().getSerializable("MAP_MODE");
         if (mode == MapMode.EditLocation) {
             try {
+                // get the old location when editing
                 oldLocation = (LatLng)intent.getExtras().get("location");
-
             } catch (Exception e){
-
+                // do nothing
             }
         }
 
@@ -142,10 +139,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(DefaultLocation).title("DefaultLocation"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DefaultLocation, DEFAULT_ZOOM));
 
         getLocationPermission();
 
