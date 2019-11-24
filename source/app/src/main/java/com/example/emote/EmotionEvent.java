@@ -4,6 +4,7 @@ package com.example.emote;
 //Additional data fields and handling should be added.
 
 import com.example.emote.Situation;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -24,6 +25,11 @@ public class EmotionEvent implements Serializable {
 
     private Date date;
     private String fireStoreDocumentID;
+
+    // workaround to allow the class to be serializable
+    // otherwise geopoint will trigger error when passed in bundle
+    private double lat = -1;
+    private double lng = -1;
 
     public EmotionEvent(){}
 
@@ -55,6 +61,27 @@ public class EmotionEvent implements Serializable {
         setReason(reason);
         setImageFile(imageFile);
         setDate(date);
+        fireStoreDocumentID = UUID.randomUUID().toString();
+    }
+
+    public EmotionEvent(Emotion emote, Situation situation, String reason, Date date, GeoPoint location){
+        setUsername(username);
+        setEmote(emote);
+        setSituation(situation);
+        setReason(reason);
+        setLocation(location);
+        setDate(date);
+        fireStoreDocumentID = UUID.randomUUID().toString();
+    }
+
+    public EmotionEvent(Emotion emote, Situation situation, String reason, Date date, String imageFile, GeoPoint location){
+        setUsername(username);
+        setEmote(emote);
+        setSituation(situation);
+        setReason(reason);
+        setImageFile(imageFile);
+        setDate(date);
+        setLocation(location);
         fireStoreDocumentID = UUID.randomUUID().toString();
     }
 
@@ -107,4 +134,23 @@ public class EmotionEvent implements Serializable {
 
     public void setDate(Date date) { this.date = date; }
 
+    public GeoPoint getLocation() {
+        if (lat == -1 || lng == -1) {
+            return null;
+        }
+        else {
+            return new GeoPoint(lat, lng);
+        }
+    }
+
+    public void setLocation(GeoPoint location) {
+        if (location == null) {
+            lat = -1;
+            lng = -1;
+        }
+        else {
+            lat = location.getLatitude();
+            lng = location.getLongitude();
+        }
+    }
 }
