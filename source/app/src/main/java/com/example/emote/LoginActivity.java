@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.test.espresso.IdlingResource;
+import androidx.test.espresso.idling.CountingIdlingResource;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     Button loginButton;
     Button signupButton;
     private FirebaseAuth mAuth;
+    CountingIdlingResource expressoTestIdlingResouce = new CountingIdlingResource("login");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
      *  event to handle login failed
      *  */
     public void onLoginFailed() {
+        expressoTestIdlingResouce.decrement();
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
         loginButton.setEnabled(true);
     }
@@ -80,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
      *  event to handle login success
      *  */
     public void onLoginSuccess() {
+        expressoTestIdlingResouce.decrement();
         loginButton.setEnabled(true);
         // move to user activity
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -108,6 +113,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordText.getText().toString();
 
 
+        expressoTestIdlingResouce.increment();
 
         LoginHelper.loginUser(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -162,5 +168,9 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    public CountingIdlingResource returnIdlingResource() {
+        return expressoTestIdlingResouce;
     }
 }
