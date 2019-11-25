@@ -141,6 +141,7 @@ public class ProfileFragment extends Fragment {
                     FirebaseAuth.getInstance().signOut();
                     Intent intent = new Intent(getContext(), LoginActivity.class);
                     startActivity(intent);
+                    EmoteApplication.setUsername("");
                     getActivity().finish();
                 } catch (Exception e) {
                     e.printStackTrace();
