@@ -49,8 +49,8 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Failed to create account", Toast.LENGTH_LONG).show();
+    public void onSignupFailed(String message) {
+        Toast.makeText(getBaseContext(), "Failed to create account: "+ message, Toast.LENGTH_LONG).show();
         createAccountButton.setEnabled(true);
     }
 
@@ -66,7 +66,7 @@ public class SignupActivity extends AppCompatActivity {
         Log.d(TAG, "SignupActivity");
 
         if (!validate()){
-            onSignupFailed();
+            onSignupFailed("");
             return;
         }
 
@@ -97,7 +97,7 @@ public class SignupActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             Toast.makeText(getBaseContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            onSignupFailed();
+                            onSignupFailed(task.getException().getMessage());
                         }
                     }
                 });
