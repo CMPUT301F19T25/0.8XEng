@@ -146,6 +146,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 });
     }
 
+    private void getFriendsEventLocations() {
+        // TODO: get latest emotion event from friends
+    }
+
     private void SetCustomMarker(EmotionEvent event, LatLng location) {
         // TODO: set custom markers that can display user, date, and emote
         mMap.addMarker(new MarkerOptions()
@@ -217,6 +221,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else if (mode == MapMode.ViewLocation) {
             if (personalHistory == true) {
                 getPersonalEventLocations();
+            } else {
+                getFriendsEventLocations();
             }
         }
     }
