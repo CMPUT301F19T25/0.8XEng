@@ -9,7 +9,7 @@
     android:background="@drawable/add_emote_background">
 
     <TextView
-        android:id="@+id/text_following"
+        android:id="@+id/text_add_emote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
