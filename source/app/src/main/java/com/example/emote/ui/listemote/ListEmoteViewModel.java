@@ -70,7 +70,8 @@ public class ListEmoteViewModel extends ViewModel {
 
 
     /**
-     * Function to grab the emote history from Firebase
+     * Function to grab emote history from firebase for all friends. First all of the friends are
+     * fetched and used to filter the emotion events.
      *
      * @param adapter       EmoteListAdapter that is used by the list view
      * @param emoteDataList ArrayList used by the EmoteListAdapter
@@ -145,7 +146,7 @@ public class ListEmoteViewModel extends ViewModel {
     }
 
     /**
-     * Function to grab the emote history from Firebase but with filtering.
+     * Function to grab the emote history from Firebase but with filtering by emotion and friend.
      *
      * @param adapter       EmoteListAdapter that is used by the list view
      * @param emoteDataList ArrayList used by the EmoteListAdapter
