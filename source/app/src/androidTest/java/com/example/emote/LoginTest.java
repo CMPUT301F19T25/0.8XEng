@@ -6,6 +6,8 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.runner.AndroidJUnit4;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,12 +38,22 @@ public class LoginTest {
     private String validUserName = "testuser4";
     private String validPassword = "password123";
     private String invalidLengthPassword = "a";
-
+    CountingIdlingResource idlingResource;
 
     @Rule
     public IntentsTestRule<LoginActivity> activityTestRule =
             new IntentsTestRule<>(LoginActivity.class);
 
+    @Before
+    public void setup(){
+        idlingResource = activityTestRule.getActivity().returnIdlingResource();
+        IdlingRegistry.getInstance().register(idlingResource);
+    }
+
+    @After
+    public void tearDown() {
+        IdlingRegistry.getInstance().unregister(idlingResource);
+    }
 
     @Test
     public void unregisiteredUserInvlaidLogin() {
@@ -58,9 +70,6 @@ public class LoginTest {
 
     @Test
     public void invlaidUserNameLengthLogin() {
-        CountingIdlingResource idlingResource = activityTestRule.getActivity().returnIdlingResource();
-        IdlingRegistry.getInstance().register(idlingResource);
-
         onView(withId(R.id.input_username))
                 .perform(typeText(invalidUserName), closeSoftKeyboard());
         onView(withId(R.id.input_password))
@@ -74,9 +83,6 @@ public class LoginTest {
 
     @Test
     public void validLogin() {
-        CountingIdlingResource idlingResource = activityTestRule.getActivity().returnIdlingResource();
-        IdlingRegistry.getInstance().register(idlingResource);
-
         onView(withId(R.id.input_username))
                 .perform(typeText(validUserName), closeSoftKeyboard());
         onView(withId(R.id.input_password))
@@ -85,5 +91,4 @@ public class LoginTest {
 
         intended(hasComponent(MainActivity.class.getName()));
     }
-
 }

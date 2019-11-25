@@ -75,7 +75,6 @@ public class LoginActivity extends AppCompatActivity {
      *  event to handle login failed
      *  */
     public void onLoginFailed() {
-        expressoTestIdlingResouce.decrement();
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
         loginButton.setEnabled(true);
     }
@@ -84,7 +83,6 @@ public class LoginActivity extends AppCompatActivity {
      *  event to handle login success
      *  */
     public void onLoginSuccess() {
-        expressoTestIdlingResouce.decrement();
         loginButton.setEnabled(true);
         // move to user activity
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -134,6 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             onLoginFailed();
                         }
+                        expressoTestIdlingResouce.decrement();
                     }
                 });
     }

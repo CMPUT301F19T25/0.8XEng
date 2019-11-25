@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.test.espresso.idling.CountingIdlingResource;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,6 +29,8 @@ public class SignupActivity extends AppCompatActivity {
     EditText confirmPasswordText;
     Button createAccountButton;
     private FirebaseAuth mAuth;
+    CountingIdlingResource expressoTestIdlingResouce = new CountingIdlingResource("signup");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,8 @@ public class SignupActivity extends AppCompatActivity {
         final String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
 
+        expressoTestIdlingResouce.increment();
+
         LoginHelper.signupUser(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -99,6 +104,7 @@ public class SignupActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             onSignupFailed();
                         }
+                        expressoTestIdlingResouce.decrement();
                     }
                 });
     }
@@ -127,4 +133,7 @@ public class SignupActivity extends AppCompatActivity {
 
         return valid;
     }
-}
+
+    public CountingIdlingResource returnIdlingResource() {
+        return expressoTestIdlingResouce;
+    }}
