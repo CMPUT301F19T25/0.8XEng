@@ -30,14 +30,18 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
+import static java.lang.Long.MIN_VALUE;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -147,7 +151,49 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void getFriendsEventLocations() {
-        // TODO: get latest emotion event from friends
+        db.collection(FireStoreHandler.FRIEND_COLLECTION)
+                .document(EmoteApplication.getUsername())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            ArrayList<String> currentFriends = (ArrayList<String>) document.get("CURRENT_FRIENDS");
+                            for (String friend : currentFriends) {
+                                db.collection(FireStoreHandler.EMOTE_COLLECTION)
+                                        .whereEqualTo(EmotionEvent.USERNAME_KEY, friend)
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    Date max_date = new Date(MIN_VALUE);
+                                                    EmotionEvent latest_event = null;
+                                                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                                                        EmotionEvent current_emote = doc.toObject(EmotionEvent.class);
+                                                        if (max_date.compareTo(current_emote.getDate()) <= 0) {
+                                                            latest_event = current_emote;
+                                                            max_date = latest_event.getDate();
+                                                        }
+                                                    }
+                                                    if (latest_event != null) {
+                                                        GeoPoint tempPoint = latest_event.getLocation();
+                                                        if (tempPoint != null) {
+                                                            SetCustomMarker(latest_event, new LatLng(tempPoint.getLatitude(), tempPoint.getLongitude()));
+                                                        }
+                                                    }
+                                                } else {
+                                                    Log.d(TAG, "Error getting documents: ", task.getException());
+                                                }
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
     private void SetCustomMarker(EmotionEvent event, LatLng location) {
