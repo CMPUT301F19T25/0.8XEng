@@ -55,8 +55,6 @@ public class FollowingListAdapter extends ArrayAdapter<String> {
         current_mood = view.findViewById(R.id.following_current_mood);
         date = view.findViewById(R.id.following_current_date);
 
-        username.setText(users.get(position));
-
         db.collection(EMOTE_COLLECTION)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -88,7 +86,6 @@ public class FollowingListAdapter extends ArrayAdapter<String> {
                         }
                     }
                 });
-
         return view;
     }
 }
