@@ -1,5 +1,6 @@
 package com.example.emote;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,9 +11,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.emote.ui.addemote.AddEmoteViewModel;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.android.gms.maps.model.LatLng;
+
 
 import java.util.Calendar;
 
@@ -31,6 +36,13 @@ public class EditEventActivity extends AppCompatActivity {
     private Button editButton;
     private Button deleteButton;
 
+    private Button locationButton;
+    private TextView locationText;
+
+    // arbitrary int for a map_request
+    private static final int MAP_REQUEST = 1617;
+    private GeoPoint location;
+
     private EmotionEvent emotionEvent;
 
     @Override
@@ -45,7 +57,7 @@ public class EditEventActivity extends AppCompatActivity {
         if (!intent.getBooleanExtra("editable", false)) {
             disableViews();
         }
-        fsh = new FireStoreHandler("dman");
+        fsh = new FireStoreHandler(EmoteApplication.getUsername());
         setFields();
 
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +76,32 @@ public class EditEventActivity extends AppCompatActivity {
             }
         });
 
+        locationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { editLocation(view);}
+        });
+    }
+
+    public void editLocation(View view) {
+        Intent mapIntent = new Intent(this, MapsActivity.class);
+        Bundle extras = new Bundle();
+        extras.putSerializable("MAP_MODE", MapsActivity.MapMode.EditLocation);
+        if (location != null) {
+            extras.putParcelable("location", new LatLng(location.getLatitude(), location.getLongitude()));
+        }
+        mapIntent.putExtras(extras);
+        startActivityForResult(mapIntent, MAP_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MAP_REQUEST && resultCode == Activity.RESULT_OK) {
+            LatLng result = (LatLng) data.getExtras().get("location");
+            location = new GeoPoint(result.latitude, result.longitude);
+            locationText.setVisibility(View.VISIBLE);
+            locationText.setText(location.toString());
+        }
     }
 
     /**
@@ -77,6 +115,9 @@ public class EditEventActivity extends AppCompatActivity {
         emotionSpinner = this.findViewById(R.id.spinnner_emote);
         editButton = this.findViewById(R.id.button_edit);
         deleteButton = this.findViewById(R.id.button_delete);
+
+        locationButton = this.findViewById(R.id.addLocationButton);
+        locationText = this.findViewById(R.id.locationText);
 
         situationSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Situation.getStrings(this)));
         emotionSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Emotion.getStrings(this)));
@@ -94,6 +135,13 @@ public class EditEventActivity extends AppCompatActivity {
         textTime.setText(String.format("%02d:%02d",
                 eventCal.get(Calendar.HOUR),
                 eventCal.get(Calendar.MINUTE)));
+
+        location = emotionEvent.getLocation();
+        if (location != null) {
+            locationText.setVisibility(View.VISIBLE);
+            locationText.setText(location.toString());
+        }
+
         textReasonField.setText(emotionEvent.getReason());
         situationSpinner.setSelection(Situation.getIndex(emotionEvent.getSituation()));
         emotionSpinner.setSelection(Emotion.getIndex(emotionEvent.getEmote()));
@@ -107,6 +155,7 @@ public class EditEventActivity extends AppCompatActivity {
         editButton.setEnabled(false);
         deleteButton.setEnabled(false);
         textReasonField.setEnabled(false);
+        locationButton.setEnabled(false);
     }
 
     /**
@@ -122,6 +171,7 @@ public class EditEventActivity extends AppCompatActivity {
             emotionEvent.setReason(reasonString);
             emotionEvent.setSituation(situation);
             emotionEvent.setEmote(emotion);
+            emotionEvent.setLocation(location);
 
         } catch (Exception e) {
             // TODO proper error messages

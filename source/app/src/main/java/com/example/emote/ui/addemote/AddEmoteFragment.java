@@ -16,7 +16,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -29,9 +31,12 @@ import com.example.emote.EmoteApplication;
 import com.example.emote.Emotion;
 import com.example.emote.EmotionEvent;
 import com.example.emote.FireStoreHandler;
+import com.example.emote.MapsActivity;
 import com.example.emote.R;
 import com.example.emote.Situation;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -60,14 +65,22 @@ public class AddEmoteFragment extends Fragment {
     private Button submitButton;
     private Button takePictureButton;
     private ImageView cameraPreview;
+    private Button addLocationButton;
+
+    private TextView mapText;
 
     FirebaseStorage storage;
     String STORAGE_REF = "gs://emote-f75ce.appspot.com";
 
     Bitmap cameraImage;
 
+    GeoPoint mapLocation;
+
 
     private static final int CAMERA_REQUEST = 1888;
+
+    // arbitrary int for a map_request
+    private static final int MAP_REQUEST = 1617;
 
     /**
      * Initialize all the necessary views with findViewById
@@ -85,6 +98,9 @@ public class AddEmoteFragment extends Fragment {
         submitButton = root.findViewById(R.id.submitButton);
         takePictureButton = root.findViewById(R.id.addPhotoButton);
         cameraPreview = root.findViewById(R.id.cameraPreview);
+        addLocationButton = root.findViewById(R.id.addLocationButton);
+
+        mapText = root.findViewById(R.id.mapText);
 
         storage = FirebaseStorage.getInstance();
         return root;
@@ -112,6 +128,10 @@ public class AddEmoteFragment extends Fragment {
             public void onClick(View view) {
                 addPicture(view);
             }
+        });
+        addLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { addLocation(view);}
         });
         resetFields();
         return root;
@@ -169,6 +189,14 @@ public class AddEmoteFragment extends Fragment {
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 
+    public void addLocation(View view) {
+        Intent mapIntent = new Intent(this.getContext(), MapsActivity.class);
+        Bundle extras = new Bundle();
+        extras.putSerializable("MAP_MODE", MapsActivity.MapMode.EditLocation);
+        mapIntent.putExtras(extras);
+        startActivityForResult(mapIntent, MAP_REQUEST);
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -180,6 +208,12 @@ public class AddEmoteFragment extends Fragment {
 
             cameraPreview.setImageBitmap(cameraImage);
 
+        }
+        else if (requestCode == MAP_REQUEST && resultCode == Activity.RESULT_OK) {
+            LatLng location = (LatLng) data.getExtras().get("location");
+            mapLocation = new GeoPoint(location.latitude, location.longitude);
+            mapText.setVisibility(View.VISIBLE);
+            mapText.setText(location.toString());
         }
     }
 
@@ -217,9 +251,16 @@ public class AddEmoteFragment extends Fragment {
             String reasonString = textReasonField.getText().toString();
             Situation situation = Situation.values()[situationSpinner.getSelectedItemPosition()];
             Emotion emotion = Emotion.values()[emotionSpinner.getSelectedItemPosition()];
-            if (cameraImage != null) {
+            if (cameraImage != null && mapLocation != null) {
+                String fileName = uploadImage(cameraImage);
+                event = new EmotionEvent(emotion, situation, reasonString, date, fileName, mapLocation);
+            }
+            else if (cameraImage != null && mapLocation == null) {
                 String fileName = uploadImage(cameraImage);
                 event = new EmotionEvent(emotion, situation, reasonString, date, fileName);
+            }
+            else if (cameraImage == null && mapLocation != null) {
+                event = new EmotionEvent(emotion, situation, reasonString, date, mapLocation);
             }
             else{
                 event = new EmotionEvent(emotion, situation, reasonString, date);
@@ -250,6 +291,9 @@ public class AddEmoteFragment extends Fragment {
         textTimeField.setText("");
         setTimeAndDateListeners();
         cameraPreview.setImageResource(0);
+        mapText.setText("");
+        mapText.setVisibility(View.GONE);
+        mapLocation = null;
     }
 
     /**

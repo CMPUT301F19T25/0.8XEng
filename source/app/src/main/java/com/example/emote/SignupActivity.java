@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.test.espresso.idling.CountingIdlingResource;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,6 +29,8 @@ public class SignupActivity extends AppCompatActivity {
     EditText confirmPasswordText;
     Button createAccountButton;
     private FirebaseAuth mAuth;
+    CountingIdlingResource expressoTestIdlingResouce = new CountingIdlingResource("signup");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +52,8 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Failed to create account", Toast.LENGTH_LONG).show();
+    public void onSignupFailed(String message) {
+        Toast.makeText(getBaseContext(), "Failed to create account: "+ message, Toast.LENGTH_LONG).show();
         createAccountButton.setEnabled(true);
     }
 
@@ -66,7 +69,7 @@ public class SignupActivity extends AppCompatActivity {
         Log.d(TAG, "SignupActivity");
 
         if (!validate()){
-            onSignupFailed();
+            onSignupFailed("");
             return;
         }
 
@@ -80,6 +83,8 @@ public class SignupActivity extends AppCompatActivity {
         final String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
 
+        expressoTestIdlingResouce.increment();
+
         LoginHelper.signupUser(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -89,26 +94,19 @@ public class SignupActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             EmoteApplication.setUsername(username);
+                            progressDialog.dismiss();
                             onSignupSuccess();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            progressDialog.dismiss();
                             Toast.makeText(getBaseContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            onSignupFailed();
+                            onSignupFailed(task.getException().getMessage());
                         }
+                        expressoTestIdlingResouce.decrement();
                     }
                 });
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // call either onSignupSuccess or onSignupFailed
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
     }
 
     private boolean validate(){
@@ -135,4 +133,7 @@ public class SignupActivity extends AppCompatActivity {
 
         return valid;
     }
-}
+
+    public CountingIdlingResource returnIdlingResource() {
+        return expressoTestIdlingResouce;
+    }}

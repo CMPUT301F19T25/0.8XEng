@@ -21,6 +21,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -60,6 +62,12 @@ public class ListEmoteViewModel extends ViewModel {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
                                     emoteDataList.add(document.toObject(EmotionEvent.class));
                                 }
+                                Collections.sort(emoteDataList, new Comparator<EmotionEvent>() {
+                                    @Override
+                                    public int compare(EmotionEvent o1, EmotionEvent o2) {
+                                        return o2.getDate().compareTo(o1.getDate());
+                                    }
+                                });
                                 adapter.notifyDataSetChanged();
                             } else {
                                 Log.d(TAG, "Error getting documents: ", task.getException());
@@ -80,6 +88,13 @@ public class ListEmoteViewModel extends ViewModel {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
                                     emoteDataList.add(document.toObject(EmotionEvent.class));
                                 }
+                                Collections.sort(emoteDataList, new Comparator<EmotionEvent>() {
+                                    @Override
+                                    public int compare(EmotionEvent o1, EmotionEvent o2) {
+                                        return o2.getDate().compareTo(o1.getDate());
+
+                                    }
+                                });
                                 adapter.notifyDataSetChanged();
                             } else {
                                 Log.d(TAG, "Error getting documents: ", task.getException());
@@ -114,6 +129,12 @@ public class ListEmoteViewModel extends ViewModel {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
                                     emoteDataList.add(document.toObject(EmotionEvent.class));
                                 }
+                                Collections.sort(emoteDataList, new Comparator<EmotionEvent>() {
+                                    @Override
+                                    public int compare(EmotionEvent o1, EmotionEvent o2) {
+                                        return o2.getDate().compareTo(o1.getDate());
+                                    }
+                                });
                                 adapter.notifyDataSetChanged();
                             } else {
                                 Log.d(TAG, "Error getting documents: ", task.getException());
@@ -135,6 +156,12 @@ public class ListEmoteViewModel extends ViewModel {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
                                     emoteDataList.add(document.toObject(EmotionEvent.class));
                                 }
+                                Collections.sort(emoteDataList, new Comparator<EmotionEvent>() {
+                                    @Override
+                                    public int compare(EmotionEvent o1, EmotionEvent o2) {
+                                        return o2.getDate().compareTo(o1.getDate());
+                                    }
+                                });
                                 adapter.notifyDataSetChanged();
                             } else {
                                 Log.d(TAG, "Error getting documents: ", task.getException());
