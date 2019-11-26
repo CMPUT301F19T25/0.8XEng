@@ -120,7 +120,7 @@ public class ListEmoteFragment extends Fragment {
     public void refresh() {
         if (spinner.getSelectedItem().toString() != "All") {
             listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList,
-                    showFriends.isChecked(), Emotion.values()[spinner.getSelectedItemPosition()]);
+                    showFriends.isChecked(), Emotion.values()[spinner.getSelectedItemPosition()-1]);
         } else {
             listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, showFriends.isChecked());
         }
