@@ -30,10 +30,6 @@ public class FollowingListAdapter extends ArrayAdapter<String> {
     private ArrayList<String> users;
     private Context context;
 
-    private TextView username;
-    private TextView current_mood;
-    private TextView date;
-
     private FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
     private FirebaseFirestore db = fsh.getFireStoreDBReference();
 
@@ -51,9 +47,9 @@ public class FollowingListAdapter extends ArrayAdapter<String> {
             view = LayoutInflater.from(context).inflate(R.layout.list_individual_following, parent, false);
         }
 
-        username = view.findViewById(R.id.following_username);
-        current_mood = view.findViewById(R.id.following_current_mood);
-        date = view.findViewById(R.id.following_current_date);
+        TextView username = view.findViewById(R.id.following_username);
+        TextView current_mood = view.findViewById(R.id.following_current_mood);
+        TextView date = view.findViewById(R.id.following_current_date);
 
         db.collection(EMOTE_COLLECTION)
                 .get()
