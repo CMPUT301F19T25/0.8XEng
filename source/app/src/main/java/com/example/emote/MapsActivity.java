@@ -30,7 +30,18 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Date;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
+import static java.lang.Long.MIN_VALUE;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -55,6 +66,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     // The geographical location where the device is currently located. That is, the last-known
     // location retrieved by the Fused Location Provider.
     private Location mLastKnownLocation;
+
+    private FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());;
+    private FirebaseFirestore db = fsh.getFireStoreDBReference();
+    private boolean personalHistory;
+//    private ArrayList<Marker> events;
 
     // a enum to indicate whether the activity is under edit or viewing
     public enum MapMode {
@@ -83,6 +99,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             } catch (Exception e){
                 // do nothing
             }
+        } else if (mode == MapMode.ViewLocation) {
+            try {
+                personalHistory = intent.getExtras().getBoolean("PERSONAL");
+            } catch (Exception e) {
+                // do nothing
+            }
         }
 
         ConfirmButton = findViewById(R.id.confirm_button);
@@ -102,6 +124,82 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
         mapFragment.getMapAsync(this);
+    }
+
+    private void getPersonalEventLocations() {
+        db.collection(FireStoreHandler.EMOTE_COLLECTION)
+                .whereEqualTo(EmotionEvent.USERNAME_KEY, fsh.getUsername())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        ArrayList<EmotionEvent> new_emotes;
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                EmotionEvent tempEvent = document.toObject(EmotionEvent.class);
+                                GeoPoint tempPoint = tempEvent.getLocation();
+                                if (tempPoint != null) {
+                                    SetCustomMarker(tempEvent, new LatLng(tempPoint.getLatitude(), tempPoint.getLongitude()));
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void getFriendsEventLocations() {
+        db.collection(FireStoreHandler.FRIEND_COLLECTION)
+                .document(EmoteApplication.getUsername())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            ArrayList<String> currentFriends = (ArrayList<String>) document.get("CURRENT_FRIENDS");
+                            for (String friend : currentFriends) {
+                                db.collection(FireStoreHandler.EMOTE_COLLECTION)
+                                        .whereEqualTo(EmotionEvent.USERNAME_KEY, friend)
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    Date max_date = new Date(MIN_VALUE);
+                                                    EmotionEvent latest_event = null;
+                                                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                                                        EmotionEvent current_emote = doc.toObject(EmotionEvent.class);
+                                                        if (max_date.compareTo(current_emote.getDate()) <= 0) {
+                                                            latest_event = current_emote;
+                                                            max_date = latest_event.getDate();
+                                                        }
+                                                    }
+                                                    if (latest_event != null) {
+                                                        GeoPoint tempPoint = latest_event.getLocation();
+                                                        if (tempPoint != null) {
+                                                            SetCustomMarker(latest_event, new LatLng(tempPoint.getLatitude(), tempPoint.getLongitude()));
+                                                        }
+                                                    }
+                                                } else {
+                                                    Log.d(TAG, "Error getting documents: ", task.getException());
+                                                }
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void SetCustomMarker(EmotionEvent event, LatLng location) {
+        // TODO: set custom markers that can display user, date, and emote
+        mMap.addMarker(new MarkerOptions()
+                .position(location));
     }
 
     public void ConfirmButtonOnClickHandler(View view) {
@@ -166,6 +264,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     DeleteButton.setVisibility(View.VISIBLE);
                 }
             });
+        } else if (mode == MapMode.ViewLocation) {
+            if (personalHistory == true) {
+                getPersonalEventLocations();
+            } else {
+                getFriendsEventLocations();
+            }
         }
     }
 

@@ -155,6 +155,7 @@ public class EditEventActivity extends AppCompatActivity {
         editButton.setEnabled(false);
         deleteButton.setEnabled(false);
         textReasonField.setEnabled(false);
+        locationButton.setEnabled(false);
     }
 
     /**
