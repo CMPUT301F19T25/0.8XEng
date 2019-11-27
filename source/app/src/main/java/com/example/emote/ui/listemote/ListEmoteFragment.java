@@ -27,6 +27,8 @@ import com.example.emote.EmotionEvent;
 import com.example.emote.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Arrays;
 import java.util.List;
 

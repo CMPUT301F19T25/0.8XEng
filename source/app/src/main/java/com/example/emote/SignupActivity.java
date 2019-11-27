@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.test.espresso.idling.CountingIdlingResource;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,6 +29,8 @@ public class SignupActivity extends AppCompatActivity {
     EditText confirmPasswordText;
     Button createAccountButton;
     private FirebaseAuth mAuth;
+    CountingIdlingResource expressoTestIdlingResouce = new CountingIdlingResource("signup");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +52,8 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Failed to create account", Toast.LENGTH_LONG).show();
+    public void onSignupFailed(String message) {
+        Toast.makeText(getBaseContext(), "Failed to create account: "+ message, Toast.LENGTH_LONG).show();
         createAccountButton.setEnabled(true);
     }
 
@@ -66,7 +69,7 @@ public class SignupActivity extends AppCompatActivity {
         Log.d(TAG, "SignupActivity");
 
         if (!validate()){
-            onSignupFailed();
+            onSignupFailed("");
             return;
         }
 
@@ -79,6 +82,8 @@ public class SignupActivity extends AppCompatActivity {
 
         final String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
+
+        expressoTestIdlingResouce.increment();
 
         LoginHelper.signupUser(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -97,8 +102,9 @@ public class SignupActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             Toast.makeText(getBaseContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            onSignupFailed();
+                            onSignupFailed(task.getException().getMessage());
                         }
+                        expressoTestIdlingResouce.decrement();
                     }
                 });
     }
@@ -127,4 +133,7 @@ public class SignupActivity extends AppCompatActivity {
 
         return valid;
     }
-}
+
+    public CountingIdlingResource returnIdlingResource() {
+        return expressoTestIdlingResouce;
+    }}

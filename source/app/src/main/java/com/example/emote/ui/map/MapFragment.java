@@ -50,6 +50,7 @@ public class MapFragment extends Fragment {
         Intent intent = new Intent(this.getContext(), MapsActivity.class);
         Bundle extras = new Bundle();
         extras.putSerializable("MAP_MODE", MapsActivity.MapMode.ViewLocation);
+        extras.putBoolean("PERSONAL", true);
         intent.putExtras(extras);
         startActivity(intent);
     }

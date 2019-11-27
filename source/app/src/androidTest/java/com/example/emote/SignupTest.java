@@ -2,6 +2,7 @@ package com.example.emote;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -9,7 +10,13 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 /**
  * Test class for the Signup activity.
@@ -26,9 +33,10 @@ public class SignupTest {
     @Rule
     public IntentsTestRule<SignupActivity> activityTestRule =
             new IntentsTestRule<>(SignupActivity.class);
+    
 
     @Test
-    public void invlaidUserNameLengthSignup() {
+    public void invalidUserNameLengthSignup() {
         onView(withId(R.id.signup_username))
                 .perform(typeText(invalidUserName), closeSoftKeyboard());
         onView(withId(R.id.signup_password))
@@ -36,6 +44,10 @@ public class SignupTest {
         onView(withId(R.id.signup_confirm_password))
                 .perform(typeText(invalidLengthPassword), closeSoftKeyboard());
         onView(withId(R.id.btn_create_account)).perform(click());
+
+        onView(withText("Failed to create account"))
+                .inRoot(withDecorView(not(is(activityTestRule.getActivity()
+                        .getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
     @Test
@@ -47,5 +59,9 @@ public class SignupTest {
         onView(withId(R.id.signup_confirm_password))
                 .perform(typeText(invalidPassword), closeSoftKeyboard());
         onView(withId(R.id.btn_create_account)).perform(click());
+
+        onView(withText("Failed to create account"))
+                .inRoot(withDecorView(not(is(activityTestRule.getActivity()
+                        .getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 }

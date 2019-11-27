@@ -3,8 +3,11 @@ package com.example.emote;
  * MainActivity with navbar and fragments
  */
 import android.os.Bundle;
+import android.os.Handler;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -13,6 +16,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
+
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,32 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            try {
+                FirebaseAuth.getInstance().signOut();
+                EmoteApplication.setUsername(null);
+                super.onBackPressed();
+                finish();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 
 }
