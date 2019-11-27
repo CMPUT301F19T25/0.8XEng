@@ -7,6 +7,27 @@
     android:background="@drawable/profile_background">
 
     <TextView
+        android:id="@+id/profile_number_friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="@+id/profile_current_mood_hint2"
+        app:layout_constraintTop_toBottomOf="@+id/profile_current_mood_hint2" />
+
+    <TextView
+        android:id="@+id/profile_current_mood_hint2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-condensed-light"
+        android:text="Following"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/profile_current_mood"
+        app:layout_constraintTop_toBottomOf="@+id/profile_current_mood" />
+
+    <TextView
         android:id="@+id/text_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,24 +46,24 @@
 
     <TextView
         android:id="@+id/profile_username_hint"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="216dp"
-        android:fontFamily="sans-serif-condensed-medium"
+        android:layout_marginTop="160dp"
+        android:fontFamily="sans-serif-condensed-light"
         android:text="Username"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_profile" />
 
     <TextView
         android:id="@+id/profile_current_mood_hint"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:fontFamily="sans-serif-condensed-medium"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-condensed-light"
         android:text="Current Mood"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/profile_username_hint"
         app:layout_constraintTop_toBottomOf="@+id/profile_username" />
 
@@ -50,9 +71,9 @@
         android:id="@+id/profile_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:fontFamily="sans-serif-condensed"
-        android:textSize="24sp"
+        android:layout_marginTop="6dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textSize="30sp"
         app:layout_constraintStart_toStartOf="@+id/profile_username_hint"
         app:layout_constraintTop_toBottomOf="@+id/profile_username_hint" />
 
@@ -60,11 +81,24 @@
         android:id="@+id/profile_current_mood"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:fontFamily="sans-serif-condensed"
-        android:textSize="24sp"
+        android:layout_marginTop="6dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textSize="30sp"
         app:layout_constraintStart_toStartOf="@+id/profile_current_mood_hint"
         app:layout_constraintTop_toBottomOf="@+id/profile_current_mood_hint" />
+
+    <Button
+        android:id="@+id/signoutButton"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Sign Out"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="@+id/profile_current_mood_hint2"
+        app:layout_constraintTop_toBottomOf="@+id/profile_number_friends" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

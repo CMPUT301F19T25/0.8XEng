@@ -1,10 +1,14 @@
 package com.example.emote.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,16 +20,22 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.emote.EmoteApplication;
 import com.example.emote.EmotionEvent;
 import com.example.emote.FireStoreHandler;
+import com.example.emote.FollowingListActivity;
+import com.example.emote.LoginActivity;
 import com.example.emote.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Date;
+import java.util.List;
 
 import static com.example.emote.FireStoreHandler.EMOTE_COLLECTION;
+import static com.example.emote.FireStoreHandler.FRIEND_COLLECTION;
 import static java.lang.Long.MIN_VALUE;
 
 /**
@@ -40,6 +50,8 @@ public class ProfileFragment extends Fragment {
 
     private TextView usernameText;
     private TextView currentmoodText;
+    private TextView friendsText;
+    private Button signoutButton;
 
     private FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
     private FirebaseFirestore db = fsh.getFireStoreDBReference();
@@ -66,8 +78,27 @@ public class ProfileFragment extends Fragment {
 
         usernameText = root.findViewById(R.id.profile_username);
         currentmoodText = root.findViewById(R.id.profile_current_mood);
+        friendsText = root.findViewById(R.id.profile_number_friends);
+        signoutButton = root.findViewById(R.id.signoutButton);
 
         usernameText.setText(fsh.getUsername());
+        db.collection(FRIEND_COLLECTION).document(EmoteApplication.getUsername())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                friendsText.setText(Integer.toString(((List<String>) document.get("CURRENT_FRIENDS")).size()) + " friends   >");
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
         db.collection(EMOTE_COLLECTION)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -94,6 +125,32 @@ public class ProfileFragment extends Fragment {
                         }
                     }
                 });
+
+        friendsText.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(getContext(), FollowingListActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        signoutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                try {
+                    FirebaseAuth.getInstance().signOut();
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    startActivity(intent);
+                    EmoteApplication.setUsername(null);
+                    getActivity().finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         return root;
     }
 }
