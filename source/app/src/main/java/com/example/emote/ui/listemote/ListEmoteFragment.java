@@ -124,11 +124,11 @@ public class ListEmoteFragment extends Fragment {
             listEmoteViewModel.grabFirebaseWithFriends(emoteAdapter, emoteDataList,
                     Emotion.values()[spinner.getSelectedItemPosition()]);
         } else if (spinner.getSelectedItem().toString() != "All") {
-            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList);
+            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, Emotion.values()[spinner.getSelectedItemPosition()]);
         } else if (showFriends.isChecked()) {
             listEmoteViewModel.grabFirebaseWithFriends(emoteAdapter, emoteDataList);
         } else {
-            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, Emotion.values()[spinner.getSelectedItemPosition()]);
+            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList);
         }
     }
 

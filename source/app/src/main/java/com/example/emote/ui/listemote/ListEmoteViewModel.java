@@ -22,6 +22,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -53,7 +54,6 @@ public class ListEmoteViewModel extends ViewModel {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ArrayList<EmotionEvent> new_emotes;
                         if (task.isSuccessful()) {
                             emoteDataList.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
@@ -68,6 +68,27 @@ public class ListEmoteViewModel extends ViewModel {
                 });
     }
 
+    public void grabFirebaseFriendsHelper(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList, final List<String> friends) {
+        db.collection(FireStoreHandler.EMOTE_COLLECTION)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            emoteDataList.clear();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                EmotionEvent currEvent  = document.toObject(EmotionEvent.class);
+                                if(friends.contains(currEvent.getUsername())) {
+                                    emoteDataList.add(document.toObject(EmotionEvent.class));
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
 
     /**
      * Function to grab emote history from firebase for all friends. First all of the friends are
@@ -85,32 +106,15 @@ public class ListEmoteViewModel extends ViewModel {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                    } else {
-                        Log.d(TAG, "No such document");
+                        List<String> friends = (List<String>) document.get("CURRENT_FRIENDS");
+                        Log.d(TAG, friends.toString());
+                        grabFirebaseFriendsHelper(adapter, emoteDataList, friends);
                     }
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
             }
         });
-        db.collection(FireStoreHandler.EMOTE_COLLECTION).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ArrayList<EmotionEvent> new_emotes;
-                        if (task.isSuccessful()) {
-                            emoteDataList.clear();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                emoteDataList.add(document.toObject(EmotionEvent.class));
-                            }
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
     }
 
     /**
@@ -146,25 +150,28 @@ public class ListEmoteViewModel extends ViewModel {
     }
 
     /**
-     * Function to grab the emote history from Firebase but with filtering by emotion and friend.
+     * Function to grab the emote history from Firebase but with filtering.
      *
      * @param adapter       EmoteListAdapter that is used by the list view
      * @param emoteDataList ArrayList used by the EmoteListAdapter
      * @param filterEmote   Emote to filter for
      */
-    public void grabFirebaseWithFriends(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList, Emotion filterEmote) {
+    public void grabFirebaseFriendsHelper(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList, Emotion filterEmote, final List<String> friends) {
         db.collection(FireStoreHandler.EMOTE_COLLECTION)
                 .whereEqualTo("emote", filterEmote)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ArrayList<EmotionEvent> new_emotes;
+
                         if (task.isSuccessful()) {
                             emoteDataList.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                emoteDataList.add(document.toObject(EmotionEvent.class));
+                                EmotionEvent currEvent = document.toObject(EmotionEvent.class);
+                                if(friends.contains(currEvent.getUsername())) {
+                                    emoteDataList.add(document.toObject(EmotionEvent.class));
+                                }
                             }
                             adapter.notifyDataSetChanged();
                         } else {
@@ -172,5 +179,33 @@ public class ListEmoteViewModel extends ViewModel {
                         }
                     }
                 });
+    }
+
+
+
+    /**
+     * Function to grab the emote history from Firebase but with filtering by emotion and friend.
+     *
+     * @param adapter       EmoteListAdapter that is used by the list view
+     * @param emoteDataList ArrayList used by the EmoteListAdapter
+     * @param filterEmote   Emote to filter for
+     */
+    public void grabFirebaseWithFriends(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList, final Emotion filterEmote) {
+        db.collection(FireStoreHandler.FRIEND_COLLECTION).document(EmoteApplication.getUsername())
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        List<String> friends = (List<String>) document.get("CURRENT_FRIENDS");
+                        Log.d(TAG, friends.toString());
+                        grabFirebaseFriendsHelper(adapter, emoteDataList, filterEmote, friends);
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 }
