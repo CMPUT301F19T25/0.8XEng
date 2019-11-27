@@ -47,7 +47,7 @@
             android:name=".EditEventActivity"
             android:label="View or Edit Event"></activity>
         <activity
-            android:name=".FriendsListActivity"
+            android:name=".FollowingListActivity"
 		 android:label="Following Friends List"></activity>
     </application>
 

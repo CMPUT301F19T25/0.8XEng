@@ -23,9 +23,9 @@ import static com.example.emote.FireStoreHandler.EMOTE_COLLECTION;
 import static com.example.emote.FireStoreHandler.FRIEND_COLLECTION;
 import static java.lang.Long.MIN_VALUE;
 
-public class FriendsListActivity extends AppCompatActivity {
+public class FollowingListActivity extends AppCompatActivity {
 
-    private static final String TAG = "FriendsListActivity";
+    private static final String TAG = "FollowingListActivity";
     private ListView followingListView;
     private ArrayAdapter<String> followingAdapter;
     private ArrayList<String> followingDataList;

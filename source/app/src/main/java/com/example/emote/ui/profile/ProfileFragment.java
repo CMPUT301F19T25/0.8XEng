@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.emote.EmoteApplication;
 import com.example.emote.EmotionEvent;
 import com.example.emote.FireStoreHandler;
-import com.example.emote.FriendsListActivity;
+import com.example.emote.FollowingListActivity;
 import com.example.emote.LoginActivity;
 import com.example.emote.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -90,9 +90,7 @@ public class ProfileFragment extends Fragment {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                SpannableString content = new SpannableString(Integer.toString(((List<String>) document.get("CURRENT_FRIENDS")).size()) + " friends");
-                                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                                friendsText.setText(content);
+                                friendsText.setText(Integer.toString(((List<String>) document.get("CURRENT_FRIENDS")).size()) + " friends   >");
                             } else {
                                 Log.d(TAG, "No such document");
                             }
@@ -131,7 +129,7 @@ public class ProfileFragment extends Fragment {
         friendsText.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
-                    Intent intent = new Intent(getContext(), FriendsListActivity.class);
+                    Intent intent = new Intent(getContext(), FollowingListActivity.class);
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -145,7 +143,7 @@ public class ProfileFragment extends Fragment {
                     FirebaseAuth.getInstance().signOut();
                     Intent intent = new Intent(getContext(), LoginActivity.class);
                     startActivity(intent);
-                    EmoteApplication.setUsername("");
+                    EmoteApplication.setUsername(null);
                     getActivity().finish();
                 } catch (Exception e) {
                     e.printStackTrace();
