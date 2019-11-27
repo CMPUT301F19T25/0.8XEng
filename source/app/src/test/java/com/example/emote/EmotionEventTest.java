@@ -30,6 +30,18 @@ public class EmotionEventTest {
         assertEquals("Festival", emotionEvent.getReason());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void longReasonThrowsIllegalArgumentException() {
+        String reason = "veryveryveryveryveryveryveryveryveryverylongreason";
+        emotionEvent.setReason(reason);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void fourWordsReasonThrowsIllegalArgumentException() {
+        String reason = "four different words reason";
+        emotionEvent.setReason(reason);
+    }
+
     @Test
     public void getDateIsCorrect() {
         assertEquals(new Date(2010, 5, 12), emotionEvent.getDate());

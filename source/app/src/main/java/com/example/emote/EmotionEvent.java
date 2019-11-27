@@ -106,6 +106,10 @@ public class EmotionEvent implements Serializable {
     }
 
     public void setReason(String reason) {
+        if (reason.length() > 20 || reason.split(" ").length > 3) {
+            throw new IllegalArgumentException("Reason can't be longer than 20 characters or 3 words");
+        }
+
         this.reason = reason;
     }
 
