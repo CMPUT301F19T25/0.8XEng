@@ -77,6 +77,13 @@ public class ListEmoteViewModel extends ViewModel {
                 });
     }
 
+    /**
+     * Helper function to grab the past emotions and filter them by friend and sort by date.
+     *
+     * @param adapter
+     * @param emoteDataList
+     * @param friends
+     */
     public void grabFirebaseFriendsHelper(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList, final List<String> friends) {
         db.collection(FireStoreHandler.EMOTE_COLLECTION)
                 .get()
@@ -171,7 +178,8 @@ public class ListEmoteViewModel extends ViewModel {
     }
 
     /**
-     * Function to grab the emote history from Firebase but with filtering.
+     * Function to grab the emote history from Firebase but with filtering, filtering by friends
+     * and sorted by date.
      *
      * @param adapter       EmoteListAdapter that is used by the list view
      * @param emoteDataList ArrayList used by the EmoteListAdapter
