@@ -51,6 +51,11 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!EmoteApplication.isOnline()) {
+                    Toast.makeText(getBaseContext(), "Can't connect to the internet",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 login();
             }
         });
@@ -58,6 +63,11 @@ public class LoginActivity extends AppCompatActivity {
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!EmoteApplication.isOnline()) {
+                    Toast.makeText(getBaseContext(), "Can't connect to the internet",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 // go to signup activity
                 Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
