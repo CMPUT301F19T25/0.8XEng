@@ -2,6 +2,8 @@ package com.example.emote.ui.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,7 +90,9 @@ public class ProfileFragment extends Fragment {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                friendsText.setText(Integer.toString(((List<String>) document.get("CURRENT_FRIENDS")).size()) + " friends");
+                                SpannableString content = new SpannableString(Integer.toString(((List<String>) document.get("CURRENT_FRIENDS")).size()) + " friends");
+                                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                                friendsText.setText(content);
                             } else {
                                 Log.d(TAG, "No such document");
                             }
