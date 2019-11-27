@@ -11,8 +11,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +28,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -37,6 +41,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -198,8 +204,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void SetCustomMarker(EmotionEvent event, LatLng location) {
         // TODO: set custom markers that can display user, date, and emote
+        // load icon
+        Context context = this.getApplicationContext();
+
+        int emoticonIdentifier = context.getResources().getIdentifier(event.getEmote().toString()+"_EMOTICON", "string", context.getPackageName());
+        String emotePath = context.getResources().getString(emoticonIdentifier);
+        int emoticonId = context.getResources().getIdentifier(emotePath, "drawable", context.getPackageName());
+
+        Bitmap bmap = BitmapFactory.decodeResource(getResources(), emoticonId);
+        Bitmap resized = Bitmap.createScaledBitmap(bmap, 140, 140, false);
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+
+        String snippet = String.format("Date: %s", format.format(event.getDate()));
+
         mMap.addMarker(new MarkerOptions()
-                .position(location));
+                .icon(BitmapDescriptorFactory.fromBitmap(resized))
+                .position(location)
+                .title(event.getUsername())).setSnippet(snippet);
     }
 
     public void ConfirmButtonOnClickHandler(View view) {
