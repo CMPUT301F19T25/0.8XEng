@@ -1,16 +1,30 @@
 package com.example.emote;
 
+
+import android.util.Log;
+import androidx.annotation.NonNull;
 import com.example.emote.Situation;
+import com.example.emote.ui.listemote.EmoteListAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 /**
  * This is a class that defines an EmotionEvent
  */
-public class EmotionEvent implements Serializable {
+public class EmotionEvent implements Serializable, Comparable<EmotionEvent> {
 
     public static final String USERNAME_KEY = "username";
 
@@ -143,11 +157,14 @@ public class EmotionEvent implements Serializable {
         return reason;
     }
 
-    public void setReason(String reason) {
+    public void verifyReason(String reason) {
         if (reason.length() > 20 || reason.split(" ").length > 3) {
             throw new IllegalArgumentException("Reason can't be longer than 20 characters or 3 words");
         }
+    }
 
+    public void setReason(String reason) {
+        verifyReason(reason);
         this.reason = reason;
     }
 
@@ -177,22 +194,33 @@ public class EmotionEvent implements Serializable {
     public void setDate(Date date) { this.date = date; }
 
     public GeoPoint getLocation() {
+        return convertLatLngToGeoPoint(this.lat, this.lng);
+    }
+
+    public GeoPoint convertLatLngToGeoPoint(double lat, double lng) {
         if (lat == -1 || lng == -1) {
             return null;
         }
+        return new GeoPoint(lat, lng);
+    }
+
+    public Double[] convertGeoPointToLatLng(GeoPoint g) {
+        if (g == null) {
+            return new Double[] {(double) -1, (double) -1};
+        }
         else {
-            return new GeoPoint(lat, lng);
+            return new Double[] {(double) g.getLatitude(), (double) g.getLongitude()};
         }
     }
 
     public void setLocation(GeoPoint location) {
-        if (location == null) {
-            lat = -1;
-            lng = -1;
-        }
-        else {
-            lat = location.getLatitude();
-            lng = location.getLongitude();
-        }
+        Double[] latLng = convertGeoPointToLatLng(location);
+        lat = latLng[0];
+        lng = latLng[1];
+    }
+
+    @Override
+    public int compareTo(EmotionEvent o) {
+        return o.getDate().compareTo(getDate());
     }
 }
