@@ -53,6 +53,7 @@ public class ListEmoteViewModel extends ViewModel {
      */
     public void grabFirebase(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList,
                              ListEmoteFragment fragment) {
+        EmoteApplication.getIdlingResource().increment();
         db.collection(FireStoreHandler.EMOTE_COLLECTION)
                 .whereEqualTo(EmotionEvent.USERNAME_KEY, fsh.getUsername())
                 .get()
@@ -76,6 +77,7 @@ public class ListEmoteViewModel extends ViewModel {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                         fragment.onLoadComplete();
+                        EmoteApplication.getIdlingResource().decrement();
                     }
                 });
     }
@@ -90,6 +92,7 @@ public class ListEmoteViewModel extends ViewModel {
     public void grabFirebaseFriendsHelper(final EmoteListAdapter adapter,
                                           final ArrayList<EmotionEvent> emoteDataList,
                                           final List<String> friends) {
+        EmoteApplication.getIdlingResource().increment();
         db.collection(FireStoreHandler.EMOTE_COLLECTION)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -113,7 +116,7 @@ public class ListEmoteViewModel extends ViewModel {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-
+                        EmoteApplication.getIdlingResource().decrement();
                     }
                 });
     }
@@ -128,7 +131,7 @@ public class ListEmoteViewModel extends ViewModel {
     public void grabFirebaseWithFriends(final EmoteListAdapter adapter,
                                         final ArrayList<EmotionEvent> emoteDataList,
                                         ListEmoteFragment fragment) {
-
+        EmoteApplication.getIdlingResource().increment();
         db.collection(FireStoreHandler.FRIEND_COLLECTION).document(EmoteApplication.getUsername())
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -144,6 +147,7 @@ public class ListEmoteViewModel extends ViewModel {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
                 fragment.onLoadComplete();
+                EmoteApplication.getIdlingResource().decrement();
             }
         });
     }
@@ -159,7 +163,7 @@ public class ListEmoteViewModel extends ViewModel {
                              final ArrayList<EmotionEvent> emoteDataList, Emotion filterEmote,
                              ListEmoteFragment fragment) {
 
-
+        EmoteApplication.getIdlingResource().increment();
         db.collection(FireStoreHandler.EMOTE_COLLECTION)
                 .whereEqualTo(EmotionEvent.USERNAME_KEY, fsh.getUsername())
                 .whereEqualTo("emote", filterEmote)
@@ -185,6 +189,7 @@ public class ListEmoteViewModel extends ViewModel {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                         fragment.onLoadComplete();
+                        EmoteApplication.getIdlingResource().decrement();
                     }
                 });
     }
@@ -198,6 +203,7 @@ public class ListEmoteViewModel extends ViewModel {
      * @param filterEmote   Emote to filter for
      */
     public void grabFirebaseFriendsHelper(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList, Emotion filterEmote, final List<String> friends) {
+        EmoteApplication.getIdlingResource().increment();
         db.collection(FireStoreHandler.EMOTE_COLLECTION)
                 .whereEqualTo("emote", filterEmote)
                 .get()
@@ -224,6 +230,7 @@ public class ListEmoteViewModel extends ViewModel {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
+                        EmoteApplication.getIdlingResource().decrement();
                     }
                 });
     }
@@ -238,6 +245,7 @@ public class ListEmoteViewModel extends ViewModel {
      * @param filterEmote   Emote to filter for
      */
     public void grabFirebaseWithFriends(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList, final Emotion filterEmote) {
+        EmoteApplication.getIdlingResource().increment();
         db.collection(FireStoreHandler.FRIEND_COLLECTION).document(EmoteApplication.getUsername())
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -252,6 +260,7 @@ public class ListEmoteViewModel extends ViewModel {
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
+                EmoteApplication.getIdlingResource().decrement();
             }
         });
     }
