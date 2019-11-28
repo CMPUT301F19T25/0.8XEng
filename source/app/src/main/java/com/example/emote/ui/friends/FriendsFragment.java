@@ -90,7 +90,10 @@ public class FriendsFragment extends Fragment {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
 //                        friendsDataList.clear();
-                            friendsDataList.addAll((ArrayList<String>) document.get(FireStoreHandler.INCOMING_FRIENDS));
+                            Object obj = document.get(FireStoreHandler.INCOMING_FRIENDS);
+                            if (obj != null) {
+                                friendsDataList.addAll((ArrayList<String>)obj);
+                            }
                             Log.d(TAG, "got some friends: " + friendsDataList.size());
                             for (int i = 0; i < friendsDataList.size(); i++) {
                                 Log.d(TAG, "friend: " + friendsDataList.get(i));

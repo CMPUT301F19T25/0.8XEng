@@ -6,9 +6,13 @@ import androidx.test.espresso.idling.CountingIdlingResource;
 import androidx.test.rule.ActivityTestRule;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.Date;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -36,7 +40,13 @@ import static org.hamcrest.core.AllOf.allOf;
  */
 public class ListEmoteTest {
 
-    private String validUserName = "testuser4";
+    private static String user1Name = "testuseremote22";
+    private static String user2Name = "testuseremote23";
+    private static EmotionEvent event1;
+    private static EmotionEvent event2;
+    private static EmotionEvent event3;
+    private static EmotionEvent event4;
+
     CountingIdlingResource idlingResource;
 
     @Rule
@@ -45,11 +55,39 @@ public class ListEmoteTest {
 
     @Before
     public void setup(){
-        EmoteApplication.setUsername(validUserName);
+        EmoteApplication.setUsername(user1Name);
         onView(withId(R.id.navigation_list_emote)).perform(click());
 
         idlingResource = EmoteApplication.getIdlingResource();
         IdlingRegistry.getInstance().register(idlingResource);
+    }
+
+    @BeforeClass
+    public static void addEmoteEvents() {
+        event1 = new EmotionEvent(Emotion.HAPPY, Situation.ALONE, "No reason", new Date());
+        event2 = new EmotionEvent(Emotion.SAD, Situation.ALONE, "No reason", new Date());
+        event3 = new EmotionEvent(Emotion.EXCITED, Situation.ALONE, "No reason", new Date());
+        event4 = new EmotionEvent(Emotion.HAPPY, Situation.ALONE, "No reason", new Date());
+
+        // add new data to users. Users are already friends in the database
+        FireStoreHandler fsh = new FireStoreHandler(user1Name);
+        fsh.addEmote(event1);
+        fsh.addEmote(event2);
+
+        FireStoreHandler fsh2 = new FireStoreHandler(user2Name);
+        fsh2.addEmote(event3);
+        fsh2.addEmote(event4);
+    }
+
+    @AfterClass
+    public static void removeEmoteEvents() {
+        FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
+        fsh.removeEmote(event1.getFireStoreDocumentID());
+        fsh.removeEmote(event2.getFireStoreDocumentID());
+
+        FireStoreHandler fsh2 = new FireStoreHandler(user2Name);
+        fsh2.removeEmote(event3.getFireStoreDocumentID());
+        fsh2.removeEmote(event4.getFireStoreDocumentID());
     }
 
     @After
@@ -58,7 +96,9 @@ public class ListEmoteTest {
     }
 
     @Test
-    public void testShowFriendsButton(){
+    public void testShowFriendsButton() throws InterruptedException {
+        // doesnt work properly
+
         onData(anything())
                 .inAdapterView(withId(R.id.emote_list_view))
                 .atPosition(0)
@@ -85,13 +125,13 @@ public class ListEmoteTest {
     public void testFilterHappy(){
         onData(anything())
                 .inAdapterView(withId(R.id.emote_list_view))
-                .atPosition(0)
+                .atPosition(1)
                 .onChildView(withId(R.id.emote_text))
                 .check(matches(withText("Happy")));
 
         onData(anything())
                 .inAdapterView(withId(R.id.emote_list_view))
-                .atPosition(1)
+                .atPosition(0)
                 .onChildView(withId(R.id.emote_text))
                 .check(matches(withText("Sad")));
 
