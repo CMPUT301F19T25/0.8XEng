@@ -124,20 +124,20 @@ public class ListEmoteFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         if (spinner.getSelectedItem().toString() != "All" && showFriends.isChecked()) {
             listEmoteViewModel.grabFirebaseWithFriends(emoteAdapter, emoteDataList,
-                    Emotion.values()[spinner.getSelectedItemPosition()-1]);
+                    Emotion.values()[spinner.getSelectedItemPosition() - 1], this);
         } else if (spinner.getSelectedItem().toString() != "All") {
-            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, Emotion.values()[spinner.getSelectedItemPosition()-1],this);
+            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, Emotion.values()[spinner.getSelectedItemPosition() - 1], this);
         } else if (showFriends.isChecked()) {
             listEmoteViewModel.grabFirebaseWithFriends(emoteAdapter, emoteDataList, this);
         } else {
-            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList,this);
+            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, this);
         }
     }
 
     /**
      * Called when a particular loading event from firebase is complete.
      */
-    public void onLoadComplete(){
+    public void onLoadComplete() {
         progressBar.setVisibility(View.GONE);
     }
 
