@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -27,8 +28,6 @@ import com.example.emote.EmotionEvent;
 import com.example.emote.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,8 +42,7 @@ public class ListEmoteFragment extends Fragment {
     private ListView emoteListView;
     private Spinner spinner;
     private CheckBox showFriends;
-
-    private ArrayList<String> friends_usernames;
+    private ProgressBar progressBar;
 
     /**
      * Main Method for this Emote fragment. Initializes the fragment,
@@ -64,6 +62,7 @@ public class ListEmoteFragment extends Fragment {
         emoteListView = root.findViewById(R.id.emote_list_view);
         spinner = root.findViewById(R.id.spinner);
         showFriends = root.findViewById(R.id.check_box_show_friends);
+        progressBar = root.findViewById(R.id.progress_bar);
 
         List<String> emotionStrings = new ArrayList<>(Arrays.asList(Emotion.getStrings(getContext())));
         emotionStrings.add(0, "All");
@@ -73,7 +72,7 @@ public class ListEmoteFragment extends Fragment {
         emoteDataList = new ArrayList<>();
         emoteAdapter = new EmoteListAdapter(getContext(), emoteDataList);
         emoteListView.setAdapter(emoteAdapter);
-        listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList);
+        listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, this);
 
 
         emoteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -126,12 +125,19 @@ public class ListEmoteFragment extends Fragment {
             listEmoteViewModel.grabFirebaseWithFriends(emoteAdapter, emoteDataList,
                     Emotion.values()[spinner.getSelectedItemPosition()-1]);
         } else if (spinner.getSelectedItem().toString() != "All") {
-            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, Emotion.values()[spinner.getSelectedItemPosition()-1]);
+            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, Emotion.values()[spinner.getSelectedItemPosition()-1],this);
         } else if (showFriends.isChecked()) {
-            listEmoteViewModel.grabFirebaseWithFriends(emoteAdapter, emoteDataList);
+            listEmoteViewModel.grabFirebaseWithFriends(emoteAdapter, emoteDataList, this);
         } else {
-            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList);
+            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList,this);
         }
+    }
+
+    /**
+     * Called when a particular loading event from firebase is complete.
+     */
+    public void onLoadComplete(){
+        progressBar.setVisibility(View.GONE);
     }
 
 }

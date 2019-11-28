@@ -8,6 +8,7 @@ package com.example.emote.ui.listemote;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 
 import com.example.emote.EmoteApplication;
@@ -50,7 +51,8 @@ public class ListEmoteViewModel extends ViewModel {
      * @param adapter       EmoteListAdapter that is used by the list view
      * @param emoteDataList ArrayList used by the EmoteListAdapter
      */
-    public void grabFirebase(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList) {
+    public void grabFirebase(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList,
+                             ListEmoteFragment fragment) {
         db.collection(FireStoreHandler.EMOTE_COLLECTION)
                 .whereEqualTo(EmotionEvent.USERNAME_KEY, fsh.getUsername())
                 .get()
@@ -73,6 +75,7 @@ public class ListEmoteViewModel extends ViewModel {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
+                        fragment.onLoadComplete();
                     }
                 });
     }
@@ -84,7 +87,9 @@ public class ListEmoteViewModel extends ViewModel {
      * @param emoteDataList
      * @param friends
      */
-    public void grabFirebaseFriendsHelper(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList, final List<String> friends) {
+    public void grabFirebaseFriendsHelper(final EmoteListAdapter adapter,
+                                          final ArrayList<EmotionEvent> emoteDataList,
+                                          final List<String> friends) {
         db.collection(FireStoreHandler.EMOTE_COLLECTION)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -108,6 +113,7 @@ public class ListEmoteViewModel extends ViewModel {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
+
                     }
                 });
     }
@@ -119,7 +125,9 @@ public class ListEmoteViewModel extends ViewModel {
      * @param adapter       EmoteListAdapter that is used by the list view
      * @param emoteDataList ArrayList used by the EmoteListAdapter
      */
-    public void grabFirebaseWithFriends(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList) {
+    public void grabFirebaseWithFriends(final EmoteListAdapter adapter,
+                                        final ArrayList<EmotionEvent> emoteDataList,
+                                        ListEmoteFragment fragment) {
 
         db.collection(FireStoreHandler.FRIEND_COLLECTION).document(EmoteApplication.getUsername())
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -135,6 +143,7 @@ public class ListEmoteViewModel extends ViewModel {
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
+                fragment.onLoadComplete();
             }
         });
     }
@@ -146,7 +155,9 @@ public class ListEmoteViewModel extends ViewModel {
      * @param emoteDataList ArrayList used by the EmoteListAdapter
      * @param filterEmote   Emote to filter for
      */
-    public void grabFirebase(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList, Emotion filterEmote) {
+    public void grabFirebase(final EmoteListAdapter adapter,
+                             final ArrayList<EmotionEvent> emoteDataList, Emotion filterEmote,
+                             ListEmoteFragment fragment) {
 
 
         db.collection(FireStoreHandler.EMOTE_COLLECTION)
@@ -173,6 +184,7 @@ public class ListEmoteViewModel extends ViewModel {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
+                        fragment.onLoadComplete();
                     }
                 });
     }
