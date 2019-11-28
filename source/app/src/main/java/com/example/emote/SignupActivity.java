@@ -1,7 +1,5 @@
 package com.example.emote;
-/**
- * Activity to handle user signups
- */
+
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,7 +18,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-
+/**
+ * Activity to handle user signups
+ */
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
@@ -65,6 +65,9 @@ public class SignupActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Sign up the user
+     */
     public void signup(){
         Log.d(TAG, "SignupActivity");
 
@@ -109,6 +112,10 @@ public class SignupActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * validates the username and password for the user
+     * @return boolean representing valid username and password
+     */
     private boolean validate(){
         boolean valid = true;
 
@@ -134,6 +141,10 @@ public class SignupActivity extends AppCompatActivity {
         return valid;
     }
 
+    /**
+     * returns the idling resources for the signup activity
+     * @return the idling resources for expresso
+     */
     public CountingIdlingResource returnIdlingResource() {
         return expressoTestIdlingResouce;
     }}

@@ -1,9 +1,5 @@
 package com.example.emote;
 
-/**
- * most of the basic code used here are from tutorials from google
- */
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -45,6 +41,9 @@ import java.util.Date;
 
 import static java.lang.Long.MIN_VALUE;
 
+/**
+ * The Map Activity used by other activities to shower user the Google Maps framework
+ */
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = MapsActivity.class.getSimpleName();
@@ -73,7 +72,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FirebaseFirestore db = fsh.getFireStoreDBReference();
     private boolean personalHistory;
 
-    // a enum to indicate whether the activity is under edit or viewing
+    /**
+     * an enum to indicate whether the activity is under edit or viewing
+     */
     public enum MapMode {
         EditLocation,
         ViewLocation,
@@ -127,6 +128,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
     }
 
+    /**
+     * Method to get the latest location for all your personal events
+     */
     private void getPersonalEventLocations() {
         db.collection(FireStoreHandler.EMOTE_COLLECTION)
                 .whereEqualTo(EmotionEvent.USERNAME_KEY, fsh.getUsername())
@@ -151,6 +155,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 });
     }
 
+    /**
+     * Method to get the latest events location of all the people you follow
+     */
     private void getFriendsEventLocations() {
         db.collection(FireStoreHandler.FRIEND_COLLECTION)
                 .document(EmoteApplication.getUsername())
@@ -197,6 +204,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 });
     }
 
+    /**
+     * A method to set custom markers for the map tickers
+     * @param event, the emotion event sent to the function
+     * @param location, the location to mark
+     */
     private void SetCustomMarker(EmotionEvent event, LatLng location) {
         // TODO: set custom markers that can display user, date, and emote
         // load icon
@@ -219,6 +231,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .title(event.getUsername())).setSnippet(snippet);
     }
 
+    /**
+     * Handler that handles confirm button clicks
+     * @param view
+     */
     public void ConfirmButtonOnClickHandler(View view) {
         if (selectedMarker != null) {
             LatLng result = new LatLng(selectedMarker.getPosition().latitude, selectedMarker.getPosition().longitude);
@@ -231,6 +247,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * Handler that handles delete button clicks
+     * @param view
+     */
     public void DeleteButtonOnClickHandler(View view) {
         if (selectedMarker != null) {
             selectedMarker.remove();
@@ -290,6 +310,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * Requests location permission
+     */
     private void getLocationPermission() {
         /*
          * Request location permission, so that we can get the location of the
@@ -307,6 +330,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * Method to get the device's current locations
+     */
     private void getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare

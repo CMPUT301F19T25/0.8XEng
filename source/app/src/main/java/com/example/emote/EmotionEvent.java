@@ -1,8 +1,5 @@
 package com.example.emote;
 
-//This is just an example of the emotional event class in order to get firestore setup.
-//Additional data fields and handling should be added.
-
 import com.example.emote.Situation;
 import com.google.firebase.firestore.GeoPoint;
 
@@ -54,6 +51,19 @@ public class EmotionEvent implements Serializable {
         fireStoreDocumentID = UUID.randomUUID().toString();
     }
 
+    /**
+     * The constructor for the EmotionEvent
+     * @param emote
+     *   The emote for the event
+     * @param situation
+     *   The social situation
+     * @param reason
+     *   The reason for the event
+     * @param date
+     *   The Date of the event
+     * @param imageFile
+     *   The image of the event
+     */
     public EmotionEvent(Emotion emote, Situation situation, String reason, Date date, String imageFile){
         setUsername(username);
         setEmote(emote);
@@ -64,6 +74,19 @@ public class EmotionEvent implements Serializable {
         fireStoreDocumentID = UUID.randomUUID().toString();
     }
 
+    /**
+     * The constructor for the EmotionEvent
+     * @param emote
+     *   The emote for the event
+     * @param situation
+     *   The social situation
+     * @param reason
+     *   The reason for the event
+     * @param date
+     *   The Date of the event
+     * @param location
+     *   The location of the event
+     */
     public EmotionEvent(Emotion emote, Situation situation, String reason, Date date, GeoPoint location){
         setUsername(username);
         setEmote(emote);
@@ -74,6 +97,21 @@ public class EmotionEvent implements Serializable {
         fireStoreDocumentID = UUID.randomUUID().toString();
     }
 
+    /**
+     * The constructor for the EmotionEvent
+     * @param emote
+     *   The emote for the event
+     * @param situation
+     *   The social situation
+     * @param reason
+     *   The reason for the event
+     * @param date
+     *   The Date of the event
+     * @param imageFile
+     *   The image of the event
+     * @param location
+     *   The location of the event
+     */
     public EmotionEvent(Emotion emote, Situation situation, String reason, Date date, String imageFile, GeoPoint location){
         setUsername(username);
         setEmote(emote);

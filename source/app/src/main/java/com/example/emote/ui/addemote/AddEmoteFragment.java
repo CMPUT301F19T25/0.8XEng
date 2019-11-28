@@ -49,7 +49,6 @@ import java.util.UUID;
 /**
  * Fragment to add a new emote to the firebase db.
  */
-
 public class AddEmoteFragment extends Fragment {
 
     private static final String TAG = "AddEmoteFragment";
@@ -106,7 +105,13 @@ public class AddEmoteFragment extends Fragment {
         return root;
     }
 
-
+    /**
+     * the onCreateView that handles creating a view for adding an emote
+     * @param inflater: inflater passed for the fragment
+     * @param container: the ViewGroup container passed for the fragment
+     * @param savedInstanceState: the saved instance state
+     * @return
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         addEmoteViewModel =
@@ -189,6 +194,10 @@ public class AddEmoteFragment extends Fragment {
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 
+    /**
+     * Add location to the emotion event, start Map intent
+     * @param view: not used
+     */
     public void addLocation(View view) {
         Intent mapIntent = new Intent(this.getContext(), MapsActivity.class);
         Bundle extras = new Bundle();
@@ -197,7 +206,12 @@ public class AddEmoteFragment extends Fragment {
         startActivityForResult(mapIntent, MAP_REQUEST);
     }
 
-
+    /**
+     * Handle getting the activity result, check if the activity returned correctly
+     * @param requestCode: the code
+     * @param resultCode: the result returned by the activity
+     * @param data: data returned by activity
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {

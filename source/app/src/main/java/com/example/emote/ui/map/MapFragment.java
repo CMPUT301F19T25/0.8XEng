@@ -19,10 +19,20 @@ import android.widget.TextView;
 import com.example.emote.MapsActivity;
 import com.example.emote.R;
 
+/**
+ * MapFragment to display personal and friends' locations
+ */
 public class MapFragment extends Fragment {
 
     private MapViewModel mapViewModel;
 
+    /**
+     * Event to handle on view creation
+     * @param inflater: inflater passed to the Fragment
+     * @param container: container passed to the fragment
+     * @param savedInstanceState: the saved instance state
+     * @return the view for the Map
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -39,6 +49,10 @@ public class MapFragment extends Fragment {
         return root;
     }
 
+    /**
+     * handle's the Map Fragment creation
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -46,6 +60,11 @@ public class MapFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
+    /**
+     * Get your personal locations and show them on the map
+     *
+     * @param view
+     */
     public void ViewPersonalLocation(View view) {
         Intent intent = new Intent(this.getContext(), MapsActivity.class);
         Bundle extras = new Bundle();
@@ -55,6 +74,10 @@ public class MapFragment extends Fragment {
         startActivity(intent);
     }
 
+    /**
+     * Get your friend's view and show them on the map
+     * @param view
+     */
     public void ViewFriendsLocation(View view) {
         Intent intent = new Intent(this.getContext(), MapsActivity.class);
         Bundle extras = new Bundle();

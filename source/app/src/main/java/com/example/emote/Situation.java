@@ -27,6 +27,13 @@ public enum Situation {
         }
         return  situations;
     }
+
+    /**
+     * get index if the situation
+     * @param situation
+     * @return
+     *   A string array containing all situation strings
+     */
     public static int getIndex(Situation situation){
         return Arrays.asList(Situation.values()).indexOf(situation);
     }

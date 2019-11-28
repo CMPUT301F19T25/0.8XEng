@@ -61,7 +61,7 @@ public class ProfileFragment extends Fragment {
      * @param inflater LayoutInflater to inflate the fragment view
      * @param container Viewgroup container of fragment
      * @param savedInstanceState Bundle of the saved instance state
-     * @return
+     * @return return the view for the profile fragment
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

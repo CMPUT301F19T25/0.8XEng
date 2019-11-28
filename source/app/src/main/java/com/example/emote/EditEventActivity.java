@@ -21,6 +21,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Calendar;
 
+/**
+ * Activity used for editing emotion events
+ */
 public class EditEventActivity extends AppCompatActivity {
 
 
@@ -82,6 +85,10 @@ public class EditEventActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Open up an activity for a user to pick up a location
+     * @param view
+     */
     public void editLocation(View view) {
         Intent mapIntent = new Intent(this, MapsActivity.class);
         Bundle extras = new Bundle();
@@ -93,6 +100,12 @@ public class EditEventActivity extends AppCompatActivity {
         startActivityForResult(mapIntent, MAP_REQUEST);
     }
 
+    /**
+     * Get the result from the map activity, check if it's valid, and set the text in edit view
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -122,6 +135,7 @@ public class EditEventActivity extends AppCompatActivity {
         situationSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Situation.getStrings(this)));
         emotionSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Emotion.getStrings(this)));
     }
+
     /*
      * Set the fields that we want for
      */
@@ -146,6 +160,7 @@ public class EditEventActivity extends AppCompatActivity {
         situationSpinner.setSelection(Situation.getIndex(emotionEvent.getSituation()));
         emotionSpinner.setSelection(Emotion.getIndex(emotionEvent.getEmote()));
     }
+
     /*
      * Disable views for when the user selects an event that doesn't belong to them.
      */

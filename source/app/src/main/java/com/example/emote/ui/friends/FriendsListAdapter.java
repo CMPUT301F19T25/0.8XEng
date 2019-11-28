@@ -1,9 +1,5 @@
 package com.example.emote.ui.friends;
 
-/*
-
-Friends list adapter
- */
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +16,9 @@ import com.example.emote.FireStoreHandler;
 import com.example.emote.R;
 import java.util.ArrayList;
 
+/**
+ * Adapter to show the list of friends
+ */
 public class FriendsListAdapter extends ArrayAdapter<String> {
 
     private ArrayList<String> friendsDataList;

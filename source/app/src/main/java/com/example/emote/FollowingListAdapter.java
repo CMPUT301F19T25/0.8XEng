@@ -24,6 +24,9 @@ import java.util.Date;
 import static com.example.emote.FireStoreHandler.EMOTE_COLLECTION;
 import static java.lang.Long.MIN_VALUE;
 
+/**
+ * Adapter for the following list
+ */
 public class FollowingListAdapter extends ArrayAdapter<String> {
 
     private static final String TAG = "FollowingListAdapter";
@@ -33,12 +36,24 @@ public class FollowingListAdapter extends ArrayAdapter<String> {
     private FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
     private FirebaseFirestore db = fsh.getFireStoreDBReference();
 
+    /**
+     * Constructor for the adapter
+     * @param context: Application's context
+     * @param users: Users in the following list
+     */
     public FollowingListAdapter(@NonNull Context context, ArrayList<String> users) {
         super(context, 0, users);
         this.users = users;
         this.context = context;
     }
 
+    /**
+     * Get the view for the following list
+     * @param position: position to get
+     * @param convertView: view to convert to
+     * @param parent: parent view
+     * @return
+     */
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         // return super.getView(position, convertView, parent);
         View view = convertView;

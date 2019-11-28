@@ -1,9 +1,4 @@
 package com.example.emote.ui.listemote;
-/**
- * View model for Emote List.
- * Has all the methods to query Firebase
- * with the necessary filters.
- */
 
 import android.util.Log;
 
@@ -30,6 +25,11 @@ import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
+/**
+ * View model for Emote List.
+ * Has all the methods to query Firebase
+ * with the necessary filters.
+ */
 public class ListEmoteViewModel extends ViewModel {
 
     private FireStoreHandler fsh;
