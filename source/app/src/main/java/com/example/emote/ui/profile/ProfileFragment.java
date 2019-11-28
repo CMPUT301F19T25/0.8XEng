@@ -50,7 +50,7 @@ public class ProfileFragment extends Fragment {
 
     private TextView usernameText;
     private TextView currentmoodText;
-    private TextView friendsText;
+    private Button friendsText;
     private Button signoutButton;
 
     private FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
@@ -90,7 +90,7 @@ public class ProfileFragment extends Fragment {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                friendsText.setText(Integer.toString(((List<String>) document.get("CURRENT_FRIENDS")).size()) + " friends   >");
+                                friendsText.setText(Integer.toString(((List<String>) document.get("CURRENT_FRIENDS")).size()) + " friends");
                             } else {
                                 Log.d(TAG, "No such document");
                             }
