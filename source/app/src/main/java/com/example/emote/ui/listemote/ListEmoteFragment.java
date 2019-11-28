@@ -121,6 +121,7 @@ public class ListEmoteFragment extends Fragment {
      * Refresh the list to get the changes from firebase.
      */
     public void refresh() {
+        progressBar.setVisibility(View.VISIBLE);
         if (spinner.getSelectedItem().toString() != "All" && showFriends.isChecked()) {
             listEmoteViewModel.grabFirebaseWithFriends(emoteAdapter, emoteDataList,
                     Emotion.values()[spinner.getSelectedItemPosition()-1]);

@@ -24,7 +24,7 @@ import java.util.Calendar;
 public class EditEventActivity extends AppCompatActivity {
 
 
-    private static final String TAG = "AddEmoteFragment";
+    private static final String TAG = "EditEmoteEvent";
     private AddEmoteViewModel addEmoteViewModel;
     private FireStoreHandler fsh;
 
@@ -37,7 +37,6 @@ public class EditEventActivity extends AppCompatActivity {
     private Button deleteButton;
 
     private Button locationButton;
-    private TextView locationText;
 
     // arbitrary int for a map_request
     private static final int MAP_REQUEST = 1617;
@@ -99,8 +98,6 @@ public class EditEventActivity extends AppCompatActivity {
         if (requestCode == MAP_REQUEST && resultCode == Activity.RESULT_OK) {
             LatLng result = (LatLng) data.getExtras().get("location");
             location = new GeoPoint(result.latitude, result.longitude);
-            locationText.setVisibility(View.VISIBLE);
-            locationText.setText(location.toString());
         }
     }
 
@@ -108,6 +105,7 @@ public class EditEventActivity extends AppCompatActivity {
      * Initialize all the necessary views with findViewById
      */
     public void initializeViews() {
+        this.getSupportActionBar().hide();
         textDate = this.findViewById(R.id.text_date);
         textTime = this.findViewById(R.id.text_time);
         textReasonField = this.findViewById(R.id.text_reason_field);
@@ -117,7 +115,6 @@ public class EditEventActivity extends AppCompatActivity {
         deleteButton = this.findViewById(R.id.button_delete);
 
         locationButton = this.findViewById(R.id.addLocationButton);
-        locationText = this.findViewById(R.id.locationText);
 
         situationSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Situation.getStrings(this)));
         emotionSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Emotion.getStrings(this)));
@@ -137,10 +134,6 @@ public class EditEventActivity extends AppCompatActivity {
                 eventCal.get(Calendar.MINUTE)));
 
         location = emotionEvent.getLocation();
-        if (location != null) {
-            locationText.setVisibility(View.VISIBLE);
-            locationText.setText(location.toString());
-        }
 
         textReasonField.setText(emotionEvent.getReason());
         situationSpinner.setSelection(Situation.getIndex(emotionEvent.getSituation()));
