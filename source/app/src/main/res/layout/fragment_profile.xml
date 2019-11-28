@@ -12,13 +12,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@+id/text_following"
-        app:layout_constraintTop_toBottomOf="@+id/text_following" >
+        app:layout_constraintTop_toBottomOf="@+id/text_following"
+        android:baselineAligned="false">
 
         <TextView
             android:id="@+id/profile_number_friends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:layout_gravity="top"
             android:fontFamily="sans-serif-condensed-medium"
             android:textSize="30sp" />
 
@@ -31,7 +33,7 @@
             android:fontFamily="sans-serif-condensed-medium"
             android:text="Show"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textSize="16sp" />
+            android:textSize="24sp" />
     </LinearLayout>
 
     <TextView
@@ -110,7 +112,7 @@
         style="@style/Widget.AppCompat.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="sans-serif-medium"
         android:text="Sign Out"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
