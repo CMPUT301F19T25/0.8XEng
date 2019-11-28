@@ -27,6 +27,8 @@ import com.example.emote.EmotionEvent;
 import com.example.emote.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,6 +43,8 @@ public class ListEmoteFragment extends Fragment {
     private ListView emoteListView;
     private Spinner spinner;
     private CheckBox showFriends;
+
+    private ArrayList<String> friends_usernames;
 
     /**
      * Main Method for this Emote fragment. Initializes the fragment,
@@ -69,7 +73,7 @@ public class ListEmoteFragment extends Fragment {
         emoteDataList = new ArrayList<>();
         emoteAdapter = new EmoteListAdapter(getContext(), emoteDataList);
         emoteListView.setAdapter(emoteAdapter);
-        listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, false);
+        listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList);
 
 
         emoteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -118,11 +122,15 @@ public class ListEmoteFragment extends Fragment {
      * Refresh the list to get the changes from firebase.
      */
     public void refresh() {
-        if (spinner.getSelectedItem().toString() != "All") {
-            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList,
-                    showFriends.isChecked(), Emotion.values()[spinner.getSelectedItemPosition()-1]);
+        if (spinner.getSelectedItem().toString() != "All" && showFriends.isChecked()) {
+            listEmoteViewModel.grabFirebaseWithFriends(emoteAdapter, emoteDataList,
+                    Emotion.values()[spinner.getSelectedItemPosition()-1]);
+        } else if (spinner.getSelectedItem().toString() != "All") {
+            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, Emotion.values()[spinner.getSelectedItemPosition()-1]);
+        } else if (showFriends.isChecked()) {
+            listEmoteViewModel.grabFirebaseWithFriends(emoteAdapter, emoteDataList);
         } else {
-            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList, showFriends.isChecked());
+            listEmoteViewModel.grabFirebase(emoteAdapter, emoteDataList);
         }
     }
 
