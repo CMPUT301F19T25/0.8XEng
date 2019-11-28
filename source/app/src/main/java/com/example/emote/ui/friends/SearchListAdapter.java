@@ -1,7 +1,4 @@
 package com.example.emote.ui.friends;
-/*
-Adapter for the Autocomplete Textbox that allows users to search other users to add.
- */
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -20,9 +17,16 @@ import com.example.emote.R;
 
 import java.util.ArrayList;
 
+/*
+Adapter for the Autocomplete Textbox that allows users to search other users to add.
+ */
 public class SearchListAdapter extends ArrayAdapter<String> {
-
-
+    /**
+     * Constructor for the Search List Adapter
+     * @param context: the Application's context
+     * @param resourceId: integer representing the id for the resource
+     * @param otherUsers: List of users to search
+     */
     public SearchListAdapter(Context context, int resourceId, ArrayList<String> otherUsers) {
         super(context, resourceId, 0, otherUsers);
     }

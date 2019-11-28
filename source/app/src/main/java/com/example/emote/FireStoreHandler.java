@@ -207,10 +207,18 @@ public class FireStoreHandler {
                 });
     }
 
+    /**
+     * get the database reference for the FireStoreHandler
+     * @return Database reference
+     */
     public FirebaseFirestore getFireStoreDBReference(){
         return db;
     }
 
+    /**
+     * get the username for the user
+     * @return String for username
+     */
     public String getUsername(){
         return username;
     }

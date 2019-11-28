@@ -1,7 +1,4 @@
 package com.example.emote.ui.listemote;
-/**
- * ArrayAdapter to allow Emote List items to fill up.
- */
 
 import android.content.Context;
 import android.graphics.Color;
@@ -31,6 +28,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * ArrayAdapter to allow Emote List items to fill up.
+ */
 public class EmoteListAdapter extends ArrayAdapter<EmotionEvent> {
 
     private ArrayList<EmotionEvent> emoteDataList;

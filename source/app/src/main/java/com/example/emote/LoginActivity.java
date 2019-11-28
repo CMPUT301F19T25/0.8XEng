@@ -1,7 +1,5 @@
 package com.example.emote;
-/**
- * Class to handle User Login
- */
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +21,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Class to handle User Login
+ */
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
@@ -34,6 +35,10 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     CountingIdlingResource expressoTestIdlingResouce = new CountingIdlingResource("login");
 
+    /**
+     * set listener for the buttons, check user login and help user log in
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +143,12 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Get activity result from Signup Activity. Log the user in.
+     * @param requestCode: request sent to signup
+     * @param resultCode: if signup succeeded
+     * @param data: any data passed back
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -171,6 +182,10 @@ public class LoginActivity extends AppCompatActivity {
         return valid;
     }
 
+    /**
+     * returns the idling resources for the login activity
+     * @return the idling resources for expresso
+     */
     public CountingIdlingResource returnIdlingResource() {
         return expressoTestIdlingResouce;
     }

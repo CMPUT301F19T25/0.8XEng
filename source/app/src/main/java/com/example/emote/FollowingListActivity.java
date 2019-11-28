@@ -23,6 +23,9 @@ import static com.example.emote.FireStoreHandler.EMOTE_COLLECTION;
 import static com.example.emote.FireStoreHandler.FRIEND_COLLECTION;
 import static java.lang.Long.MIN_VALUE;
 
+/**
+ * Activity to show the following list for the users
+ */
 public class FollowingListActivity extends AppCompatActivity {
 
     private static final String TAG = "FollowingListActivity";
@@ -35,6 +38,10 @@ public class FollowingListActivity extends AppCompatActivity {
     private FirebaseFirestore db = fsh.getFireStoreDBReference();
 
 
+    /**
+     * onCreate event handler to fetch user's following list
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,7 +1,5 @@
 package com.example.emote;
-/**
- * MainActivity with navbar and fragments
- */
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
@@ -15,10 +13,17 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+/**
+ * MainActivity with the bottom navbar and the fragments
+ */
 public class MainActivity extends AppCompatActivity {
 
     boolean doubleBackToExitPressedOnce = false;
 
+    /**
+     * the onCreate method for this activity, shows the navbar and links them to fragments
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
+    /**
+     * Signout when we press the back button twice
+     */
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {

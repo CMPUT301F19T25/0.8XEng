@@ -1,9 +1,4 @@
 package com.example.emote.ui.listemote;
-/**
- * Fragment for the History of Emotion Events.
- * This fragment show's the user and other user's
- * emotion events.
- */
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +25,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Fragment for the History of Emotion Events.
+ * This fragment show's the user and other user's
+ * emotion events.
+ */
 public class ListEmoteFragment extends Fragment {
 
     private static final String TAG = "ListEmoteFragment";

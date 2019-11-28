@@ -1,7 +1,4 @@
 package com.example.emote.ui.friends;
-/*
-Friends fragment
- */
 
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +25,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * The Friend's Fragment, showing a list of friends
+ */
 public class FriendsFragment extends Fragment {
 
     private static final String TAG = "FriendsFragment";
@@ -136,6 +136,10 @@ public class FriendsFragment extends Fragment {
         return root;
     }
 
+    /**
+     * handle the activity created event
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
