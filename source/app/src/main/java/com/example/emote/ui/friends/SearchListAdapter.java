@@ -62,7 +62,7 @@ public class SearchListAdapter extends ArrayAdapter<String> {
                 notifyDataSetChanged();
                 Button send = v.findViewById(R.id.button_send);
                 send.setEnabled(false);
-                send.setText("FOLLOWED");
+                send.setText("REQUEST SENT");
             }
         });
 
