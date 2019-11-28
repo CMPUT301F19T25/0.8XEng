@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
+import androidx.test.espresso.idling.CountingIdlingResource;
 
 import com.example.emote.EmoteApplication;
 import com.example.emote.Emotion;
@@ -34,7 +35,7 @@ public class ListEmoteViewModel extends ViewModel {
 
     private FireStoreHandler fsh;
     private FirebaseFirestore db;
-
+    CountingIdlingResource idlingResource = new CountingIdlingResource("emotelist");
     /**
      * Constructor which sets the username for firestore access
      * and also gets a firestore reference.
@@ -43,6 +44,7 @@ public class ListEmoteViewModel extends ViewModel {
         //
         fsh = new FireStoreHandler(EmoteApplication.getUsername());
         db = fsh.getFireStoreDBReference();
+        EmoteApplication.setIdlingResource(idlingResource);
     }
 
     /**

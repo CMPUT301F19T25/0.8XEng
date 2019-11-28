@@ -5,6 +5,7 @@ import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
 import androidx.test.rule.ActivityTestRule;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,12 +45,16 @@ public class ListEmoteTest {
 
     @Before
     public void setup(){
-        idlingResource = new CountingIdlingResource("resource");
-        IdlingRegistry.getInstance().register(idlingResource);
-
         EmoteApplication.setUsername(validUserName);
-        EmoteApplication.setIdlingResource(idlingResource);
         onView(withId(R.id.navigation_list_emote)).perform(click());
+
+        idlingResource = EmoteApplication.getIdlingResource();
+        IdlingRegistry.getInstance().register(idlingResource);
+    }
+
+    @After
+    public void tearDown() {
+        IdlingRegistry.getInstance().unregister(idlingResource);
     }
 
     @Test
