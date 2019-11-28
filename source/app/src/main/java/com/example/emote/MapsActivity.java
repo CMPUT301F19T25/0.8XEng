@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -40,13 +39,10 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
 import static java.lang.Long.MIN_VALUE;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -76,7 +72,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());;
     private FirebaseFirestore db = fsh.getFireStoreDBReference();
     private boolean personalHistory;
-//    private ArrayList<Marker> events;
 
     // a enum to indicate whether the activity is under edit or viewing
     public enum MapMode {
@@ -327,9 +322,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             // Set the map's camera position to the current location of the device.
                             if (oldLocation == null) {
                                 mLastKnownLocation = task.getResult();
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                        new LatLng(mLastKnownLocation.getLatitude(),
-                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                if(mLastKnownLocation != null) {
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                            new LatLng(mLastKnownLocation.getLatitude(),
+                                                    mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                } else {
+                                    mMap.moveCamera(CameraUpdateFactory
+                                            .newLatLngZoom(DefaultLocation, DEFAULT_ZOOM));
+                                }
                             }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
