@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.test.espresso.idling.CountingIdlingResource;
 
 import com.example.emote.EmoteApplication;
 import com.example.emote.EmotionEvent;
@@ -56,6 +57,8 @@ public class ProfileFragment extends Fragment {
     private FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
     private FirebaseFirestore db = fsh.getFireStoreDBReference();
 
+    private CountingIdlingResource idlingResource = new CountingIdlingResource("profile");
+
     /**
      *
      * @param inflater LayoutInflater to inflate the fragment view
@@ -82,6 +85,8 @@ public class ProfileFragment extends Fragment {
         signoutButton = root.findViewById(R.id.signoutButton);
 
         usernameText.setText(fsh.getUsername());
+        EmoteApplication.setIdlingResource(idlingResource);
+        idlingResource.increment();
         db.collection(FRIEND_COLLECTION).document(EmoteApplication.getUsername())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -97,8 +102,10 @@ public class ProfileFragment extends Fragment {
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
                         }
+                        idlingResource.decrement();
                     }
                 });
+        idlingResource.increment();
         db.collection(EMOTE_COLLECTION)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -123,6 +130,8 @@ public class ProfileFragment extends Fragment {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
+                        idlingResource.decrement();
+
                     }
                 });
 
@@ -142,9 +151,10 @@ public class ProfileFragment extends Fragment {
                 try {
                     FirebaseAuth.getInstance().signOut();
                     Intent intent = new Intent(getContext(), LoginActivity.class);
-                    startActivity(intent);
                     EmoteApplication.setUsername(null);
-                    getActivity().finish();
+
+                    startActivity(intent);
+                    //getActivity().finish();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
