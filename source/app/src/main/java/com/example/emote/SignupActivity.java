@@ -32,6 +32,10 @@ public class SignupActivity extends AppCompatActivity {
     CountingIdlingResource expressoTestIdlingResouce = new CountingIdlingResource("signup");
 
 
+    /**
+     * The onCreate event handles by the activity, set up signup activity
+     * @param savedInstanceState: the instance state passed to the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,11 +56,18 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Event to handle when the signup fails
+     * @param message: a message to print to the user
+     */
     public void onSignupFailed(String message) {
         Toast.makeText(getBaseContext(), "Failed to create account: "+ message, Toast.LENGTH_LONG).show();
         createAccountButton.setEnabled(true);
     }
 
+    /**
+     * Event to handle when signup succeeds, return to LoginActivity
+     */
     public void onSignupSuccess() {
         createAccountButton.setEnabled(true);
         setResult(RESULT_OK, null);
