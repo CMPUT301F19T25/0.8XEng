@@ -18,8 +18,6 @@ public class MapViewModel extends ViewModel {
      * Constructor for the MapViewModel
      */
     public MapViewModel(){
-        // Create idling resource for map ui tests
-        EmoteApplication.setIdlingResource( new CountingIdlingResource("map"));
     }
 
     /**
