@@ -45,9 +45,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                app:errorTextAppearance="@style/LargerHintsForAddEmoteStyle.ErrorTextStyle"
+                app:helperTextTextAppearance="@style/AddEmoteLabel"
                 app:helperText="Emotion"
-                app:hintEnabled="true"
                 app:layout_constraintTop_toBottomOf="@+id/text_add_emote"
                 tools:layout_editor_absoluteX="16dp">
 
@@ -68,6 +67,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
                 app:hintEnabled="true"
+                app:hintTextAppearance="@style/AddEmoteLabel"
+                app:errorTextAppearance="@style/error_appearance"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_emote_name"
                 tools:layout_editor_absoluteX="16dp">
 
@@ -88,7 +89,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                app:errorTextAppearance="@style/LargerHintsForAddEmoteStyle.ErrorTextStyle"
+                app:hintTextAppearance="@style/AddEmoteLabel"
+                app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="true"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_date"
                 tools:layout_editor_absoluteX="16dp">
@@ -111,17 +113,16 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
                 app:helperText="Situation"
-                app:hintEnabled="true"
+                app:helperTextTextAppearance="@style/AddEmoteLabel"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_time"
                 tools:layout_editor_absoluteX="16dp">
 
                 <Spinner
                     android:id="@+id/spinner_situation"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:background="@drawable/rounded_corner_black_border"
-                    android:hint="Situation"
                     android:padding="10dp"
                     android:textSize="24sp" />
 
@@ -133,7 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                app:hintEnabled="true"
+                app:hintTextAppearance="@style/AddEmoteLabel"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_situation"
                 tools:layout_editor_absoluteX="16dp">
 
@@ -142,16 +143,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_corner_black_border"
-                    android:hint="Reason"
+                    android:hint="Reason (optional)"
                     android:padding="10dp"
                     android:textSize="24sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                 android:id="@+id/cameraPreview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="350dp"
+                android:layout_height="350dp"
                 android:scaleType="fitXY"
+                android:layout_gravity="center"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_reason"
                 tools:layout_editor_absoluteX="175dp" />
 
@@ -164,6 +166,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:textSize="24sp"
                 android:text="mapCoordinate"/>
 
             <LinearLayout

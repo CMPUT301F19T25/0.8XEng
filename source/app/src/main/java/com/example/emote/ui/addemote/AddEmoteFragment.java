@@ -38,6 +38,7 @@ import com.example.emote.R;
 import com.example.emote.Situation;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -68,6 +69,8 @@ public class AddEmoteFragment extends Fragment {
     private Button takePictureButton;
     private ImageView cameraPreview;
     private Button addLocationButton;
+    private TextInputLayout text_layout_date;
+    private TextInputLayout text_layout_time;
 
     private TextView mapText;
 
@@ -100,7 +103,11 @@ public class AddEmoteFragment extends Fragment {
         submitButton = root.findViewById(R.id.submitButton);
         takePictureButton = root.findViewById(R.id.addPhotoButton);
         cameraPreview = root.findViewById(R.id.cameraPreview);
+        cameraPreview.getLayoutParams().height = 0;
+        cameraPreview.requestLayout();
         addLocationButton = root.findViewById(R.id.addLocationButton);
+        text_layout_date = root.findViewById(R.id.text_layout_date);
+        text_layout_time = root.findViewById(R.id.text_layout_time);
 
         mapText = root.findViewById(R.id.mapText);
 
@@ -224,6 +231,7 @@ public class AddEmoteFragment extends Fragment {
             cameraImage = Bitmap.createScaledBitmap(cameraImage, cameraPreview.getWidth(), newHeight, true);
 
             cameraPreview.setImageBitmap(cameraImage);
+            cameraPreview.getLayoutParams().height = 850;
 
         }
         else if (requestCode == MAP_REQUEST && resultCode == Activity.RESULT_OK) {
@@ -277,10 +285,17 @@ public class AddEmoteFragment extends Fragment {
     public void addEmote(View view) {
         EmotionEvent event;
         try {
+            if (textDateField.getText().toString().length() == 0){
+                text_layout_date.setError("Please enter date");
+            }
+            if (textTimeField.getText().toString().length() == 0){
+                text_layout_time.setError("Please enter a time");
+            }
             Date date = pickerToDate(textDateField.getText().toString(), textTimeField.getText().toString());
             String reasonString = textReasonField.getText().toString();
             Situation situation = Situation.values()[situationSpinner.getSelectedItemPosition()];
             Emotion emotion = Emotion.values()[emotionSpinner.getSelectedItemPosition()];
+
             if (cameraImage != null && mapLocation != null) {
                 String fileName = uploadImage(cameraImage);
                 event = new EmotionEvent(emotion, situation, reasonString, date, fileName, mapLocation);
@@ -299,7 +314,7 @@ public class AddEmoteFragment extends Fragment {
 
         } catch (Exception e) {
             // TODO proper error messages
-            Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Error: Please try again ", Toast.LENGTH_LONG).show();
             resetFields();
             return;
         }
@@ -308,6 +323,10 @@ public class AddEmoteFragment extends Fragment {
         fsh.addEmote(event);
         Toast.makeText(getContext(), "Emotion Event Added", Toast.LENGTH_LONG).show();
         resetFields();
+        text_layout_date.setErrorEnabled(false);
+        text_layout_time.setErrorEnabled(false);
+        cameraPreview.getLayoutParams().height = 0;
+        cameraPreview.requestLayout();
     }
 
     /**
