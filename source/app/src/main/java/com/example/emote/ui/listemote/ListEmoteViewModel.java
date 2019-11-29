@@ -35,7 +35,8 @@ public class ListEmoteViewModel extends ViewModel {
 
     private FireStoreHandler fsh;
     private FirebaseFirestore db;
-    CountingIdlingResource idlingResource = new CountingIdlingResource("emotelist");
+    CountingIdlingResource idlingResource = EmoteApplication.getIdlingResource();
+
     /**
      * Constructor which sets the username for firestore access
      * and also gets a firestore reference.
@@ -68,12 +69,7 @@ public class ListEmoteViewModel extends ViewModel {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 emoteDataList.add(document.toObject(EmotionEvent.class));
                             }
-                            Collections.sort(emoteDataList, new Comparator<EmotionEvent>() {
-                                @Override
-                                public int compare(EmotionEvent o1, EmotionEvent o2) {
-                                    return o2.getDate().compareTo(o1.getDate());
-                                }
-                            });
+                            Collections.sort(emoteDataList);
                             adapter.notifyDataSetChanged();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -103,17 +99,12 @@ public class ListEmoteViewModel extends ViewModel {
                         if (task.isSuccessful()) {
                             emoteDataList.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                EmotionEvent currEvent  = document.toObject(EmotionEvent.class);
-                                if(friends.contains(currEvent.getUsername())) {
+                                EmotionEvent currEvent = document.toObject(EmotionEvent.class);
+                                if (friends.contains(currEvent.getUsername())) {
                                     emoteDataList.add(document.toObject(EmotionEvent.class));
                                 }
                             }
-                            Collections.sort(emoteDataList, new Comparator<EmotionEvent>() {
-                                @Override
-                                public int compare(EmotionEvent o1, EmotionEvent o2) {
-                                    return o2.getDate().compareTo(o1.getDate());
-                                }
-                            });
+                            Collections.sort(emoteDataList);
                             adapter.notifyDataSetChanged();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -180,12 +171,7 @@ public class ListEmoteViewModel extends ViewModel {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 emoteDataList.add(document.toObject(EmotionEvent.class));
                             }
-                            Collections.sort(emoteDataList, new Comparator<EmotionEvent>() {
-                                @Override
-                                public int compare(EmotionEvent o1, EmotionEvent o2) {
-                                    return o2.getDate().compareTo(o1.getDate());
-                                }
-                            });
+                            Collections.sort(emoteDataList);
                             adapter.notifyDataSetChanged();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -218,25 +204,20 @@ public class ListEmoteViewModel extends ViewModel {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 EmotionEvent currEvent = document.toObject(EmotionEvent.class);
-                                if(friends.contains(currEvent.getUsername())) {
+                                if (friends.contains(currEvent.getUsername())) {
                                     emoteDataList.add(document.toObject(EmotionEvent.class));
                                 }
                             }
-                            Collections.sort(emoteDataList, new Comparator<EmotionEvent>() {
-                                @Override
-                                public int compare(EmotionEvent o1, EmotionEvent o2) {
-                                    return o2.getDate().compareTo(o1.getDate());
-                                }
-                            });
+                            Collections.sort(emoteDataList);
                             adapter.notifyDataSetChanged();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
+
                         EmoteApplication.getIdlingResource().decrement();
                     }
                 });
     }
-
 
 
     /**
@@ -246,7 +227,8 @@ public class ListEmoteViewModel extends ViewModel {
      * @param emoteDataList ArrayList used by the EmoteListAdapter
      * @param filterEmote   Emote to filter for
      */
-    public void grabFirebaseWithFriends(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList, final Emotion filterEmote) {
+    public void grabFirebaseWithFriends(final EmoteListAdapter adapter, final ArrayList<EmotionEvent> emoteDataList,
+                                        final Emotion filterEmote, ListEmoteFragment fragment) {
         EmoteApplication.getIdlingResource().increment();
         db.collection(FireStoreHandler.FRIEND_COLLECTION).document(EmoteApplication.getUsername())
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -262,6 +244,8 @@ public class ListEmoteViewModel extends ViewModel {
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
+                fragment.onLoadComplete();
+
                 EmoteApplication.getIdlingResource().decrement();
             }
         });

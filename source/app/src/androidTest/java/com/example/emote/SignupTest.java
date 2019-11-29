@@ -28,6 +28,7 @@ public class SignupTest {
     private String validUserName = "testuser4";
     private String validPassword = "password123";
     private String invalidLengthPassword = "a";
+    private String failText = "Failed to create account: Invalid Username or Password";
 
 
     @Rule
@@ -45,7 +46,7 @@ public class SignupTest {
                 .perform(typeText(invalidLengthPassword), closeSoftKeyboard());
         onView(withId(R.id.btn_create_account)).perform(click());
 
-        onView(withText("Failed to create account"))
+        onView(withText(failText))
                 .inRoot(withDecorView(not(is(activityTestRule.getActivity()
                         .getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
@@ -60,7 +61,7 @@ public class SignupTest {
                 .perform(typeText(invalidPassword), closeSoftKeyboard());
         onView(withId(R.id.btn_create_account)).perform(click());
 
-        onView(withText("Failed to create account"))
+        onView(withText(failText))
                 .inRoot(withDecorView(not(is(activityTestRule.getActivity()
                         .getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
