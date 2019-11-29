@@ -149,9 +149,9 @@
 
             <ImageView
                 android:id="@+id/cameraPreview"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:scaleType="fitXY"
+                android:layout_gravity="center"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_reason"
                 tools:layout_editor_absoluteX="175dp" />
 
