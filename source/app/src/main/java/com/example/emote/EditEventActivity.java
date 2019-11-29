@@ -233,11 +233,6 @@ public class EditEventActivity extends AppCompatActivity {
 
         situationSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Situation.getStrings(this)));
         emotionSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Emotion.getStrings(this)));
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
 
         addPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,12 +242,6 @@ public class EditEventActivity extends AppCompatActivity {
         });
     }
 
-<<<<<<< Updated upstream
-    public void addPicture(View view) {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST);
-=======
-
     /**
      * View to add pictures to events, using the camera
      * @param view: view to use for the edit event 
@@ -260,8 +249,6 @@ public class EditEventActivity extends AppCompatActivity {
     public void addPicture(View view) {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
->>>>>>> Stashed changes
->>>>>>> Stashed changes
     }
 
 

@@ -194,26 +194,6 @@ public class EmotionEvent implements Serializable, Comparable<EmotionEvent> {
     public void setDate(Date date) { this.date = date; }
 
     public GeoPoint getLocation() {
-<<<<<<< Updated upstream
-        return convertLatLngToGeoPoint(this.lat, this.lng);
-    }
-
-    public GeoPoint convertLatLngToGeoPoint(double lat, double lng) {
-        if (lat == -1 || lng == -1) {
-            return null;
-        }
-        return new GeoPoint(lat, lng);
-    }
-
-    public Double[] convertGeoPointToLatLng(GeoPoint g) {
-        if (g == null) {
-            return new Double[] {(double) -1, (double) -1};
-=======
-<<<<<<< Updated upstream
-        if (lat == -1 || lng == -1) {
-            return null;
-        }
-=======
         return convertLatLngToGeoPoint(this.lat, this.lng);
     }
 
@@ -239,23 +219,12 @@ public class EmotionEvent implements Serializable, Comparable<EmotionEvent> {
         if (g == null) {
             return new Double[] {(double) -1, (double) -1};
         }
->>>>>>> Stashed changes
         else {
-            return new GeoPoint(lat, lng);
+            return new Double[] {(double) g.getLatitude(), (double) g.getLongitude()};
         }
     }
 
     public void setLocation(GeoPoint location) {
-<<<<<<< Updated upstream
-        if (location == null) {
-            lat = -1;
-            lng = -1;
->>>>>>> Stashed changes
-        }
-        else {
-            return new Double[] {(double) g.getLatitude(), (double) g.getLongitude()};
-        }
-=======
         Double[] latLng = convertGeoPointToLatLng(location);
         lat = latLng[0];
         lng = latLng[1];
@@ -266,18 +235,6 @@ public class EmotionEvent implements Serializable, Comparable<EmotionEvent> {
      * @param o: another EmotionEvent to compare to
      * @return an int depending on which element is bigger
      */
-    @Override
-    public int compareTo(EmotionEvent o) {
-        return o.getDate().compareTo(getDate());
->>>>>>> Stashed changes
-    }
-
-    public void setLocation(GeoPoint location) {
-        Double[] latLng = convertGeoPointToLatLng(location);
-        lat = latLng[0];
-        lng = latLng[1];
-    }
-
     @Override
     public int compareTo(EmotionEvent o) {
         return o.getDate().compareTo(getDate());

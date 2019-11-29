@@ -72,22 +72,12 @@ public class FollowingListActivity extends AppCompatActivity {
                 });
     }
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-=======
     /**
      * Method to handle what to do when back button is pressed, used to exit.
      */
->>>>>>> Stashed changes
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
     }
-
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 }
