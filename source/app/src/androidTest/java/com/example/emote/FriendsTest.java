@@ -76,7 +76,7 @@ public class FriendsTest {
                 .onChildView(withId(R.id.friend_text))
                 .check(matches(withText(validUserName2)));
 
-        // accept request
+        // decline request
         onData(anything())
                 .inAdapterView(withId(R.id.friends_list_view))
                 .atPosition(0)
