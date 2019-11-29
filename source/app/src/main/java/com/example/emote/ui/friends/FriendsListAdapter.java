@@ -24,12 +24,24 @@ public class FriendsListAdapter extends ArrayAdapter<String> {
     private ArrayList<String> friendsDataList;
     private Context context;
 
+    /**
+     * Adapter for the FriendsList
+     * @param context the application context
+     * @param friendsDataList the data list for friends
+     */
     public FriendsListAdapter(Context context, ArrayList<String> friendsDataList){
         super(context, 0, friendsDataList);
         this.friendsDataList = friendsDataList;
         this.context = context;
     }
 
+    /**
+     * Method to get the view for the friends list adapter
+     * @param position position to get
+     * @param convertView the view to convert
+     * @param parent the parent view
+     * @return the view for the FriendsList
+     */
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {

@@ -11,10 +11,17 @@ public class FriendsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
+    /**
+     * Constructor for the FriendsViewModel
+     */
     public FriendsViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("Friends");
     }
 
+    /**
+     * get the text for the view model
+     * @return the mtext
+     */
     public LiveData<String> getText() { return mText; }
 }

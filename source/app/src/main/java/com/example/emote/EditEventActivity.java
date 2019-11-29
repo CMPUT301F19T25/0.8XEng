@@ -73,6 +73,10 @@ public class EditEventActivity extends AppCompatActivity {
     private TextView locationText;
     Bitmap cameraImage;
 
+    /**
+     * onCreate event handler to handle when activity starts, sets up the edit event activity
+     * @param savedInstanceState: saved instance state passed to activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -238,6 +242,10 @@ public class EditEventActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * View to add pictures to events, using the camera
+     * @param view: view to use for the edit event 
+     */
     public void addPicture(View view) {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);

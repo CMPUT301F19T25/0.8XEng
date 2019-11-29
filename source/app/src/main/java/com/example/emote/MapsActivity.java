@@ -82,6 +82,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         ViewLocation,
     }
 
+    /**
+     * onCreate event handler when activity is created. Used to set up the maps activity
+     * @param savedInstanceState: saved instance state passed to the activit
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

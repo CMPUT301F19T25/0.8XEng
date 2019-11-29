@@ -72,10 +72,12 @@ public class FollowingListActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Method to handle what to do when back button is pressed, used to exit.
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
     }
-
 }

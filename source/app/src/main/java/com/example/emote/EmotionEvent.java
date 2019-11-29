@@ -197,6 +197,12 @@ public class EmotionEvent implements Serializable, Comparable<EmotionEvent> {
         return convertLatLngToGeoPoint(this.lat, this.lng);
     }
 
+    /**
+     * Converts a pair of doubles to a new GeoPoint if valid
+     * @param lat: latitude
+     * @param lng: longitude
+     * @return new GeoPoint using the latitude and longitude
+     */
     public GeoPoint convertLatLngToGeoPoint(double lat, double lng) {
         if (lat == -1 || lng == -1) {
             return null;
@@ -204,6 +210,11 @@ public class EmotionEvent implements Serializable, Comparable<EmotionEvent> {
         return new GeoPoint(lat, lng);
     }
 
+    /**
+     * Converts a GeoPoint to a pair of Latitude and Longitude
+     * @param g: a GeoPoint
+     * @return array of latitude and longitude
+     */
     public Double[] convertGeoPointToLatLng(GeoPoint g) {
         if (g == null) {
             return new Double[] {(double) -1, (double) -1};
@@ -219,6 +230,11 @@ public class EmotionEvent implements Serializable, Comparable<EmotionEvent> {
         lng = latLng[1];
     }
 
+    /**
+     * Compares two EmotionEvent using their dates
+     * @param o: another EmotionEvent to compare to
+     * @return an int depending on which element is bigger
+     */
     @Override
     public int compareTo(EmotionEvent o) {
         return o.getDate().compareTo(getDate());
