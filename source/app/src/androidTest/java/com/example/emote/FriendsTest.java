@@ -1,5 +1,7 @@
 package com.example.emote;
 
+import android.view.View;
+
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.idling.CountingIdlingResource;
 import androidx.test.rule.ActivityTestRule;
@@ -21,8 +23,8 @@ import static org.hamcrest.Matchers.anything;
 
 public class FriendsTest {
 
-    private String validUserName1 = "testuser4";
-    private String validUserName2 = "testuser5";
+    private String validUserName1 = "testuser44";
+    private String validUserName2 = "testuser55";
     CountingIdlingResource idlingResource;
 
     @Rule
@@ -31,6 +33,10 @@ public class FriendsTest {
 
     @Before
     public void setup(){
+        // send friend request to validUserName1
+        FireStoreHandler fsh = new FireStoreHandler(validUserName2);
+        fsh.sendFriendRequest(validUserName1);
+
         EmoteApplication.setUsername(validUserName1);
         onView(withId(R.id.navigation_friends)).perform(click());
 
@@ -45,14 +51,37 @@ public class FriendsTest {
 
 
     @Test
-    public void testFriendRequests(){
-
+    public void testFriendRequestAccept() {
+        // find request
         onData(anything())
                 .inAdapterView(withId(R.id.friends_list_view))
                 .atPosition(0)
                 .onChildView(withId(R.id.friend_text))
-                .check(matches(withText("testuser5")));
+                .check(matches(withText(validUserName2)));
 
+        // accept request
+        onData(anything())
+                .inAdapterView(withId(R.id.friends_list_view))
+                .atPosition(0)
+                .onChildView(withId(R.id.accept_follow))
+                .perform(click());
+    }
+
+    @Test
+    public void testFriendRequestDecline() {
+        // find request
+        onData(anything())
+                .inAdapterView(withId(R.id.friends_list_view))
+                .atPosition(0)
+                .onChildView(withId(R.id.friend_text))
+                .check(matches(withText(validUserName2)));
+
+        // decline request
+        onData(anything())
+                .inAdapterView(withId(R.id.friends_list_view))
+                .atPosition(0)
+                .onChildView(withId(R.id.decline_follow))
+                .perform(click());
     }
 
 }
