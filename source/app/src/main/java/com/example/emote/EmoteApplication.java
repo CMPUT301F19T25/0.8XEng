@@ -29,6 +29,9 @@ public class EmoteApplication {
         EmoteApplication.idlingResource = idlingResource;
     }
     public static CountingIdlingResource getIdlingResource() {
+        if(idlingResource == null){
+            idlingResource = new CountingIdlingResource("EmoteAppCounter");
+        }
         return idlingResource;
     }
 }
