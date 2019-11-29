@@ -58,7 +58,7 @@ public class ProfileFragment extends Fragment {
     private FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
     private FirebaseFirestore db = fsh.getFireStoreDBReference();
 
-    private CountingIdlingResource idlingResource = new CountingIdlingResource("profile");
+    private CountingIdlingResource idlingResource;
 
     /**
      *
@@ -87,7 +87,7 @@ public class ProfileFragment extends Fragment {
         signoutButton = root.findViewById(R.id.signoutButton);
 
         usernameText.setText(fsh.getUsername());
-        EmoteApplication.setIdlingResource(idlingResource);
+        idlingResource = EmoteApplication.getIdlingResource();
         idlingResource.increment();
         db.collection(FRIEND_COLLECTION).document(EmoteApplication.getUsername())
                 .get()

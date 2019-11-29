@@ -10,6 +10,7 @@
     <style name="AddEmoteLabel" parent="TextAppearance.Design.Hint">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
     </style>
     <style name="error_appearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">#ff7875</item>

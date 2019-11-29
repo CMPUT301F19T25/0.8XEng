@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#265C8D</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#265C8D</color>
+    <color name="colorAccent">#488ece</color>
     <color name="SAD">#E1E1E1</color>
     <color name="HAPPY">#8CFAFA</color>
     <color name="LONELY">#8CC0FA</color>

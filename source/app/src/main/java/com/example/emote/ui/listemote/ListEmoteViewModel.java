@@ -35,7 +35,7 @@ public class ListEmoteViewModel extends ViewModel {
 
     private FireStoreHandler fsh;
     private FirebaseFirestore db;
-    CountingIdlingResource idlingResource = new CountingIdlingResource("emotelist");
+    CountingIdlingResource idlingResource = EmoteApplication.getIdlingResource();
 
     /**
      * Constructor which sets the username for firestore access

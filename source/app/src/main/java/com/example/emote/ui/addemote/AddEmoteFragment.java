@@ -339,7 +339,6 @@ public class AddEmoteFragment extends Fragment {
         textDateField.setText("");
         textTimeField.setText("");
         setTimeAndDateListeners();
-        cameraPreview.setImageResource(0);
         mapText.setText("");
         mapText.setVisibility(View.GONE);
         mapLocation = null;

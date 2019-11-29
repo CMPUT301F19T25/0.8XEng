@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.test.espresso.idling.CountingIdlingResource;
 
 import android.app.Activity;
 import android.content.Context;
@@ -72,6 +73,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FirebaseFirestore db = fsh.getFireStoreDBReference();
     private boolean personalHistory;
 
+
     /**
      * an enum to indicate whether the activity is under edit or viewing
      */
@@ -132,6 +134,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * Method to get the latest location for all your personal events
      */
     private void getPersonalEventLocations() {
+        EmoteApplication.getIdlingResource().increment();
         db.collection(FireStoreHandler.EMOTE_COLLECTION)
                 .whereEqualTo(EmotionEvent.USERNAME_KEY, fsh.getUsername())
                 .get()
@@ -151,6 +154,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
+                        EmoteApplication.getIdlingResource().decrement();
                     }
                 });
     }
@@ -159,6 +163,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * Method to get the latest events location of all the people you follow
      */
     private void getFriendsEventLocations() {
+        EmoteApplication.getIdlingResource().increment();
         db.collection(FireStoreHandler.FRIEND_COLLECTION)
                 .document(EmoteApplication.getUsername())
                 .get()
@@ -169,6 +174,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             DocumentSnapshot document = task.getResult();
                             ArrayList<String> currentFriends = (ArrayList<String>) document.get("CURRENT_FRIENDS");
                             for (String friend : currentFriends) {
+                                EmoteApplication.getIdlingResource().increment();
                                 db.collection(FireStoreHandler.EMOTE_COLLECTION)
                                         .whereEqualTo(EmotionEvent.USERNAME_KEY, friend)
                                         .get()
@@ -194,12 +200,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                 } else {
                                                     Log.d(TAG, "Error getting documents: ", task.getException());
                                                 }
+                                                EmoteApplication.getIdlingResource().decrement();
                                             }
                                         });
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
+                        EmoteApplication.getIdlingResource().decrement();
                     }
                 });
     }
@@ -210,7 +218,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * @param location, the location to mark
      */
     private void SetCustomMarker(EmotionEvent event, LatLng location) {
-        // TODO: set custom markers that can display user, date, and emote
         // load icon
         Context context = this.getApplicationContext();
 
