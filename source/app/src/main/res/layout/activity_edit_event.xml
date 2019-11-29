@@ -118,6 +118,16 @@
             android:hint="Reason" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/text_layout_reason"
+        android:id="@+id/locationText" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -126,7 +136,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/text_layout_reason"
+        app:layout_constraintTop_toBottomOf="@+id/locationText"
         tools:layout_editor_absoluteX="197dp">
 
         <Button
