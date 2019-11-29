@@ -2,6 +2,8 @@ package com.example.emote;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -20,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Activity used for editing emotion events
@@ -46,6 +49,7 @@ public class EditEventActivity extends AppCompatActivity {
     private GeoPoint location;
 
     private EmotionEvent emotionEvent;
+    private TextView locationText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +115,30 @@ public class EditEventActivity extends AppCompatActivity {
         if (requestCode == MAP_REQUEST && resultCode == Activity.RESULT_OK) {
             LatLng result = (LatLng) data.getExtras().get("location");
             location = new GeoPoint(result.latitude, result.longitude);
+            SetLocationText();
+        }
+    }
+
+    /**
+     * Private method to set the location text
+     */
+    private void SetLocationText() {
+        if (location != null) {
+            locationText.setVisibility(View.VISIBLE);
+            List<Address> addresses = null;
+            try {
+                addresses = new Geocoder(this).getFromLocation(location.getLatitude(), location.getLongitude(),1);
+            }
+            catch (Exception e) {
+                // do nothing
+            }
+            try {
+                String address = addresses.get(0).getAddressLine(0);
+                locationText.setText(address);
+            }
+            catch (Exception e) {
+                locationText.setText("Lat: " + String.format("%.3f", location.getLatitude()) +", Lng: " + String.format("%.3f", location.getLongitude()));
+            }
         }
     }
 
@@ -128,6 +156,7 @@ public class EditEventActivity extends AppCompatActivity {
         deleteButton = this.findViewById(R.id.button_delete);
 
         locationButton = this.findViewById(R.id.addLocationButton);
+        locationText = this.findViewById(R.id.locationText);
 
         situationSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Situation.getStrings(this)));
         emotionSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Emotion.getStrings(this)));
@@ -148,6 +177,7 @@ public class EditEventActivity extends AppCompatActivity {
                 eventCal.get(Calendar.MINUTE)));
 
         location = emotionEvent.getLocation();
+        SetLocationText();
 
         textReasonField.setText(emotionEvent.getReason());
         situationSpinner.setSelection(Situation.getIndex(emotionEvent.getSituation()));
