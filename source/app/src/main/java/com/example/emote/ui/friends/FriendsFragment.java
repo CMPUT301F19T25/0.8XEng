@@ -82,6 +82,7 @@ public class FriendsFragment extends Fragment {
         final FireStoreHandler fsh = new FireStoreHandler(username);
         FirebaseFirestore db = fsh.getFireStoreDBReference();
 
+        EmoteApplication.getIdlingResource().increment();
         db.collection(FireStoreHandler.FRIEND_COLLECTION).document(fsh.getUsername())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -102,9 +103,10 @@ public class FriendsFragment extends Fragment {
                         } else {
                             Log.d(TAG, "Error getting friends: ", task.getException());
                         }
+                        EmoteApplication.getIdlingResource().decrement();
                     }
                 });
-
+        EmoteApplication.getIdlingResource().increment();
         db.collection(FireStoreHandler.FRIEND_COLLECTION)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -133,7 +135,7 @@ public class FriendsFragment extends Fragment {
                         } else {
                             Log.d(TAG, "Error getting all users");
                         }
-
+                        EmoteApplication.getIdlingResource().decrement();
                     }
                 });
         return root;
@@ -146,6 +148,5 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // TODO: Use the ViewModel
     }
 }
