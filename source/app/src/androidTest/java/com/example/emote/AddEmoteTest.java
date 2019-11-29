@@ -79,7 +79,7 @@ public class AddEmoteTest {
         onView(withId(R.id.scrollView2))
                 .perform(swipeUp());
         onView(withId(R.id.submitButton)).perform(click());
-        onView(withText("Error: length=1; index=2"))
+        onView(withText("Error: Please try again "))
                 .inRoot(withDecorView(not(is(activityRule.getActivity()
                         .getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
