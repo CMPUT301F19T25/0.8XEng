@@ -84,6 +84,16 @@ public class EditEventActivity extends AppCompatActivity {
         emotionEvent = (EmotionEvent) intent.getSerializableExtra("event");
         if (!intent.getBooleanExtra("editable", false)) {
             disableViews();
+            addPhotoButton.setVisibility(View.GONE);
+            locationButton.setVisibility(View.GONE);
+            editButton.setVisibility(View.GONE);
+            deleteButton.setVisibility(View.GONE);
+        }
+        else{
+            addPhotoButton.setVisibility(View.VISIBLE);
+            locationButton.setVisibility(View.VISIBLE);
+            editButton.setVisibility(View.VISIBLE);
+            deleteButton.setVisibility(View.VISIBLE);
         }
         fsh = new FireStoreHandler(EmoteApplication.getUsername());
         setFields();
