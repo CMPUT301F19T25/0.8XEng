@@ -27,7 +27,8 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/text_add_emote">
 
         <LinearLayout
@@ -35,134 +36,141 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_layout_emote_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            app:helperText="Emotion"
-            app:hintEnabled="true"
-            app:layout_constraintTop_toBottomOf="@+id/text_add_emote"
-            tools:layout_editor_absoluteX="16dp">
-
-            <Spinner
-                android:id="@+id/spinnner_emote"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_layout_emote_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                app:helperText="Emotion"
+                app:helperTextTextAppearance="@style/AddEmoteLabel"
+                app:hintEnabled="true"
+                app:layout_constraintTop_toBottomOf="@+id/text_add_emote"
+                tools:layout_editor_absoluteX="16dp">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <Spinner
+                    android:id="@+id/spinnner_emote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_layout_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            app:helperText="Date"
-            app:hintEnabled="true"
-            app:layout_constraintTop_toBottomOf="@+id/text_layout_emote_name"
-            tools:layout_editor_absoluteX="16dp">
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_layout_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                app:helperText="Date"
+                app:helperTextTextAppearance="@style/AddEmoteLabel"
+                app:hintEnabled="true"
+                app:layout_constraintTop_toBottomOf="@+id/text_layout_emote_name"
+                tools:layout_editor_absoluteX="16dp">
+
+                <TextView
+                    android:id="@+id/text_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:text="TextView"
+                    android:textSize="24sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_layout_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:hint="Time"
+                app:helperTextTextAppearance="@style/AddEmoteLabel"
+                app:helperText="Time"
+                app:hintEnabled="true"
+                app:layout_constraintTop_toBottomOf="@+id/text_layout_date"
+                tools:layout_editor_absoluteX="16dp">
+
+                <TextView
+                    android:id="@+id/text_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textSize="24sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_layout_situation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                app:helperText="Situation"
+                app:helperTextTextAppearance="@style/AddEmoteLabel"
+                app:hintEnabled="true"
+                app:layout_constraintTop_toBottomOf="@+id/text_layout_time"
+                tools:layout_editor_absoluteX="16dp">
+
+                <Spinner
+                    android:id="@+id/spinner_situation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Situation"
+                    android:padding="10dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_layout_reason"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:hintEnabled="true"
+                app:hintTextAppearance="@style/AddEmoteLabel"
+                app:layout_constraintTop_toBottomOf="@+id/text_layout_situation"
+                tools:layout_editor_absoluteX="16dp"
+                android:textColorHint="@color/colorAccent">
+
+                <EditText
+                    android:id="@+id/text_reason_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Reason"
+                    android:padding="10dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/text_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="TextView"
-                android:padding="10dp"
-                android:textSize="24sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_layout_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:hint="Time"
-            app:helperText="Time"
-            app:hintEnabled="true"
-            android:padding="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/text_layout_date"
-            tools:layout_editor_absoluteX="16dp">
-
-            <TextView
-                android:id="@+id/text_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="TextView"
-                android:textSize="24sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_layout_situation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            app:helperText="Situation"
-            app:hintEnabled="true"
-            app:layout_constraintTop_toBottomOf="@+id/text_layout_time"
-            tools:layout_editor_absoluteX="16dp">
-
-            <Spinner
-                android:id="@+id/spinner_situation"
+                android:id="@+id/locationText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:hint="Situation" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_layout_reason"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            app:hintEnabled="true"
-            app:layout_constraintTop_toBottomOf="@+id/text_layout_situation"
-            tools:layout_editor_absoluteX="16dp">
-
-            <EditText
-                android:id="@+id/text_reason_field"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:hint="Reason" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/text_layout_reason"
-            android:id="@+id/locationText" />
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:textSize="24dp"
+                android:layout_marginRight="20dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/text_layout_reason" />
 
             <ImageView
                 android:id="@+id/cameraPreview"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:scaleType="fitXY"
-                tools:layout_editor_absoluteX="175dp"
-                android:layout_marginBottom="5dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="5dp"
-                android:layout_gravity="center"/>
+                android:layout_marginBottom="5dp"
+                android:scaleType="fitXY"
+                tools:layout_editor_absoluteX="175dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <Button
                     android:id="@+id/addPhotoButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginRight="20dp"
-                    android:padding="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/rounded_corner_blue"
+                    android:padding="5dp"
                     android:text="Photo" />
 
                 <Button
@@ -177,35 +185,33 @@
             </LinearLayout>
 
 
+            <Button
+                android:id="@+id/button_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/rounded_corner_blue"
+                android:onClick="addEmote"
+                android:padding="12dp"
+                android:text="Edit"
+                android:textSize="25sp"
+                tools:layout_editor_absoluteX="175dp" />
 
-        <Button
-            android:id="@+id/button_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="40dp"
-            android:onClick="addEmote"
-            android:text="Edit"
-            android:padding="12dp"
-            android:textSize="25sp"
-            android:background="@drawable/rounded_corner_blue"
-            tools:layout_editor_absoluteX="175dp" />
-
-        <Button
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="40dp"
-            android:id="@+id/button_delete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:textSize="25sp"
-            android:text="Delete"
-            android:background="@drawable/rounded_corner_blue"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            android:layout_marginBottom="80dp"
-            />
+            <Button
+                android:id="@+id/button_delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="80dp"
+                android:background="@drawable/rounded_corner_blue"
+                android:padding="12dp"
+                android:text="Delete"
+                android:textSize="25sp"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 
         </LinearLayout>

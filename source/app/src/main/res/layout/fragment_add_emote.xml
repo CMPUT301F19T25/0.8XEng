@@ -29,6 +29,7 @@
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -45,9 +46,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                app:errorTextAppearance="@style/LargerHintsForAddEmoteStyle.ErrorTextStyle"
                 app:helperText="Emotion"
-                app:hintEnabled="true"
+                app:helperTextTextAppearance="@style/AddEmoteLabel"
                 app:layout_constraintTop_toBottomOf="@+id/text_add_emote"
                 tools:layout_editor_absoluteX="16dp">
 
@@ -67,9 +67,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
+                app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="true"
+                app:hintTextAppearance="@style/AddEmoteLabel"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_emote_name"
-                tools:layout_editor_absoluteX="16dp">
+                tools:layout_editor_absoluteX="16dp"
+                android:textColorHint="@color/colorAccent">
 
                 <EditText
                     android:id="@+id/text_date_field"
@@ -88,10 +91,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                app:errorTextAppearance="@style/LargerHintsForAddEmoteStyle.ErrorTextStyle"
+                app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="true"
+                app:hintTextAppearance="@style/AddEmoteLabel"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_date"
-                tools:layout_editor_absoluteX="16dp">
+                tools:layout_editor_absoluteX="16dp"
+                android:textColorHint="@color/colorAccent">
 
                 <EditText
                     android:id="@+id/text_time_field"
@@ -111,17 +116,16 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
                 app:helperText="Situation"
-                app:hintEnabled="true"
+                app:helperTextTextAppearance="@style/AddEmoteLabel"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_time"
                 tools:layout_editor_absoluteX="16dp">
 
                 <Spinner
                     android:id="@+id/spinner_situation"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:background="@drawable/rounded_corner_black_border"
-                    android:hint="Situation"
                     android:padding="10dp"
                     android:textSize="24sp" />
 
@@ -133,25 +137,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                app:hintEnabled="true"
+                app:hintTextAppearance="@style/AddEmoteLabel"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_situation"
-                tools:layout_editor_absoluteX="16dp">
+                tools:layout_editor_absoluteX="16dp"
+                android:textColorHint="@color/colorAccent">
 
                 <EditText
                     android:id="@+id/text_reason_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_corner_black_border"
-                    android:hint="Reason"
+                    android:hint="Reason (optional)"
                     android:padding="10dp"
                     android:textSize="24sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                 android:id="@+id/cameraPreview"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_width="350dp"
+                android:layout_height="350dp"
                 android:layout_gravity="center"
+                android:scaleType="fitXY"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_reason"
                 tools:layout_editor_absoluteX="175dp" />
 
@@ -159,21 +165,22 @@
                 android:id="@+id/mapText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_constraintTop_toBottomOf="@+id/cameraPreview"
-                android:visibility="gone"
-                android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="20dp"
-                android:text="mapCoordinate"/>
+                android:text="mapCoordinate"
+                android:textSize="24sp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/cameraPreview" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="20dp"
+                android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/mapText"
                 tools:layout_editor_absoluteX="197dp">
 
@@ -185,8 +192,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/rounded_corner_blue"
                     android:padding="5dp"
-                    android:textSize="20sp"
-                    android:text="Photo" />
+                    android:text="Photo"
+                    android:textSize="20sp" />
 
                 <Button
                     android:id="@+id/addLocationButton"
@@ -196,8 +203,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/rounded_corner_blue"
                     android:padding="5dp"
-                    android:textSize="20sp"
-                    android:text="Location" />
+                    android:text="Location"
+                    android:textSize="20sp" />
             </LinearLayout>
 
             <Button
@@ -210,8 +217,8 @@
                 android:background="@drawable/rounded_corner_blue"
                 android:onClick="addEmote"
                 android:padding="12dp"
-                android:textSize="30sp"
                 android:text="Add"
+                android:textSize="30sp"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
         </LinearLayout>
     </ScrollView>
