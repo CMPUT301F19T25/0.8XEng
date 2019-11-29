@@ -51,13 +51,14 @@ public class ProfileFragment extends Fragment {
 
     private TextView usernameText;
     private TextView currentmoodText;
-    private Button friendsText;
+    private TextView friendsText;
     private Button signoutButton;
+    private Button showFriends;
 
     private FireStoreHandler fsh = new FireStoreHandler(EmoteApplication.getUsername());
     private FirebaseFirestore db = fsh.getFireStoreDBReference();
 
-    private CountingIdlingResource idlingResource = new CountingIdlingResource("profile");
+    private CountingIdlingResource idlingResource;
 
     /**
      *
@@ -82,10 +83,11 @@ public class ProfileFragment extends Fragment {
         usernameText = root.findViewById(R.id.profile_username);
         currentmoodText = root.findViewById(R.id.profile_current_mood);
         friendsText = root.findViewById(R.id.profile_number_friends);
+        showFriends = root.findViewById(R.id.show_friends_button);
         signoutButton = root.findViewById(R.id.signoutButton);
 
         usernameText.setText(fsh.getUsername());
-        EmoteApplication.setIdlingResource(idlingResource);
+        idlingResource = EmoteApplication.getIdlingResource();
         idlingResource.increment();
         db.collection(FRIEND_COLLECTION).document(EmoteApplication.getUsername())
                 .get()
@@ -95,7 +97,7 @@ public class ProfileFragment extends Fragment {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                friendsText.setText(Integer.toString(((List<String>) document.get("CURRENT_FRIENDS")).size()) + " friends");
+                                friendsText.setText(Integer.toString(((List<String>) document.get("CURRENT_FRIENDS")).size()));
                             } else {
                                 Log.d(TAG, "No such document");
                             }
@@ -135,7 +137,7 @@ public class ProfileFragment extends Fragment {
                     }
                 });
 
-        friendsText.setOnClickListener(new View.OnClickListener() {
+        showFriends.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
                     Intent intent = new Intent(getContext(), FollowingListActivity.class);

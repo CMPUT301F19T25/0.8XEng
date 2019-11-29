@@ -63,13 +63,13 @@ public class ListEmoteTest {
                 .inAdapterView(withId(R.id.emote_list_view))
                 .atPosition(0)
                 .onChildView(withId(R.id.emote_text))
-                .check(matches(withText("Happy")));
+                .check(matches(withText("Sad")));
 
         onData(anything())
                 .inAdapterView(withId(R.id.emote_list_view))
                 .atPosition(1)
                 .onChildView(withId(R.id.emote_text))
-                .check(matches(withText("Sad")));
+                .check(matches(withText("Happy")));
 
         onView(withId(R.id.check_box_show_friends)).perform(click());
     }
@@ -87,13 +87,13 @@ public class ListEmoteTest {
                 .inAdapterView(withId(R.id.emote_list_view))
                 .atPosition(0)
                 .onChildView(withId(R.id.emote_text))
-                .check(matches(withText("Happy")));
+                .check(matches(withText("Sad")));
 
         onData(anything())
                 .inAdapterView(withId(R.id.emote_list_view))
                 .atPosition(1)
                 .onChildView(withId(R.id.emote_text))
-                .check(matches(withText("Sad")));
+                .check(matches(withText("Happy")));
 
 
         onView(withId(R.id.spinner)).perform(click());

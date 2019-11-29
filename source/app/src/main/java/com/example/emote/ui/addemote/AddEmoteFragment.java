@@ -5,6 +5,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
@@ -44,6 +46,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -226,8 +229,21 @@ public class AddEmoteFragment extends Fragment {
         else if (requestCode == MAP_REQUEST && resultCode == Activity.RESULT_OK) {
             LatLng location = (LatLng) data.getExtras().get("location");
             mapLocation = new GeoPoint(location.latitude, location.longitude);
+            List<Address> addresses = null;
+            try {
+                addresses = new Geocoder(this.getContext()).getFromLocation(location.latitude, location.longitude,1);
+            }
+            catch (Exception e) {
+                // do nothing
+            }
             mapText.setVisibility(View.VISIBLE);
-            mapText.setText(location.toString());
+            try {
+                String address = addresses.get(0).getAddressLine(0);
+                mapText.setText(address);
+            }
+            catch (Exception e) {
+                mapText.setText("Lat: " + String.format("%.3f", location.latitude) +", Lng: " + String.format("%.3f", location.longitude));
+            }
         }
     }
 
