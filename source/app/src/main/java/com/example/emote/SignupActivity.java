@@ -72,7 +72,7 @@ public class SignupActivity extends AppCompatActivity {
         Log.d(TAG, "SignupActivity");
 
         if (!validate()){
-            onSignupFailed("");
+            onSignupFailed("Invalid Username or Password");
             return;
         }
 
