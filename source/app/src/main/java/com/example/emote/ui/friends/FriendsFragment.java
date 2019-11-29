@@ -87,6 +87,7 @@ public class FriendsFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        EmoteApplication.getIdlingResource().increment();
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
 //                        friendsDataList.clear();
@@ -99,6 +100,7 @@ public class FriendsFragment extends Fragment {
                         } else {
                             Log.d(TAG, "Error getting friends: ", task.getException());
                         }
+                        EmoteApplication.getIdlingResource().decrement();
                     }
                 });
 
@@ -107,6 +109,7 @@ public class FriendsFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        EmoteApplication.getIdlingResource().increment();
                         if (task.isSuccessful()) {
                             QuerySnapshot querySnapshot = task.getResult();
                             HashSet<String> currentFriendsHash = new HashSet<>();
@@ -130,7 +133,7 @@ public class FriendsFragment extends Fragment {
                         } else {
                             Log.d(TAG, "Error getting all users");
                         }
-
+                        EmoteApplication.getIdlingResource().decrement();
                     }
                 });
         return root;
