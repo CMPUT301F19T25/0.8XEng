@@ -29,7 +29,7 @@ public class ProfileTest {
 
     private String validUserName = "testuser4";
     private String currentMood = "SAD";
-    private String friendsButton = "2 FRIENDS";
+    private String friendsCount = "2";
 
     CountingIdlingResource idlingResource;
 
@@ -66,12 +66,12 @@ public class ProfileTest {
     @Test
     public void testNumberFriends() {
         onView(withId(R.id.profile_number_friends))
-                .check(matches(withText(friendsButton)));
+                .check(matches(withText(friendsCount)));
     }
 
     @Test
     public void testFriendsButton() {
-        onView(withId(R.id.profile_number_friends))
+        onView(withId(R.id.show_friends_button))
                 .perform(click());
         intended(hasComponent(FollowingListActivity.class.getName()));
     }
